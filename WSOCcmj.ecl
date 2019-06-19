@@ -1,6 +1,7 @@
-﻿ IMPORT ATHLETE360;
-   IMPORT STD;
-   
+﻿IMPORT ATHLETE360;
+IMPORT STD;
+ 
+EXPORT WSOCcmj := MODULE
    fullData := ATHLETE360.WSOCjump.file;
    
    trialLayout := RECORD
@@ -496,7 +497,7 @@
    end;
    
    
-   Alltrials :=
+   Export Processedfile :=
 
          PROJECT(fullData, extractRSItrials(LEFT) ) + 
          PROJECT(fullData, extractRSI_jhtrials(LEFT)) + 
@@ -546,5 +547,4 @@
          PROJECT(fullData, extractpeaklanding_powertrials(LEFT)) + 
          PROJECT(fullData, extractpeaklanding_velocitytrials(LEFT)) + 
          PROJECT(fullData, extractpeaktakeoffacceltrials(LEFT));
-     
-   Alltrials;
+END;

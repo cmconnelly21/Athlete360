@@ -1,9 +1,11 @@
 ﻿IMPORT $;
 IMPORT STD;
 
+EXPORT WSOCthor := MODULE
+
 csvData := $.WSOClr.File;
 
-wsocthorlayout := RECORD
+ layout := RECORD
 		UNSIGNED4 _date;
 		UNSIGNED3 _time;
 		STRING30 Name;
@@ -23,7 +25,7 @@ wsocthorlayout := RECORD
 		UNSIGNED1 SessionOverall;	
 END;
 
-thordata := PROJECT(csvData,TRANSFORM(wsocthorlayout,
+EXPORT processedfile := PROJECT(csvData,TRANSFORM(layout,
                   SELF._date := STD.date.FromStringToDate(LEFT.Timestamp,'%m/%d/%Y');
 									SELF._time := STD.date.FromStringToTime(LEFT.Timestamp,'%H:%M:%S');
                   self.Name := left.Name;
@@ -42,5 +44,4 @@ thordata := PROJECT(csvData,TRANSFORM(wsocthorlayout,
                   self.UpperBodyLoad := (Unsigned1)left.UpperBodyLoad;
                   self.SessionOverall := (Unsigned1)left.SessionOverall));
 
-
-EXPORT WSOCthor := OUTPUT(thordata);									
+END;									

@@ -40,7 +40,7 @@ EXPORT MSOCthor := MODULE
 	END;
 	
 	EXPORT File := DATASET('~Athlete360::OUT::MSOClr',Layout,CSV(HEADING(1)));
-	EXPORT thorfile := PROJECT(file,TRANSFORM(thorlayout,
+	EXPORT processedfile := PROJECT(file,TRANSFORM(thorlayout,
                   SELF.Date := STD.date.FromStringToDate(LEFT.Date,'%Y-%m-%d');
 									SELF.Time := IF(std.str.splitwords(Left.Time, ' ')[2]='PM',
 									1200 + STD.date.FromStringToTime(Left.Time,'%H:%M'),
