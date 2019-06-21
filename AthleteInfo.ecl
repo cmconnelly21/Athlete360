@@ -4,7 +4,8 @@
 		STRING5 Team;
 		STRING3 Position;
 		STRING4 Year;
+		STRING ID;
 	END;
 
-	EXPORT File := DATASET('~athlete360::in::AthleteInfo.csv',Layout,CSV(HEADING(1)));
+	EXPORT File := DATASET('~athlete360::in::Athlete360_AthleteInfo.csv',Layout,CSV(HEADING(1)));
 END;

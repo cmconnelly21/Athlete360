@@ -2,7 +2,7 @@
 IMPORT STD;
  
 EXPORT WSOCcmj := MODULE
-   fullData := ATHLETE360.WSOCjump.file;
+   fullData := ATHLETE360.WSOC.WSOCjump.file;
    
    trialLayout := RECORD
      string30 name;
@@ -16,7 +16,7 @@ EXPORT WSOCcmj := MODULE
      decimal10_5 trial3;
    end;
    
-   trialLayout extractRSItrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractRSItrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'RSI';
@@ -26,7 +26,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractRSI_jhtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractRSI_jhtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'RSI_jh';
@@ -36,7 +36,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractJumpheight_impmomtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractJumpheight_impmomtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'Jumpheight_impmom';
@@ -46,7 +46,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractActiveStiffnesstrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractActiveStiffnesstrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'ActiveStiffness';
@@ -56,7 +56,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractActiveStiffness_indextrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractActiveStiffness_indextrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'ActiveStiffness_index';
@@ -66,7 +66,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractImpulse_concentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractImpulse_concentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'Impulse_concentric';
@@ -76,7 +76,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanforce_concentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanforce_concentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanforce_concentric';
@@ -86,7 +86,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanwkg_concentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanwkg_concentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanwkg_concentric';
@@ -96,7 +96,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanpower_concentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanpower_concentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanpower_concentric';
@@ -106,7 +106,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeakvelocity_concentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeakvelocity_concentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peakvelocity_concentric';
@@ -116,7 +116,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractcontacttimetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractcontacttimetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'contacttime';
@@ -126,7 +126,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractcountermvmt_depthtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractcountermvmt_depthtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'countermvmt_depth';
@@ -136,7 +136,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractdropheighttrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractdropheighttrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'dropheight';
@@ -146,7 +146,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractdroplandingtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractdroplandingtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'droplanding';
@@ -156,7 +156,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractecc_con_meanforceratiotrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractecc_con_meanforceratiotrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'ecc_con_meanforceratio';
@@ -166,7 +166,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractimpulse_eccentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractimpulse_eccentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'impulse_eccentric';
@@ -176,7 +176,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanforce_eccentrictrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanforce_eccentrictrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanforce_eccentric';
@@ -186,7 +186,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extracteffectivedroptrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extracteffectivedroptrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'effectivedrop';
@@ -196,7 +196,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractflighttimetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractflighttimetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'flighttime';
@@ -206,7 +206,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractforce_zerovelocitytrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractforce_zerovelocitytrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'force_zerovelocity';
@@ -216,7 +216,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_flighttimetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_flighttimetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_flighttime';
@@ -226,7 +226,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_flighttime_intrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_flighttime_intrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_flighttime_in';
@@ -236,7 +236,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_impdistrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_impdistrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_impdis';
@@ -246,7 +246,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_impmom_intrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_impmom_intrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_impmom_in';
@@ -256,7 +256,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractMovementstart_peakpowertrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractMovementstart_peakpowertrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'Movementstart_peakpower';
@@ -266,7 +266,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractforce_peakdriveofftrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractforce_peakdriveofftrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'force_peakdriveoff';
@@ -276,7 +276,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeakforce_droplandingtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeakforce_droplandingtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peakforce_droplanding';
@@ -286,7 +286,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeakwkgtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeakwkgtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peakwkg';
@@ -296,7 +296,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeakpowertrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeakpowertrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peakpower';
@@ -306,7 +306,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractimpulse_postivetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractimpulse_postivetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'impulse_positive';
@@ -316,7 +316,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractconcentricstarttrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractconcentricstarttrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'concentricstart';
@@ -326,7 +326,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractverticalvelocity_contacttrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractverticalvelocity_contacttrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'verticalvelocity_contact';
@@ -336,7 +336,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractverticalvelocity_takeofftrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractverticalvelocity_takeofftrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'verticalvelocity_takeoff';
@@ -346,7 +346,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_relativelandingRFDtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_relativelandingRFDtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_relativelandingRFD';
@@ -356,7 +356,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractjumpheight_relativepeaklandingforcetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractjumpheight_relativepeaklandingforcetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_relativepeaklandingforce';
@@ -366,7 +366,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractlanding_netpeakforcetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractlanding_netpeakforcetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'landing_netpeakforce';
@@ -376,7 +376,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractlandingRFDtrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractlandingRFDtrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'landingRFD';
@@ -386,7 +386,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanlanding_acceltrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanlanding_acceltrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_accel';
@@ -396,7 +396,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanlanding_powertrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanlanding_powertrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_power';
@@ -406,7 +406,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractmeanlanding_velocitytrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractmeanlanding_velocitytrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_velocity';
@@ -416,7 +416,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpassivestiffnesstrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpassivestiffnesstrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'passitvestiffness';
@@ -426,7 +426,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpassivestiffness_indextrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpassivestiffness_indextrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'passivestiffness_index';
@@ -436,7 +436,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeakimpactforcetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeakimpactforcetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peakimpactforce';
@@ -446,7 +446,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeaklanding_acceltrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeaklanding_acceltrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_accel';
@@ -456,7 +456,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeaklanding_forcetrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeaklanding_forcetrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_force';
@@ -466,7 +466,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeaklanding_powertrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeaklanding_powertrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_power';
@@ -476,7 +476,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeaklanding_velocitytrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeaklanding_velocitytrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_velocity';
@@ -486,7 +486,7 @@ EXPORT WSOCcmj := MODULE
      self := L;
    end;
    
-   trialLayout extractpeaktakeoffacceltrials(ATHLETE360.WSOCjump.file L) := transform
+   trialLayout extractpeaktakeoffacceltrials(ATHLETE360.WSOC.WSOCjump.file L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
 		 self.trialname := 'peaktakeoffaccel';
