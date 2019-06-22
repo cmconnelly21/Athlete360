@@ -29,4 +29,4 @@ sprayFiles := Apply(fileList,
             )
 );
 
-EXPORT FileSpray := SEQUENTIAL(output(fileList), sprayFiles);
+EXPORT spray_build := SEQUENTIAL(output(fileList), sprayFiles);

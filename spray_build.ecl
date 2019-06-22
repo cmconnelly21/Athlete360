@@ -4,14 +4,14 @@ String fileDate := (String) std.Date.Today() : STORED('filedate');
 
 folderDate := Std.Date.DateToString((Unsigned4)fileDate, '%Y-%m-%d');
 
-folderName := '/var/lib/HPCCSystems/mydropzone/Athlete360/' + folderDate;
+folderName := Athlete360.util.constants.landingzone_folder + folderDate;
 
-fileList := std.file.RemoteDirectory('10.0.0.220', folderName, '**');
+fileList := std.file.RemoteDirectory(Athlete360.util.constants.landingzone_ip, folderName, '**');
 
-spray_prefix := '~athlete360::in::spray::';
+spray_prefix := Athlete360.util.constants.spray_prefix;
 
 sprayFiles := NOTHOR(Apply(fileList, 
-                Std.file.SprayVariable('10.0.0.220',
+                Std.file.SprayVariable(Athlete360.util.constants.landingzone_ip,
                     folderName +'/' + name,
                     65536,
                     ',',
@@ -30,7 +30,6 @@ sprayFiles := NOTHOR(Apply(fileList,
         );
 
     spraybuild := NOTHOR(Apply(fileList, 
-                // STD.File.PromoteSuperFileList([spray_prefix + name], spray_prefix + name + '_' + workunit),
                 Athlete360.util.fn_promote_file(spray_prefix, name )
             )
         );
