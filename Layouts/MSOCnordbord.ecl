@@ -1,6 +1,4 @@
-﻿IMPORT $;
-IMPORT STD;
-
+﻿
 EXPORT MSOCnordbord := RECORD
 		STRING Name;
 		STRING Date;

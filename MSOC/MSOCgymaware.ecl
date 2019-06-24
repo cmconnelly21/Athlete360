@@ -1,7 +1,7 @@
 ﻿IMPORT $;
 IMPORT STD;
 
-EXPORT WSOCgym := MODULE
+EXPORT MSOCgymaware := MODULE
 	EXPORT Layout := RECORD
 		STRING FirstName;
 		STRING LastName;
@@ -56,10 +56,10 @@ EXPORT WSOCgym := MODULE
 		DECIMAL10_5 TotalTonnage;
 		DECIMAL10_5 TotalWork;
 		DECIMAL5_2 Weight_bestset;
-		DECIMAL10_5 Workavg;
+		DECIMAL10_5 Workavg;	
 	END;
 
-	EXPORT File := DATASET('~athlete360::in::wsoc_gymaware.csv',Layout,CSV(HEADING(1)));
+	EXPORT File := DATASET('~athlete360::in::msoc_gymaware.csv',Layout,CSV(HEADING(1)));
 	EXPORT processedfile := PROJECT(File,TRANSFORM(Layout1,SELF.date := STD.date.fromstringtodate(LEFT.date,'%Y/%m/%d');
 																								self.Name := left.Firstname + ' ' + left.Lastname;
 																								SELF.Exercise := LEFT.Exercise;

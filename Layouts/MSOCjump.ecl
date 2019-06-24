@@ -1,6 +1,4 @@
-﻿IMPORT $;
-IMPORT STD;
-
+﻿
 EXPORT MSOCJump := RECORD
 		STRING Name;
 		STRING Test;

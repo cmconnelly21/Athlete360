@@ -1,7 +1,5 @@
-﻿IMPORT $;
-IMPORT STD;
-
-EXPORT MSOCgym := RECORD
+﻿
+EXPORT MSOCgymaware := RECORD
 		STRING50 Name;
 		UNSIGNED4 Date;
 		UNSIGNED1 SetNumber;

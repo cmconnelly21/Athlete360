@@ -1,5 +1,4 @@
-﻿EXPORT WSOCReadiness := MODULE
-	EXPORT Layout := RECORD
+﻿EXPORT WSOCReadiness := RECORD
 		STRING20 Date;
 		STRING25 Timestamp;
 		STRING20 Name;
@@ -12,6 +11,3 @@
 		STRING25 Explanation;
 		INTEGER1 Welnesssum;
 	END;
-
-	EXPORT File:= DATASET('~athlete360::in::WSOC_Readiness_Monitoring.csv',Layout,CSV(HEADING(1)));
-END;

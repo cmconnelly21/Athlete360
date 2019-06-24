@@ -1,6 +1,4 @@
-﻿IMPORT $;
-IMPORT STD;
-
+﻿
 EXPORT MSOCgps :=RECORD
 		STRING50 Name;
 		STRING50 Position;

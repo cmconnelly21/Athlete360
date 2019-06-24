@@ -1,5 +1,4 @@
-﻿EXPORT WSOCload := MODULE
-	EXPORT Layout := RECORD
+﻿EXPORT WSOCtrainingload := RECORD
 		STRING15 Timestamp;
 		STRING20 Name;
 		STRING20 SessionType;
@@ -10,6 +9,3 @@
 		INTEGER1 SessionOverall;
 		STRING10 Date;	
 	END;
-
-	EXPORT File := DATASET('~athlete360::in::wsoc_load_monitoring.csv',Layout,CSV(HEADING(1)));
-END;

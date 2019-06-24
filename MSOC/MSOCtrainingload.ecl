@@ -1,4 +1,4 @@
-﻿EXPORT MSOCtrainingloads := MODULE
+﻿EXPORT MSOCtrainingload := MODULE
 	EXPORT Layout := RECORD
 		STRING Date;
 		STRING Time;

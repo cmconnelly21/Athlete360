@@ -1,4 +1,4 @@
-﻿EXPORT WSOCload := MODULE
+﻿EXPORT WSOCtraingload := MODULE
 	EXPORT Layout := RECORD
 		STRING15 Timestamp;
 		STRING20 Name;
