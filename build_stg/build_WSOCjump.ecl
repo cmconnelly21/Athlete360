@@ -1,7 +1,6 @@
 IMPORT Athlete360, STD;
 
 // First_step get the spray file from files_spray
-
 sprayFile := Athlete360.files_spray.WSOCjumpfile;
 
 // get the layout (processed layout)
