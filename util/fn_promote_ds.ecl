@@ -18,7 +18,8 @@ EXPORT fn_promote_ds(string prefix, String filename, DATASET filedata) := FUNCTI
         writeFile,
         STD.File.PromoteSuperFileList(
             [super, father, grandfather, greatGrandfather],
-            sub
+            sub,
+            true
         )
     );
     

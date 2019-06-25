@@ -298,4 +298,5 @@
 		STRING peaktakeoffaccelm;
 		STRING peaktakeoffaccelsd;
 		STRING peaktakeoffaccelcov;
+		String wuid := workunit;
 	END;

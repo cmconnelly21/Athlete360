@@ -12,13 +12,8 @@ EXPORT fn_promote_file(string prefix, String filename) := FUNCTION
 
     sub := prefix + filename + '_' + workunit;
 
-    // writeFile := OUTPUT(filedata, ,sub , COMPRESSED);
-
-    RETURN SEQUENTIAL(
-        // writeFile,
-        STD.File.PromoteSuperFileList(
+    RETURN  STD.File.PromoteSuperFileList(
             [super, father, grandfather, greatGrandfather],
             sub
-        )
     );
 END;
