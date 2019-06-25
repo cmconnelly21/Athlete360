@@ -1,9 +1,13 @@
 IMPORT Athlete360, STD;
 
+// First_step get the spray file from files_spray
+
 sprayFile := Athlete360.files_spray.WSOCjumpfile;
 
+// get the layout (processed layout)
 stgLayout := Athlete360.Layouts.WSOCjump_stg;
 
+// do all preprocessing actions and get the cleaned data from spray
 stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
      self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
@@ -534,6 +538,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
          PROJECT(sprayFile, extractpeaklanding_powertrials(LEFT)) + 
          PROJECT(sprayFile, extractpeaklanding_velocitytrials(LEFT)) + 
          PROJECT(sprayFile, extractpeaktakeoffacceltrials(LEFT));
+// after we get the cleaned spray, add wtih currently staged file, dedup by unique fields
 
 finalStageData := DEDUP(
         SORT(
@@ -542,4 +547,6 @@ finalStageData := DEDUP(
         NAME, DATE
     );
 
+// by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
+// promote  the final dataset into stage gile
 EXPORT build_WSOCjump := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCjump_name, finalStageData);
