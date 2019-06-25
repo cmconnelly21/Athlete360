@@ -10,4 +10,5 @@
 		STRING Stress;
 		STRING Sleepquality;
 		STRING Sleephours;
+		string19 wuid := workunit;
 	END;

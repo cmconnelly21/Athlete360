@@ -7,5 +7,6 @@
 		INTEGER1 LowerBodyLoad;
 		INTEGER1 UpperBodyLoad;
 		INTEGER1 SessionOverall;
-		STRING10 Date;	
+		STRING10 Date;
+		string19 wuid := workunit;
 	END;

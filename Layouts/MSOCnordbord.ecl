@@ -1,5 +1,4 @@
-﻿
-EXPORT MSOCnordbord := RECORD
+﻿EXPORT MSOCnordbord := RECORD
 		STRING Name;
 		STRING Date;
 		STRING Time;
@@ -16,4 +15,5 @@ EXPORT MSOCnordbord := RECORD
 		STRING AVG_IMBALANCE;
 		STRING AVG_TORQUE_L;
 		STRING AVG_TORQUE_R;
+		string19 wuid := workunit;
 	END;

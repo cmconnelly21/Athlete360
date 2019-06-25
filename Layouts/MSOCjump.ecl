@@ -1,5 +1,4 @@
-﻿
-EXPORT MSOCJump := RECORD
+﻿EXPORT MSOCJump := RECORD
 		STRING Name;
 		STRING Test;
 		STRING Date;
@@ -20,6 +19,14 @@ EXPORT MSOCJump := RECORD
 		STRING Jumpheight_impmomm;
 		STRING Jumpheight_impmomsd;
 		STRING Jumpheight_impmomcov;
+		STRING RSImod_trial1;
+		STRING RSImod_trial2;
+		STRING RSImod_trial3;
+		STRING RSImod_trial4;
+		STRING RSImod_trial5;
+		STRING RSImodm;
+		STRING RSImodsd;
+		STRING RSImodcov;
 		STRING EccdecelRFD_trial1;
 		STRING EccdecelRFD_trial2;
 		STRING EccdecelRFD_trial3;
@@ -76,4 +83,5 @@ EXPORT MSOCJump := RECORD
 		STRING peaklanding_forceasymmetrym;
 		STRING peaklanding_forceasymmetrysd;
 		STRING peaklanding_forceasymmetrycov;
+		string19 wuid := workunit;
 	END;

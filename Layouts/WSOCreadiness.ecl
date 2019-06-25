@@ -9,5 +9,6 @@
 		INTEGER1 Hydration;
 		STRING3 Pain;
 		STRING25 Explanation;
-		INTEGER1 Welnesssum;
+		INTEGER1 Wellnesssum;
+		string19 wuid := workunit;
 	END;

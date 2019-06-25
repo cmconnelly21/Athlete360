@@ -1,4 +1,4 @@
-EXPORT constants := MODULE
+﻿EXPORT constants := MODULE
 
     EXPORT spray_prefix := '~athlete360::in::spray::';
 
@@ -21,6 +21,7 @@ EXPORT constants := MODULE
     EXPORT WSOCreadiness_name := 'ws_readiness';
     EXPORT WSOCtesting_name := 'ws_testing';
     EXPORT WSOCtrainingload_name := 'ws_trainingload';
-    EXPORT WSOCgymaware_name := 'ws_gymaware';		
+    EXPORT WSOCgymaware_name := 'ws_gymaware';
+		EXPORT Athleteinfo_name := 'athleteinfo';
 
 END;

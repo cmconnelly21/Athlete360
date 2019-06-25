@@ -8,4 +8,5 @@
 		STRING Trainingload;
 		STRING Category;
 		STRING Team;
+		string19 wuid := workunit;
 	END;

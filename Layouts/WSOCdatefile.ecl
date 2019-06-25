@@ -1,4 +1,5 @@
 ﻿EXPORT WSOCdatefile  := RECORD
-	STRING date;
-	STRING gamedaycount;
+	STRING20 date;
+	STRING5 gamedaycount;
+	string19 wuid := workunit;
 END;
