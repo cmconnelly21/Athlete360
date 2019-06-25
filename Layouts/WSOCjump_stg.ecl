@@ -9,4 +9,5 @@ EXPORT WSOCjump_stg := RECORD
     decimal10_5 trial2;
     decimal10_5 trial3;
     string19 wuid := workunit;
+    string20 athleteid := '';
 END;

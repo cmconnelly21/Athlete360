@@ -17,6 +17,15 @@ finalStageData := DEDUP(
         NAME, DATE
     );
 
+map := Athlete360.files_stg.athelete_info_stgfile;
+
+join(finalStageData, map,
+    left.name = right.name
+    transform(,
+        self.athleteid := right.athleteid
+        self := left
+    )
+)
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
 EXPORT build_WSOCjump := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCjump_name, finalStageData);
