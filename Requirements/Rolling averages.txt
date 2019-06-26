@@ -1,0 +1,17 @@
+Requirements for rolling averages in WSOC readiness and trainingload data:
+
+1. Get the input data, and connect it to a file that has every date for the period of data. 
+This is to see what days have missing data.
+
+2. Dedup and sort the data based on athlete name and date.
+
+3. Denormalize the data and use count to get median vaules for each athlete based on all data points for the variables that will be averaged.
+This is to fill missing data points with the median value.
+
+4. Create a table with the median values and fill all empty records with median values.
+
+5. Make a new count that will create the window for the rolling average. 
+This should find the average based on data points from x amount of days, and then move forward by one day for each date.
+So if its 5 days, the rolling average data will start on the 6th day and provide an average value based on the previous 5 days.
+
+6. make a new table with the new columns for the rolling averages and then output the data.

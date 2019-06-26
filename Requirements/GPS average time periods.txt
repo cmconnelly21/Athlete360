@@ -1,0 +1,21 @@
+Requirements for finding average time periods in GPS data:
+
+1. Figure out what parts of the data should be included for average time periods.
+
+2. Figure out how many rows of data are needed for the length of time needed for the average.
+ex:10 rows/sec
+   600 rows/min
+   3000 rows/5 min
+   6000 rows/10 min
+   9000 rows/15 min
+
+3. Find the data points in the right sections of data to find the different time periods. 
+Create a count that will cover the amount of rows needed for the time periods for the time and speed columns.
+
+4. Then find the sum of the speed during those time periods to find distance covered.
+create a new table that will have the distance covered in a new column.
+
+5. Now find the average speed for those time periods.
+create a new table that will include the average speed  in a new column.
+
+6. Create the output for the data.
