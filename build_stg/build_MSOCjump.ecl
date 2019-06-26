@@ -153,7 +153,7 @@ mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 completestgdata := join(finalStageData, mapfile,
     left.name = right.name,
     transform(stgLayout,
-        self.athleteid := right.athleteid, self.wuid := workunit,self.wuid := workunut,
+        self.athleteid := right.athleteid, self.wuid := workunit,
         self := left
     ),
     LEFT OUTER
