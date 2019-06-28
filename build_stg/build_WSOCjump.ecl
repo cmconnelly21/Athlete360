@@ -9,7 +9,7 @@ stgLayout := Athlete360.Layouts.WSOCjump_stg;
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'RSI';
      self.trial1 := (decimal10_5) L.rsi_trial1;
      self.trial2 := (decimal10_5) L.rsi_trial2;
@@ -19,7 +19,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractRSI_jhtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'RSI_jh';
      self.trial1 := (decimal10_5) L.rsi_jh_trial1;
      self.trial2 := (decimal10_5) L.rsi_jh_trial2;
@@ -29,7 +29,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractJumpheight_impmomtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'Jumpheight_impmom';
      self.trial1 := (decimal10_5) L.Jumpheight_impmom_trial1;
      self.trial2 := (decimal10_5) L.Jumpheight_impmom_trial2;
@@ -39,7 +39,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractActiveStiffnesstrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'ActiveStiffness';
      self.trial1 := (decimal10_5) L.ActiveStiffness_trial1;
      self.trial2 := (decimal10_5) L.ActiveStiffness_trial2;
@@ -49,7 +49,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractActiveStiffness_indextrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'ActiveStiffness_index';
      self.trial1 := (decimal10_5) L.ActiveStiffness_index_trial1;
      self.trial2 := (decimal10_5) L.ActiveStiffness_index_trial2;
@@ -59,7 +59,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractImpulse_concentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'Impulse_concentric';
      self.trial1 := (decimal10_5) L.Impulse_concentric_trial1;
      self.trial2 := (decimal10_5) L.Impulse_concentric_trial2;
@@ -69,7 +69,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanforce_concentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanforce_concentric';
      self.trial1 := (decimal10_5) L.meanforce_concentric_trial1;
      self.trial2 := (decimal10_5) L.meanforce_concentric_trial2;
@@ -79,7 +79,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanwkg_concentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanwkg_concentric';
      self.trial1 := (decimal10_5) L.meanwkg_concentric_trial1;
      self.trial2 := (decimal10_5) L.meanwkg_concentric_trial2;
@@ -89,7 +89,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanpower_concentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanpower_concentric';
      self.trial1 := (decimal10_5) L.meanpower_concentric_trial1;
      self.trial2 := (decimal10_5) L.meanpower_concentric_trial2;
@@ -99,7 +99,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeakvelocity_concentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peakvelocity_concentric';
      self.trial1 := (decimal10_5) L.peakvelocity_concentric_trial1;
      self.trial2 := (decimal10_5) L.peakvelocity_concentric_trial2;
@@ -109,7 +109,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractcontacttimetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'contacttime';
      self.trial1 := (decimal10_5) L.contacttime_trial1;
      self.trial2 := (decimal10_5) L.contacttime_trial2;
@@ -119,7 +119,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractcountermvmt_depthtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'countermvmt_depth';
      self.trial1 := (decimal10_5) L.countermvmt_depth_trial1;
      self.trial2 := (decimal10_5) L.countermvmt_depth_trial2;
@@ -129,7 +129,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractdropheighttrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'dropheight';
      self.trial1 := (decimal10_5) L.dropheight_trial1;
      self.trial2 := (decimal10_5) L.dropheight_trial2;
@@ -139,7 +139,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractdroplandingtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'droplanding';
      self.trial1 := (decimal10_5) L.droplanding_trial1;
      self.trial2 := (decimal10_5) L.droplanding_trial2;
@@ -149,7 +149,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractecc_con_meanforceratiotrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'ecc_con_meanforceratio';
      self.trial1 := (decimal10_5) L.ecc_con_meanforceratio_trial1;
      self.trial2 := (decimal10_5) L.ecc_con_meanforceratio_trial2;
@@ -159,7 +159,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractimpulse_eccentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'impulse_eccentric';
      self.trial1 := (decimal10_5) L.impulse_eccentric_trial1;
      self.trial2 := (decimal10_5) L.impulse_eccentric_trial2;
@@ -169,7 +169,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanforce_eccentrictrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanforce_eccentric';
      self.trial1 := (decimal10_5) L.meanforce_eccentric_trial1;
      self.trial2 := (decimal10_5) L.meanforce_eccentric_trial2;
@@ -179,7 +179,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extracteffectivedroptrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'effectivedrop';
      self.trial1 := (decimal10_5) L.effectivedrop_trial1;
      self.trial2 := (decimal10_5) L.effectivedrop_trial2;
@@ -189,7 +189,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractflighttimetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'flighttime';
      self.trial1 := (decimal10_5) L.flighttime_trial1;
      self.trial2 := (decimal10_5) L.flighttime_trial2;
@@ -199,7 +199,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractforce_zerovelocitytrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'force_zerovelocity';
      self.trial1 := (decimal10_5) L.force_zerovelocity_trial1;
      self.trial2 := (decimal10_5) L.force_zerovelocity_trial2;
@@ -209,7 +209,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_flighttimetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_flighttime';
      self.trial1 := (decimal10_5) L.jumpheight_flighttime_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_flighttime_trial2;
@@ -219,7 +219,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_flighttime_intrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_flighttime_in';
      self.trial1 := (decimal10_5) L.jumpheight_flighttime_in_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_flighttime_in_trial2;
@@ -229,7 +229,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_impdistrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_impdis';
      self.trial1 := (decimal10_5) L.jumpheight_impdis_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_impdis_trial2;
@@ -239,7 +239,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_impmom_intrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_impmom_in';
      self.trial1 := (decimal10_5) L.jumpheight_impmom_in_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_impmom_in_trial2;
@@ -249,7 +249,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractMovementstart_peakpowertrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'Movementstart_peakpower';
      self.trial1 := (decimal10_5) L.Movementstart_peakpower_trial1;
      self.trial2 := (decimal10_5) L.Movementstart_peakpower_trial2;
@@ -259,7 +259,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractforce_peakdriveofftrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'force_peakdriveoff';
      self.trial1 := (decimal10_5) L.force_peakdriveoff_trial1;
      self.trial2 := (decimal10_5) L.force_peakdriveoff_trial2;
@@ -269,7 +269,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeakforce_droplandingtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peakforce_droplanding';
      self.trial1 := (decimal10_5) L.peakforce_droplanding_trial1;
      self.trial2 := (decimal10_5) L.peakforce_droplanding_trial2;
@@ -279,7 +279,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeakwkgtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peakwkg';
      self.trial1 := (decimal10_5) L.peakwkg_trial1;
      self.trial2 := (decimal10_5) L.peakwkg_trial2;
@@ -289,7 +289,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeakpowertrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peakpower';
      self.trial1 := (decimal10_5) L.peakpower_trial1;
      self.trial2 := (decimal10_5) L.peakpower_trial2;
@@ -299,7 +299,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractimpulse_postivetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'impulse_positive';
      self.trial1 := (decimal10_5) L.impulse_postive_trial1;
      self.trial2 := (decimal10_5) L.impulse_postive_trial2;
@@ -309,7 +309,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractconcentricstarttrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'concentricstart';
      self.trial1 := (decimal10_5) L.concentricstart_trial1;
      self.trial2 := (decimal10_5) L.concentricstart_trial2;
@@ -319,7 +319,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractverticalvelocity_contacttrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'verticalvelocity_contact';
      self.trial1 := (decimal10_5) L.verticalvelocity_contact_trial1;
      self.trial2 := (decimal10_5) L.verticalvelocity_contact_trial2;
@@ -329,7 +329,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractverticalvelocity_takeofftrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'verticalvelocity_takeoff';
      self.trial1 := (decimal10_5) L.verticalvelocity_takeoff_trial1;
      self.trial2 := (decimal10_5) L.verticalvelocity_takeoff_trial2;
@@ -339,7 +339,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_relativelandingRFDtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_relativelandingRFD';
      self.trial1 := (decimal10_5) L.jumpheight_relativelandingRFD_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_relativelandingRFD_trial2;
@@ -349,7 +349,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractjumpheight_relativepeaklandingforcetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'jumpheight_relativepeaklandingforce';
      self.trial1 := (decimal10_5) L.jumpheight_relativepeaklandingforce_trial1;
      self.trial2 := (decimal10_5) L.jumpheight_relativepeaklandingforce_trial2;
@@ -359,7 +359,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractlanding_netpeakforcetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'landing_netpeakforce';
      self.trial1 := (decimal10_5) L.landing_netpeakforce_trial1;
      self.trial2 := (decimal10_5) L.landing_netpeakforce_trial2;
@@ -369,7 +369,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractlandingRFDtrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'landingRFD';
      self.trial1 := (decimal10_5) L.landingRFD_trial1;
      self.trial2 := (decimal10_5) L.landingRFD_trial2;
@@ -379,7 +379,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanlanding_acceltrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_accel';
      self.trial1 := (decimal10_5) L.meanlanding_accel_trial1;
      self.trial2 := (decimal10_5) L.meanlanding_accel_trial2;
@@ -389,7 +389,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanlanding_powertrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_power';
      self.trial1 := (decimal10_5) L.meanlanding_power_trial1;
      self.trial2 := (decimal10_5) L.meanlanding_power_trial2;
@@ -399,7 +399,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractmeanlanding_velocitytrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'meanlanding_velocity';
      self.trial1 := (decimal10_5) L.meanlanding_velocity_trial1;
      self.trial2 := (decimal10_5) L.meanlanding_velocity_trial2;
@@ -409,7 +409,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpassivestiffnesstrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'passitvestiffness';
      self.trial1 := (decimal10_5) L.passivestiffness_trial1;
      self.trial2 := (decimal10_5) L.passivestiffness_trial2;
@@ -419,7 +419,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpassivestiffness_indextrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'passivestiffness_index';
      self.trial1 := (decimal10_5) L.passivestiffness_index_trial1;
      self.trial2 := (decimal10_5) L.passivestiffness_index_trial2;
@@ -429,7 +429,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeakimpactforcetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peakimpactforce';
      self.trial1 := (decimal10_5) L.peakimpactforce_trial1;
      self.trial2 := (decimal10_5) L.peakimpactforce_trial2;
@@ -439,7 +439,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeaklanding_acceltrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_accel';
      self.trial1 := (decimal10_5) L.peaklanding_accel_trial1;
      self.trial2 := (decimal10_5) L.peaklanding_accel_trial2;
@@ -449,7 +449,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeaklanding_forcetrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_force';
      self.trial1 := (decimal10_5) L.peaklanding_force_trial1;
      self.trial2 := (decimal10_5) L.peaklanding_force_trial2;
@@ -459,7 +459,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeaklanding_powertrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_power';
      self.trial1 := (decimal10_5) L.peaklanding_power_trial1;
      self.trial2 := (decimal10_5) L.peaklanding_power_trial2;
@@ -469,7 +469,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeaklanding_velocitytrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peaklanding_velocity';
      self.trial1 := (decimal10_5) L.peaklanding_velocity_trial1;
      self.trial2 := (decimal10_5) L.peaklanding_velocity_trial2;
@@ -479,7 +479,7 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
    
    stgLayout extractpeaktakeoffacceltrials(ATHLETE360.Layouts.WSOCjump L) := transform
      self.date := std.date.FromStringToDate(L.date[1..10] ,'%d/%m/%Y');
-     self.time := std.date.FromStringToDate(L.date[11..16] ,'%H:%M');
+     self.time := std.date.FromStringToDate(L.date[12..16] ,'%H:%M');
 		 self.trialname := 'peaktakeoffaccel';
      self.trial1 := (decimal10_5) L.peaktakeoffaccel_trial1;
      self.trial2 := (decimal10_5) L.peaktakeoffaccel_trial2;
@@ -548,13 +548,14 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData, mapfile,
-    left.name = right.name,
-    transform(stgLayout,
-        self.athleteid := right.athleteid, self.wuid := workunit,
-        self := left
-    ),
-    LEFT OUTER
+completestgdata := join(dedup(sort(Athlete360.files_stg.WSOCjump_stgfile, name), name),
+
+Athlete360.files_stg.Athleteinfo_stgfile,
+
+Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+
+left only
+
 );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile

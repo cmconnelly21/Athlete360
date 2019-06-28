@@ -8,7 +8,7 @@ stgLayout := Athlete360.Layouts.WSOCgymaware_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.WSOCgymaware L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%Y/%m/%d');
+																								SELF.date := STD.date.fromstringtodate(L.date[1..10],'%d/%m/%Y');
 																								self.Name := L.Firstname + ' ' + L.Lastname;
 																								SELF.Exercise := L.Exercise;
 																								SELF.SetNumber := (UNSIGNED1)L.SetNumber;
@@ -51,13 +51,14 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData, mapfile,
-    left.name = right.name,
-    transform(stgLayout,
-        self.athleteid := right.athleteid, self.wuid := workunit,
-        self := left
-    ),
-    LEFT OUTER
+completestgdata := join(dedup(sort(Athlete360.files_stg.WSOCgymaware_stgfile, name), name),
+
+Athlete360.files_stg.Athleteinfo_stgfile,
+
+Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+
+left only
+
 );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
