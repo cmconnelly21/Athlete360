@@ -45,7 +45,7 @@
 // Athlete360.files_stg.WSOCgymaware_stgfile;
 // Athlete360.files_stg.athleteinfo_stgfile;
 
-Athlete360.stg_build;
+//Athlete360.stg_build;
 
 Athlete360.files_spray.WSOCjumpfile;
 Athlete360.files_stg.WSOCjump_stgfile;
