@@ -37,7 +37,7 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(dedup(sort(Athlete360.files_stg.WSOCreadiness_stgfile, name), name),
+completestgdata := join(dedup(sort(finalStageData, name), name),
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
