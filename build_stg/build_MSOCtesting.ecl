@@ -41,7 +41,7 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(dedup(sort(finalStageData, name), name),
+completestgdata := join(finalStageData,
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
@@ -49,7 +49,7 @@ Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name)
 
 transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
 
-left only
+left outer
 
 );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.

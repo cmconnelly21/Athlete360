@@ -542,13 +542,13 @@ stgLayout extractRSItrials(ATHLETE360.Layouts.WSOCjump L) := transform
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.WSOCjump_stgfile,
-            NAME, DATE, -wuid),
-        NAME, DATE
+            name, date, trialname, -wuid),
+        name, date, trialname
     );
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(dedup(sort(finalStageData, name), name),
+completestgdata := join(finalStageData,
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
@@ -556,9 +556,11 @@ Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name)
 
 transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
 
-left only
+left outer
 
 );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
 EXPORT build_WSOCjump := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCjump_name, completestgdata);
+//OUTPUT(COUNT(finalStageData));
+//OUTPUT(COUNT(dedup(sort(finalStageData, name, date, trialname), name, date, trialname)));
