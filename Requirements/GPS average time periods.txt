@@ -18,4 +18,7 @@ create a new table that will have the distance covered in a new column.
 5. Now find the average speed for those time periods.
 create a new table that will include the average speed  in a new column.
 
-6. Create the output for the data.
+6. Now find the average heart rate for those time periods
+create a new table that will include the average heart rate in a new column.
+
+7. Create the output for the data.
