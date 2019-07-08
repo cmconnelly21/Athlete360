@@ -1,0 +1,20 @@
+Requirements for finding peak time periods in GPS data:
+
+1. Figure out how many rows of data are needed for the length of time needed for the average.
+ex:10 rows/sec
+   600 rows/min
+   3000 rows/5 min
+   6000 rows/10 min
+   9000 rows/15 min
+
+2. Scan through data in a window of rows equal to the time period you want. 
+Create a count that will cover the amount of rows needed for the time periods for the time, speed, and heart rate columns.
+
+3. Iterate through and find the three greatest average values for each value.
+The window should move through one row at a time taking a value for each combo of the # of rows needed and find what combos are the greatest.
+There should be three vaules for speed and heart rate.
+
+4. Record what time periods hold those three greatest values.
+Take the time periods that the speed and heart rates happened at.
+
+7. Create the output for the data.
