@@ -35,14 +35,14 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCnordbord_stgfile,
-            NAME, DATE, -wuid),
-        NAME, DATE
+            NAME, DATE, TIME, -wuid),
+        NAME, DATE, TIME
     );
 
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(dedup(sort(finalStageData, name), name),
+completestgdata := join(finalStageData,
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 

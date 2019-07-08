@@ -44,8 +44,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCgymaware_stgfile,
-            NAME, DATE, -wuid),
-        NAME, DATE
+            NAME, DATE, exercise, setnumber, -wuid),
+        NAME, DATE, exercise, setnumber
     );
 
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
