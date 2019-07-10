@@ -1,5 +1,9 @@
 Requirements for finding peak time periods in GPS data:
 
+upload data to landing zone
+spray data to cluster with starting layout
+process data with stage layout
+
 1. Figure out how many rows of data are needed for the length of time needed for the average.
 ex:10 rows/sec
    600 rows/min
