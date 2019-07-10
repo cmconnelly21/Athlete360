@@ -1,9 +1,9 @@
-﻿IMPORT Athlete360;
+﻿IMPORT * from $;
 
 
 
 EXPORT build_athlete360 := 
 
-sequential(Athlete360.spray_build, Athlete360.stg_build);
+sequential(spray_build, stg_build);
 
 
