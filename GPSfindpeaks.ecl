@@ -2,7 +2,7 @@
 
 rawDs := SORT(Athlete360.RawGPS.processedfile, name, ElapsedTime) : INDEPENDENT;
 
-_limit := 5;
+_limit := 600;
 
 inputDs := PROJECT(
         rawDs,

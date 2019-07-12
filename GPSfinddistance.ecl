@@ -20,8 +20,8 @@ inputDs := PROJECT(
 outputDs := ITERATE(inputDs,
     TRANSFORM({RECORDOF(LEFT)},
 		self.cnt := RIGHT.cnt;
-		self.speedtotal := IF(self.cnt = 1, right.speed, left.speed + right.speed);
-		self.distance := left.elapsedtime * left.speedtotal;
+		self.speedtotal := IF(self.cnt = 1, right.speed, left.speedtotal + right.speed);
+		self.distance := (left.elapsedtime * (left.speedtotal/left.cnt));
 		self := right
 				
 				
