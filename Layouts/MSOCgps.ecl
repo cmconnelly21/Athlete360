@@ -5,7 +5,8 @@
 		STRING Week;
 		STRING Date;
 		STRING Drillname;
-		STRING Drilltime;
+		STRING Drillstarttime;
+		STRING Drilltotaltime;
 		STRING Drilldistance;
 		STRING distancepermin;
 		STRING Highspeeddistance;

@@ -25,7 +25,7 @@ EXPORT RawGPS := MODULE
 		UNSIGNED3 HeartRate; 	
 	END;
 
-	EXPORT File := DATASET('~intern::in::gpsgo1262019_rawdata.csv',Layout,CSV(HEADING(1)));
+	EXPORT File := DATASET('~athlete360::in::ms_rawgps06122019.csv',Layout,CSV(HEADING(1)));
 	EXPORT processedfile := PROJECT(File,TRANSFORM(Layout1,
 																								SELF.time := (UNSIGNED4)LEFT.Time;
 																								SELF.Name := LEFT.Name;
