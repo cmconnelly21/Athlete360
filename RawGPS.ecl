@@ -27,7 +27,7 @@ EXPORT RawGPS := MODULE
 
 	EXPORT File := DATASET('~athlete360::in::ms_rawgps06122019.csv',Layout,CSV(HEADING(1)));
 	EXPORT processedfile := PROJECT(File,TRANSFORM(Layout1,
-																								SELF.time := (UNSIGNED4)LEFT.Time;
+																								SELF.time := STD.date.fromstringtotime (LEFT.time, '%H:%M:%S');
 																								SELF.Name := LEFT.Name;
 																								SELF.PlayerID := (UNSIGNED3)LEFT.PlayerID;
 																								SELF.HeartRate := (UNSIGNED3)LEFT.HeartRate;

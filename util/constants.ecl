@@ -11,6 +11,7 @@
     EXPORT WSOCdate_name := 'ws_dates';
     EXPORT MSOCtesting_name := 'ms_testing';
     EXPORT MSOCgps_name := 'ms_gps';
+		EXPORT MSOCrawgps_name := 'ms_rawgps06122019';
     EXPORT MSOCgymaware_name := 'ms_gymaware';
     EXPORT MSOCjump_name := 'ms_jump';
     EXPORT MSOCnordbord_name := 'ms_nordbord';
