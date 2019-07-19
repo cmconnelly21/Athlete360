@@ -1,8 +1,8 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
 
-inputData := ATHLETE360.WSOClr.File;
-rec := ATHLETE360.WSOClr.layout;
+inputData := ATHLETE360.ECLarchive.WSOC.WSOClr.File;
+rec := ATHLETE360.ECLarchive.WSOC.WSOClr.layout;
 
 inputDs := PROJECT(inputData, TRANSFORM({recordof(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
 
@@ -90,12 +90,12 @@ dataWithAvgs := project
     
 output(dataWithAvgs);
 
-OUTPUT(ATHLETE360.WSOCdatefile.file);
-OUTPUT(ATHLETE360.WSOClr.file);
-OUTPUT(ATHLETE360.WSOCdatefile.processedfile);
-Name := JOIN(dataWithAvgs,ATHLETE360.WSOCdatefile.processedfile,
+OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
+OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOClr.file);
+OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.processedfile);
+Name := JOIN(dataWithAvgs,ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file,
 			STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
-			TRANSFORM({RECORDOF(LEFT); ATHLETE360.WSOCdatefile.layout.gamedaycount},
+			TRANSFORM({RECORDOF(LEFT); ATHLETE360.ECLarchive.WSOC.WSOCdatefile.layout.gamedaycount},
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
 			OUTPUT(Name, all);
