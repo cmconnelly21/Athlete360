@@ -75,7 +75,7 @@ Athlete360.build_athlete360;
  //Athlete360.files_stg.MSOCgps_stgfile;
  //Athlete360.files_spray.MSOCrawgpsfile;
  //Athlete360.files_stg.MSOCrawgps_stgfile;
-// Athlete360.files_spray.athleteinfofile;
-// Athlete360.files_spray.WSOCdatefile;
+ //Athlete360.files_spray.athleteinfofile;
+ //Athlete360.files_spray.WSOCdatefile;
 
 //SORT(Intern.RawGPS.processedfile, Name, elapsedtime)[1..1000];
