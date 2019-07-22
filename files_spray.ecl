@@ -5,7 +5,7 @@ IMPORT Athlete360;
     EXPORT WSOCdatefile := DATASET( Athlete360.util.constants.spray_prefix + 'ws_dates', Athlete360.Layouts.WSOCdatefile, CSV(HEADING(1)), OPT);
 		EXPORT MSOCtestingfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_testing', Athlete360.Layouts.MSOCtesting, CSV(HEADING(1)), OPT);
 		EXPORT MSOCgpsfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_gps', Athlete360.Layouts.MSOCgps, CSV(HEADING(1)), OPT);
-		EXPORT MSOCrawgpsfile := DATASET( Athlete360.util.constants.spray_prefix + 'Athlete360_ms_rawgps06122019.csv', Athlete360.Layouts.MSOCrawgps, CSV(HEADING(1)), OPT);
+		EXPORT MSOCrawgpsfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_rawgps', Athlete360.Layouts.MSOCrawgps, CSV(HEADING(1)), OPT);
 		EXPORT MSOCgymawarefile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_gymaware', Athlete360.Layouts.MSOCgymaware, CSV(HEADING(1)), OPT);
 		EXPORT MSOCjumpfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_jump', Athlete360.Layouts.MSOCjump, CSV(HEADING(9)), OPT);
 		EXPORT MSOCnordbordfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_nordbord', Athlete360.Layouts.MSOCnordbord, CSV(HEADING(3)), OPT);

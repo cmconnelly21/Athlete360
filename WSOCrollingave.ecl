@@ -1,16 +1,30 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
 
-inputData := ATHLETE360.ECLarchive.WSOC.WSOClr.File;
-rec := ATHLETE360.ECLarchive.WSOC.WSOClr.layout;
+rawDs := SORT(Athlete360.files_stg.WSOCreadiness_stgfile, Date, Name) : INDEPENDENT;
 
-inputDs := PROJECT(inputData, TRANSFORM({recordof(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
+completedata := join(dedup(sort(rawDs, name), name),
+
+Athlete360.files_stg.WSOCtrainingload_stgfile,
+
+Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+
+transform({RECORDOF(LEFT)}, SELF.name := RIGHT.name; 
+														SELF.Date := RIGHT.Date;
+														SELF := LEFT;), 
+
+left outer
+
+);
+
+
+inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
 
 
 
-inputDataUniqueName := DEDUP(SORT(inputData, name), name);
+completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
-rec denormalizeToFindMedian(rec L, DATASET(rec) R) := TRANSFORM
+completedata denormalizeToFindMedian(completedata L, DATASET(completedata) R) := TRANSFORM
      
     SELF.wellnesssum := IF(COUNT(R) % 2 = 1, 
                             SORT(R, wellnesssum)[(COUNT(R) / 2 ) + 1].wellnesssum, 
@@ -25,19 +39,19 @@ rec denormalizeToFindMedian(rec L, DATASET(rec) R) := TRANSFORM
 
  END;
 
-inputDataWithMedians := DENORMALIZE
+completedataWithMedians := DENORMALIZE
     (
-        inputDataUniqueName, 
-        inputData,
+        completedataUniqueName, 
+        completedata,
         LEFT.name = RIGHT.name,
         GROUP,
         denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
     );
 
-replaceMediansOnEmptyRecs := JOIN
+replaceMediansOnEmptycompletedatas := JOIN
     (
-        inputData,
-        inputDataWithMedians,
+        completedata,
+        completedataWithMedians,
         LEFT.name = RIGHT.name,
         TRANSFORM(RECORDOF(LEFT),
             SELF.wellnesssum := IF(LEFT.wellnesssum <> 0, LEFT.wellnesssum, RIGHT.wellnesssum);
@@ -47,56 +61,58 @@ replaceMediansOnEmptyRecs := JOIN
         LEFT OUTER
     );
 
-replaceMediansOnEmptyRecsProj := PROJECT
+replaceMediansOnEmptycompletedatasProj := PROJECT
     (
-        replaceMediansOnEmptyRecs, 
+        replaceMediansOnEmptycompletedatas, 
         TRANSFORM(
-            {recordof(LEFT); integer cnt}, 
+            {RECORDOF(LEFT); integer cnt}, 
             SELF.cnt := COUNTER; 
             self := left
         )
     );
 
-replaceMediansOnEmptyRecsWithCnt := iterate
+replaceMediansOnEmptycompletedatasWithCnt := iterate
     (
         sort
             (
-                replaceMediansOnEmptyRecsProj,
+                replaceMediansOnEmptycompletedatasProj,
                 Name,_Date
             ), 
         transform(
-            {rec, integer cnt}, 
+            {completedata, integer cnt}, 
             self.cnt := IF(counter = 1 OR left.name <> right.name, 1, left.cnt+ 1 ); 
             self := right
         )
     );
 
-replaceMediansOnEmptyRecsWithCntSorted := SORT
+replaceMediansOnEmptycompletedatasWithCntSorted := SORT
     (
-        replaceMediansOnEmptyRecsWithCnt ,
+        replaceMediansOnEmptycompletedatasWithCnt ,
         Name,cnt
     );
 
 dataWithAvgs := project
     (
-        replaceMediansOnEmptyRecsWithCntSorted,
+        replaceMediansOnEmptycompletedatasWithCntSorted,
         Transform(
-	        { Recordof(LEFT); DECIMAL5_2 SessionOverall_roll; DECIMAL5_2 WellnessSum_roll},           
-  	        SELF.SessionOverall_roll := AVE(replaceMediansOnEmptyRecsWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-5 AND cnt <= left.cnt), SessionOverall);
-  	        SELF.WellnessSum_roll := AVE(replaceMediansOnEmptyRecsWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-5 AND cnt <= left.cnt),WellnessSum);
+	        { RECORDOF(LEFT); DECIMAL5_2 SessionOverall_roll; DECIMAL5_2 WellnessSum_roll},           
+  	        SELF.SessionOverall_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt), SessionOverall);
+  	        SELF.WellnessSum_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt),WellnessSum);
+						SELF.SessionOverall_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt), SessionOverall);
+  	        SELF.WellnessSum_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt),WellnessSum);
             SELF := LEFT
         )     
     );
     
 output(dataWithAvgs);
 
-OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
-OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOClr.file);
-OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.processedfile);
-Name := JOIN(dataWithAvgs,ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file,
-			STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
-			TRANSFORM({RECORDOF(LEFT); ATHLETE360.ECLarchive.WSOC.WSOCdatefile.layout.gamedaycount},
-			SELF.gamedaycount := RIGHT.gamedaycount;
-			SELF := LEFT));
-			OUTPUT(Name, all);
+//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
+//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOClr.file);
+//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.processedfile);
+//Name := JOIN(dataWithAvgs,ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file,
+	//		STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
+	//		TRANSFORM({RECORDOF(LEFT); ATHLETE360.ECLarchive.WSOC.WSOCdatefile.layout.gamedaycount},
+	//		SELF.gamedaycount := RIGHT.gamedaycount;
+	//		SELF := LEFT));
+	//		OUTPUT(Name, all);
 			
