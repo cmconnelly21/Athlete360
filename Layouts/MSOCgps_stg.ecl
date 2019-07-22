@@ -5,7 +5,7 @@
 		UNSIGNED1 Week;
 		UNSIGNED4 Date;
 		STRING Drillname;
-		DECIMAL5_2 Drillstarttime;
+		UNSIGNED4 Drillstarttime;
 		DECIMAL5_2 Drilltotaltime;
 		DECIMAL10_5 Drilldistance;
 		DECIMAL5_2 distancepermin;

@@ -1,4 +1,5 @@
 ﻿IMPORT Athlete360, std;
+#option('outputlimit',2000);
 
 rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
 

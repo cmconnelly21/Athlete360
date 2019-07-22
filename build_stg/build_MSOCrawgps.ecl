@@ -8,7 +8,7 @@ stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCrawgps L):= transform
-																								SELF.time := STD.date.fromstringtotime (L.time, '%H:%M:%S');
+																								SELF.time := STD.date.fromstringtotime (L.time, '%H:%M.%S');
 																								SELF.Name := L.Name;
 																								SELF.PlayerID := (UNSIGNED3)L.PlayerID;
 																								SELF.HeartRate := (UNSIGNED3)L.HeartRate;

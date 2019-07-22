@@ -12,7 +12,7 @@ Athlete360.build_athlete360;
 
 // Athlete360.build_stg.build_WSOCjump
 // );
-
+//Athlete360.stg_build;
 // Athlete360.files_spray.WSOCdatefile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_spray.MSOCgpsfile;
@@ -71,10 +71,10 @@ Athlete360.build_athlete360;
 // Athlete360.files_stg.WSOCtesting_stgfile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_stg.MSOCtesting_stgfile;
- Athlete360.files_spray.MSOCgpsfile;
- Athlete360.files_stg.MSOCgps_stgfile;
- Athlete360.files_spray.MSOCrawgpsfile;
- Athlete360.files_stg.MSOCrawgps_stgfile;
+ //Athlete360.files_spray.MSOCgpsfile;
+ //Athlete360.files_stg.MSOCgps_stgfile;
+ //Athlete360.files_spray.MSOCrawgpsfile;
+ //Athlete360.files_stg.MSOCrawgps_stgfile;
 // Athlete360.files_spray.athleteinfofile;
 // Athlete360.files_spray.WSOCdatefile;
 

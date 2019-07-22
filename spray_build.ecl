@@ -1,4 +1,4 @@
-Import STD, Athlete360;
+﻿Import STD, Athlete360;
 
 String fileDate := (String) std.Date.Today() : STORED('filedate');
 
@@ -34,4 +34,5 @@ sprayFiles := NOTHOR(Apply(fileList,
             )
         );
 
-EXPORT spray_build := SEQUENTIAL(output(fileList), sprayFiles, spraybuild);
+//EXPORT spray_build := SEQUENTIAL(output(fileList), sprayFiles, spraybuild);
+output(fileList)
