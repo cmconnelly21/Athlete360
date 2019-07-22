@@ -34,5 +34,5 @@ sprayFiles := NOTHOR(Apply(fileList,
             )
         );
 
-//EXPORT spray_build := SEQUENTIAL(output(fileList), sprayFiles, spraybuild);
-output(fileList)
+EXPORT spray_build := SEQUENTIAL(output(fileList), sprayFiles, spraybuild);
+//output(fileList)
