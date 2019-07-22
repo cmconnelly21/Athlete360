@@ -1,11 +1,28 @@
 ﻿IMPORT Athlete360, std;
 
-rawDs := SORT(Athlete360.RawGPS.processedfile, name, ElapsedTime) : INDEPENDENT;
+rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
 
 _limit := 600;
 
+
+completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime),
+
+Athlete360.files_stg.MSOCgps_stgfile,
+
+Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+
+transform({RECORDOF(LEFT), string drillname, decimal5_2 drillstarttime, UNSIGNED4 Date}, SELF.name := RIGHT.name; 
+														SELF.drillname := RIGHT.drillname;
+														SELF.drillstarttime := RIGHT.drillstarttime;
+														SELF.Date := RIGHT.Date;
+														SELF := LEFT;), 
+
+left outer
+
+);
+
 inputDs := PROJECT(
-        rawDs,
+        completegpsdata,
         TRANSFORM({RECORDOF(LEFT); integer cnt; 
             decimal15_8 speed_sumval := 0; 
             decimal15_8 heartrate_sumval := 0; 

@@ -4,8 +4,8 @@ IMPORT Athlete360;
 
     EXPORT WSOCdate_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_dates', Athlete360.Layouts.WSOCdatefile, THOR, OPT);
 		EXPORT MSOCtesting_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_testing', Athlete360.Layouts.MSOCtesting_stg, THOR, OPT);
-		EXPORT MSOCgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_gps06122019', Athlete360.Layouts.MSOCgps_stg, THOR, OPT);
-		EXPORT MSOCrawgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_rawgps', Athlete360.Layouts.MSOCrawgps_stg, THOR, OPT);
+		EXPORT MSOCgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_gps', Athlete360.Layouts.MSOCgps_stg, THOR, OPT);
+		EXPORT MSOCrawgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_rawgps06122019', Athlete360.Layouts.MSOCrawgps_stg, THOR, OPT);
 		EXPORT MSOCgymaware_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_gymaware', Athlete360.Layouts.MSOCgymaware_stg, THOR, OPT);
 		EXPORT MSOCjump_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_jump', Athlete360.Layouts.MSOCjump_stg, THOR, OPT);
 		EXPORT MSOCnordbord_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_nordbord', Athlete360.Layouts.MSOCnordbord_stg, THOR, OPT);
