@@ -10,7 +10,14 @@ completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime)
 
 Athlete360.files_stg.MSOCgps_stgfile,
 
-Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+	Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
+	trim(right.drillname) <> 'SESSION OVERALL' AND
+	Left.Time BETWEEN right.drillstarttime AND 
+	STD.date.AdjustTime(
+			right.drillstarttime, 
+			minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
+			second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])
+	),
 
 transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, UNSIGNED4 Date}, 
 														SELF.name := RIGHT.name; 
@@ -19,7 +26,7 @@ transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, UNSIGNED4
 														SELF.Date := RIGHT.Date;
 														SELF := LEFT;), 
 
-left outer
+inner
 
 );
 
