@@ -9,8 +9,10 @@ Athlete360.files_stg.WSOCtrainingload_stgfile,
 
 Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
 
-transform({RECORDOF(LEFT)}, SELF.name := RIGHT.name; 
+transform({RECORDOF(LEFT), Right.Sessionoverall}, 
+														SELF.name := RIGHT.name; 
 														SELF.Date := RIGHT.Date;
+														SELF.Sessionoverall := Right.Sessionoverall;
 														SELF := LEFT;), 
 
 left outer
@@ -24,7 +26,7 @@ inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.c
 
 completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
-completedata denormalizeToFindMedian(completedata L, DATASET(completedata) R) := TRANSFORM
+RECORDOF(completedata) denormalizeToFindMedian(RECORDOF(completedata) L, DATASET(RECORDOF(completedata)) R) := TRANSFORM
      
     SELF.wellnesssum := IF(COUNT(R) % 2 = 1, 
                             SORT(R, wellnesssum)[(COUNT(R) / 2 ) + 1].wellnesssum, 
@@ -76,7 +78,7 @@ replaceMediansOnEmptycompletedatasWithCnt := iterate
         sort
             (
                 replaceMediansOnEmptycompletedatasProj,
-                Name,_Date
+                Name,Date
             ), 
         transform(
             {completedata, integer cnt}, 
@@ -95,7 +97,7 @@ dataWithAvgs := project
     (
         replaceMediansOnEmptycompletedatasWithCntSorted,
         Transform(
-	        { RECORDOF(LEFT); DECIMAL5_2 SessionOverall_roll; DECIMAL5_2 WellnessSum_roll},           
+	        { RECORDOF(LEFT); DECIMAL5_2 SessionOverall_roll2; DECIMAL5_2 WellnessSum_roll2; DECIMAL5_2 SessionOverall_roll4; DECIMAL5_2 WellnessSum_roll4},           
   	        SELF.SessionOverall_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt), SessionOverall);
   	        SELF.WellnessSum_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt),WellnessSum);
 						SELF.SessionOverall_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt), SessionOverall);

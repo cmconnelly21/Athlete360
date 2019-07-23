@@ -1,6 +1,6 @@
 ﻿EXPORT constants := MODULE
 
-    EXPORT spray_prefix := '~athlete360::in::spray::';
+    EXPORT spray_prefix := '~athlete360::in::spray::athlete360_';
 
     EXPORT stg_prefix := '~athlete360::in::stg::';
 

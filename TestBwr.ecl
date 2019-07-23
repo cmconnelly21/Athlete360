@@ -1,7 +1,7 @@
 ﻿Import Athlete360, Intern, std;
 
 #stored('filedate', '20190723');
-Athlete360.build_athlete360;
+//Athlete360.build_athlete360;
 
 // Athlete360.DataPatterns.profile(Athlete360.files_spray.WSOCdatefile, features := '\'fill_rate,best_ecl_types\'');
 
@@ -13,7 +13,7 @@ Athlete360.build_athlete360;
 // Athlete360.build_stg.build_WSOCjump
 // );
 //Athlete360.spray_build;
-//Athlete360.stg_build;
+Athlete360.stg_build;
 // Athlete360.files_spray.WSOCdatefile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_spray.MSOCgpsfile;
