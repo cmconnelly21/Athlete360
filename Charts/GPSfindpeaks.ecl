@@ -40,8 +40,8 @@ inputDs := PROJECT(
             decimal10_5 speed_boundary := 0,
             decimal10_5 heartrate_boundary := 0},
             SELF.cnt := COUNTER;
-            self.speed_boundary := IF(counter < _limit, left.speed, rawDs[COUNTER - _limit].speed);
-            self.heartrate_boundary := IF(counter < _limit, left.heartrate, rawDs[COUNTER - _limit].heartrate);
+            self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
+            self.heartrate_boundary := IF(counter < _limit, left.heartrate, completegpsdata[COUNTER - _limit].heartrate);
             SELF := LEFT;
         )
 );
@@ -58,7 +58,7 @@ outputDs := ITERATE(inputDs,
                             IF(self.cnt > _limit, 
                                 (left.speed_sumval - self.speed_boundary), left.speed_sumval) + right.speed);
         self.heartrate_sumval := IF(self.cnt = 1, 
-                            RIGHT.speed, 
+                            RIGHT.heartrate, 
                             IF(self.cnt > _limit, 
                                 (left.heartrate_sumval - self.heartrate_boundary), left.heartrate_sumval) + right.heartrate);                                
         self.speed_rollingave := self.speed_sumval / IF(self.cnt < _limit, self.cnt, _limit);
@@ -67,5 +67,12 @@ outputDs := ITERATE(inputDs,
     )
 
 );
-OUTPUT(inputDs, all);
-output(outputDs, all);
+
+// findpeaks := Topn(outputDs,1,drillname); 
+
+findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
+
+OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::GPSfindpeaks',CSV,OVERWRITE);
+//OUTPUT(inputDs, all);
+//output(outputDs, all);
+//output(findpeaks, all);

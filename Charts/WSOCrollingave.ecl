@@ -117,4 +117,5 @@ output(dataWithAvgs);
 	//		SELF.gamedaycount := RIGHT.gamedaycount;
 	//		SELF := LEFT));
 	//		OUTPUT(Name, all);
-			
+
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::WSOCrollingave',CSV,OVERWRITE);
