@@ -1,6 +1,6 @@
 ﻿EXPORT constants := MODULE
 
-    EXPORT spray_prefix := '~athlete360::in::spray::athlete360_';
+    EXPORT spray_prefix := '~athlete360::in::spray::';
 
     EXPORT stg_prefix := '~athlete360::in::stg::';
 
@@ -12,6 +12,8 @@
     EXPORT MSOCtesting_name := 'ms_testing';
     EXPORT MSOCgps_name := 'ms_gps';
 		EXPORT MSOCrawgps_name := 'ms_rawgps';
+		EXPORT WSOCgps_name := 'ws_gps';
+		EXPORT WSOCrawgps_name := 'ws_rawgps';
     EXPORT MSOCgymaware_name := 'ms_gymaware';
     EXPORT MSOCjump_name := 'ms_jump';
     EXPORT MSOCnordbord_name := 'ms_nordbord';

@@ -1,14 +1,14 @@
 ﻿IMPORT Athlete360, STD;
 
 // First_step get the spray file from files_spray
-sprayFile := Athlete360.files_spray.MSOCgpsfile;
+sprayFile := Athlete360.files_spray.WSOCgpsfile;
 
 // get the layout (processed layout)
-stgLayout := Athlete360.Layouts.MSOCgps_stg;
+stgLayout := Athlete360.Layouts.WSOCgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
-stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
+stgLayout extractdata (Athlete360.Layouts.WSOCgps L):= transform
+																								SELF.date := STD.date.fromstringtodate(L.date,'%Y/%m/%d');
 																								SELF.Name := L.Name;
 																								SELF.Drillname := L.Drillname;
 																								SELF.Week := (UNSIGNED1)L.Week;
@@ -87,7 +87,7 @@ END;
 
 finalStageData := DEDUP(
         SORT(
-            cleanedSprayFile + Athlete360.files_stg.MSOCgps_stgfile,
+            cleanedSprayFile + Athlete360.files_stg.WSOCgps_stgfile,
             NAME, DATE, DRILLNAME, Drillstarttime, drilltotaltime, -wuid),
         NAME, DATE, DRILLNAME, Drillstarttime, drilltotaltime
     );
@@ -108,4 +108,4 @@ left outer
 );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCgps_name, completestgData);
+EXPORT build_WSOCgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCgps_name, completestgData);

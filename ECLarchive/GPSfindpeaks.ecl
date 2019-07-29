@@ -72,7 +72,7 @@ outputDs := ITERATE(inputDs,
 
 findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
-OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::GPSfindpeaks',CSV,OVERWRITE);
-//OUTPUT(inputDs, all);
-//output(outputDs, all);
-//output(findpeaks, all);
+//OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::GPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(inputDs, all);
+output(outputDs, all);
+output(findpeaks, all);EXPORT GPSfindpeaks := 'todo';
