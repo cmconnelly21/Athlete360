@@ -5,7 +5,12 @@ rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDE
 
 _limit := 600;
 
-
+temp1 := RECORD
+    recordof(rawDs);
+    string drillname;
+     UNSIGNED4 drillstarttime;
+      UNSIGNED4 Date;
+END;
 completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime),
 
 Athlete360.files_stg.MSOCgps_stgfile,
@@ -19,7 +24,7 @@ Athlete360.files_stg.MSOCgps_stgfile,
 			second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])
 	),
 
-transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, UNSIGNED4 Date}, 
+transform(temp1, 
 														SELF.name := RIGHT.name; 
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
@@ -46,7 +51,39 @@ inputDs := PROJECT(
         )
 );
 
+tempRec := RECORD
+    temp1; 
+    integer cnt; 
+    decimal15_8 speed_sumval := 0; 
+    decimal15_8 heartrate_sumval := 0; 
+    decimal10_5 speed_rollingave := 0; 
+    decimal10_5 heartrate_rollingave := 0; 
+    decimal10_5 speed_boundary := 0,
+    decimal10_5 heartrate_boundary := 0;
+end;
 
+temp2 := RECORD
+        dataset(temprec) recs;
+END;
+
+temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transform
+    
+     SELF.recs :=  PROJECT(
+        R,
+        TRANSFORM(tempRec,
+            SELF.cnt := COUNTER;
+            self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
+            self.heartrate_boundary := IF(counter < _limit, left.heartrate, completegpsdata[COUNTER - _limit].heartrate);
+            SELF := LEFT;
+        )
+);
+END;
+
+input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs, NAME), name),
+        inputDs,
+        LEFT.name = RIGHT.name,
+        group,
+        addBoundaries(LEFT, ROWS(RIGHT)));
 
 outputDs := ITERATE(inputDs,
     TRANSFORM({RECORDOF(LEFT)},
@@ -75,4 +112,14 @@ findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname);
 //OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::GPSfindpeaks',CSV,OVERWRITE);
 OUTPUT(inputDs, all);
 output(outputDs, all);
-output(findpeaks, all);EXPORT GPSfindpeaks := 'todo';
+output(findpeaks, all);
+
+
+temprec NewChildren(temprec R) := TRANSFORM
+SELF := R;
+END;
+NewChilds := NORMALIZE(input_boundaries,LEFT.recs,NewChildren(RIGHT));
+
+
+athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
+output(athletespecificpeaks, all);
