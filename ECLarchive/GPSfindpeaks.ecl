@@ -72,8 +72,8 @@ temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transf
         R,
         TRANSFORM(tempRec,
             SELF.cnt := COUNTER;
-            self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
-            self.heartrate_boundary := IF(counter < _limit, left.heartrate, completegpsdata[COUNTER - _limit].heartrate);
+            self.speed_boundary := IF(counter < _limit, left.speed, R[COUNTER - _limit].speed);
+            self.heartrate_boundary := IF(counter < _limit, left.heartrate, R[COUNTER - _limit].heartrate);
             SELF := LEFT;
         )
 );
@@ -84,8 +84,13 @@ input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs, NAME), name),
         LEFT.name = RIGHT.name,
         group,
         addBoundaries(LEFT, ROWS(RIGHT)));
+				
+temprec NewChildren(temprec R) := TRANSFORM
+SELF := R;
+END;
+NewChilds := NORMALIZE(input_boundaries,LEFT.recs,NewChildren(RIGHT));
 
-outputDs := ITERATE(inputDs,
+outputDs := ITERATE(sort(NewChilds, name, cnt),
     TRANSFORM({RECORDOF(LEFT)},
         self.speed_boundary := RIGHT.speed_boundary;//IF(COUNTER < _limit, right.speed, left.speed);
         self.heartrate_boundary := RIGHT.heartrate_boundary;//IF(COUNTER < _limit, right.speed, left.speed);
@@ -110,16 +115,9 @@ outputDs := ITERATE(inputDs,
 findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
 //OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::GPSfindpeaks',CSV,OVERWRITE);
-OUTPUT(inputDs, all);
+OUTPUT(sort(NewChilds, name, cnt),all);
 output(outputDs, all);
 output(findpeaks, all);
-
-
-temprec NewChildren(temprec R) := TRANSFORM
-SELF := R;
-END;
-NewChilds := NORMALIZE(input_boundaries,LEFT.recs,NewChildren(RIGHT));
-
 
 athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
 output(athletespecificpeaks, all);

@@ -53,18 +53,6 @@ inputDs := PROJECT(
             decimal10_5 heartrate_boundary3 := 0,
 						decimal10_5 speed_boundary5 := 0,
             decimal10_5 heartrate_boundary5 := 0,
-						decimal15_8 speed_sumvali := 0; 
-            decimal15_8 heartrate_sumvali := 0; 
-            decimal10_5 speed_rollingavei := 0; 
-            decimal10_5 heartrate_rollingavei := 0;
-						decimal15_8 speed_sumval3i := 0; 
-            decimal15_8 heartrate_sumval3i := 0; 
-            decimal10_5 speed_rollingave3i := 0; 
-            decimal10_5 heartrate_rollingave3i := 0;
-						decimal15_8 speed_sumval5i := 0; 
-            decimal15_8 heartrate_sumval5i := 0; 
-            decimal10_5 speed_rollingave5i := 0; 
-            decimal10_5 heartrate_rollingave5i := 0,
 						integer cnt2 := 0},
             SELF.cnt := COUNTER;
             self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
@@ -119,36 +107,6 @@ outputDs := ITERATE(inputDs,
                                 (left.heartrate_sumval5 - self.heartrate_boundary5), left.heartrate_sumval5) + right.heartrate);                                
         self.speed_rollingave5 := self.speed_sumval5 / IF(self.cnt < _limit3, self.cnt, _limit3);
         self.heartrate_rollingave5 := self.heartrate_sumval5 / IF(self.cnt < _limit3, self.cnt, _limit3);
-				self.speed_sumvali := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit, 
-                                (left.speed_sumvali - self.speed_boundary), left.speed_sumvali) + right.speed);
-        self.heartrate_sumvali := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit, 
-                                (left.heartrate_sumvali - self.heartrate_boundary), left.heartrate_sumvali) + right.heartrate);                                
-        self.speed_rollingavei := self.speed_sumval / IF(self.cnt2 < _limit, self.cnt2, _limit);
-        self.heartrate_rollingavei := self.heartrate_sumval / IF(self.cnt2 < _limit, self.cnt2, _limit);
-				self.speed_sumval3i := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit2, 
-                                (left.speed_sumval3i - self.speed_boundary3), left.speed_sumval3i) + right.speed);
-        self.heartrate_sumval3i := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit2, 
-                                (left.heartrate_sumval3i - self.heartrate_boundary3), left.heartrate_sumval3i) + right.heartrate);                                
-        self.speed_rollingave3i := self.speed_sumval3i / IF(self.cnt2 < _limit2, self.cnt2, _limit2);
-        self.heartrate_rollingave3i := self.heartrate_sumval3i / IF(self.cnt2 < _limit2, self.cnt2, _limit2);
-				self.speed_sumval5i := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit3, 
-                                (left.speed_sumval5i - self.speed_boundary5), left.speed_sumval5i) + right.speed);
-        self.heartrate_sumval5i := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit3, 
-                                (left.heartrate_sumval5i - self.heartrate_boundary5), left.heartrate_sumval5i) + right.heartrate);                                
-        self.speed_rollingave5i := self.speed_sumval5i / IF(self.cnt2 < _limit3, self.cnt2, _limit3);
-        self.heartrate_rollingave5i := self.heartrate_sumval5i / IF(self.cnt2 < _limit3, self.cnt2, _limit3);
         self := RIGHT
     )
 
@@ -156,9 +114,22 @@ outputDs := ITERATE(inputDs,
 
 // findpeaks := Topn(outputDs,1,drillname); 
 
-findpeaks := dedup(sort(outputDs, name, drillname, -heartrate_rollingave), name, drillname); 
+findpeaks := dedup(sort(outputDs, name, drillname, -heartrate_rollingave), name, drillname);
+ 
+totalaverages := Project(findpeaks, 
+							transform({RECORDOF(LEFT);
+								decimal10_5 heartrate_totalave,
+								decimal10_5 heartrate_totalave3,
+								decimal10_5 heartrate_totalave5},
+							self.heartrate_totalave := AVE(findpeaks, heartrate_rollingave);
+							self.heartrate_totalave3 := AVE(findpeaks, heartrate_rollingave3);
+							self.heartrate_totalave5 := AVE(findpeaks, heartrate_rollingave5);
+							self := LEFT
+								));
+								 
 
 //OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::MSOCGPSfindpeaks',CSV,OVERWRITE);
 OUTPUT(inputDs, all);
 output(outputDs, all);
 output(findpeaks, all);
+output(totalaverages, all);
