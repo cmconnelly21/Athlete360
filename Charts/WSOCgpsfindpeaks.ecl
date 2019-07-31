@@ -1,12 +1,15 @@
 ﻿IMPORT Athlete360, std;
 #option('outputlimit',2000);
 
+//pull data from raw gps stage file
 rawDs := SORT(Athlete360.files_stg.WSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
 
+//set window size for different time periods, 10 rows = 1 second
 _limit := 600;
 _limit2 := 1800;
 _limit3 := 3000;
 
+//add needed fields to raw gps layout and join data from gps stage file
 temp1 := RECORD
     recordof(rawDs);
     string drillname;
@@ -37,6 +40,7 @@ inner
 
 );
 
+//add needed fields to complete gps data and build boundaries to create the time period windows
 inputDs := PROJECT(
         completegpsdata,
         TRANSFORM({RECORDOF(LEFT); integer cnt; 
@@ -53,6 +57,7 @@ inputDs := PROJECT(
         )
 );
 
+//add fields that will be used to create the averages
 tempRec := RECORD
     temp1; 
     integer cnt; 
@@ -80,6 +85,7 @@ temp2 := RECORD
         dataset(temprec) recs;
 END;
 
+//add the boundaries to the new layout and define how they will work
 temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transform
     
      SELF.recs :=  PROJECT(
@@ -97,6 +103,7 @@ temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transf
 );
 END;
 
+//denormalize and set data up to seperate the data by athlete
 input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs, NAME), name),
         inputDs,
         LEFT.name = RIGHT.name,
@@ -108,6 +115,7 @@ SELF := R;
 END;
 NewChilds := NORMALIZE(input_boundaries,LEFT.recs,NewChildren(RIGHT));
 
+//go through by row and set the boundaries and cnt that will be created for each athlete, then layout sum and averages fields
 outputDs := ITERATE(sort(NewChilds, name, cnt),
     TRANSFORM({RECORDOF(LEFT)},
         self.speed_boundary := RIGHT.speed_boundary;//IF(COUNTER < _limit, right.speed, left.speed);
@@ -152,17 +160,15 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 
 );
 
+//create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
 findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
-OUTPUT(sort(NewChilds, name, cnt),all);
-output(outputDs, all);
-output(findpeaks, all);
-
+//create dataset to show the peak averages for each athlete during each drill
 athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
-output(athletespecificpeaks, all);
 
+//create dataset to show average peaks for each drill 
 totalaverages := Project(athletespecificpeaks, 
 							transform({RECORDOF(LEFT);
 								decimal5_2 heartrate_totalave,
@@ -174,5 +180,10 @@ totalaverages := Project(athletespecificpeaks,
 							self := LEFT
 								));
 								
+//output the data and create an output file								
+OUTPUT(sort(NewChilds, name, cnt),all);
+output(outputDs, all);
+output(findpeaks, all);
+output(athletespecificpeaks, all);							
 output(totalaverages, all);
 //OUTPUT(totalaverages,,'~Athlete360::OUT::Charts::WSOCGPSfindpeaks',CSV,OVERWRITE);
