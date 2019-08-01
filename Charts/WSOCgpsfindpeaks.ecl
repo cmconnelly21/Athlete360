@@ -1,5 +1,5 @@
 ﻿IMPORT Athlete360, std;
-#option('outputlimit',2000);
+// #option('outputlimit',2000);
 
 rawDs := SORT(Athlete360.files_stg.WSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
 
@@ -159,6 +159,8 @@ outputDs := ITERATE(inputDs,
 findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
 //OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::WSOCGPSfindpeaks',CSV,OVERWRITE);
-OUTPUT(inputDs, all);
-output(outputDs, all);
-output(findpeaks, all);
+// OUTPUT(inputDs, all);
+// output(outputDs, all);
+// output(findpeaks, all);
+
+EXPORT WSOCgpsfindpeaks := Athlete360.util.fn_promote_ds(Athlete360.util.constants.chart_prefix, 'WSOCgpsfindpeaks', findpeaks);

@@ -4,7 +4,17 @@
 
     EXPORT stg_prefix := '~athlete360::in::stg::';
 
+    EXPORT chart_prefix := '~Athlete360::OUT::Charts::';
+
     EXPORT landingzone_folder := '/var/lib/HPCCSystems/mydropzone/Athlete360/';    
+
+    EXPORT despray_prefix := '~athlete360::out::despray';
+
+    EXPORT chart_out_MSOCgpsfindpeaks := 'MSOCgpsfindpeaks';
+    EXPORT chart_out_WSOCgpsfindpeaks := 'WSOCgpsfindpeaks';
+    EXPORT chart_out_MSOCrollingave := 'MSOCrollingave';
+    EXPORT chart_out_WSOCrollingave := 'WSOCrollingave';
+
 
     EXPORT landingzone_ip  := '10.0.0.220';
     
