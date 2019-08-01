@@ -1,6 +1,7 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
 
+//pull data from readiness stage file and join with data from training loads stage file
 rawDs := SORT(Athlete360.files_stg.MSOCreadiness_stgfile, Date, Name) : INDEPENDENT;
 
 completedata := join(dedup(sort(rawDs, name), name),
@@ -19,11 +20,11 @@ left outer
 
 );
 
-
+//add count to dataset
 inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
 
 
-
+//define how the count will work
 completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
 RECORDOF(completedata) denormalizeToFindMedian(RECORDOF(completedata) L, DATASET(RECORDOF(completedata)) R) := TRANSFORM
@@ -41,6 +42,7 @@ RECORDOF(completedata) denormalizeToFindMedian(RECORDOF(completedata) L, DATASET
 
  END;
 
+//denormalize to seperate by athlete to find median values
 completedataWithMedians := DENORMALIZE
     (
         completedataUniqueName, 
@@ -50,6 +52,7 @@ completedataWithMedians := DENORMALIZE
         denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
     );
 
+//define what median values to find
 replaceMediansOnEmptycompletedatas := JOIN
     (
         completedata,
@@ -63,6 +66,7 @@ replaceMediansOnEmptycompletedatas := JOIN
         LEFT OUTER
     );
 
+//add median values to dataset
 replaceMediansOnEmptycompletedatasProj := PROJECT
     (
         replaceMediansOnEmptycompletedatas, 
@@ -73,6 +77,7 @@ replaceMediansOnEmptycompletedatasProj := PROJECT
         )
     );
 
+//add the count to the data with the median values
 replaceMediansOnEmptycompletedatasWithCnt := iterate
     (
         sort
@@ -86,13 +91,15 @@ replaceMediansOnEmptycompletedatasWithCnt := iterate
             self := right
         )
     );
-
+		
+//sort by name
 replaceMediansOnEmptycompletedatasWithCntSorted := SORT
     (
         replaceMediansOnEmptycompletedatasWithCnt ,
         Name,cnt
     );
 
+//create and define the averages using the count to find averages based on previous 2 and 4 days
 dataWithAvgs := project
     (
         replaceMediansOnEmptycompletedatasWithCntSorted,

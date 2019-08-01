@@ -1,13 +1,21 @@
 ﻿IMPORT Athlete360, std;
 // #option('outputlimit',2000);
 
+//pull data from raw gps stage file
 rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
 
+//set window size for different time periods, 10 rows = 1 second
 _limit := 600;
 _limit2 := 1800;
 _limit3 := 3000;
 
-
+//add needed fields to raw gps layout and join data from gps stage file
+temp1 := RECORD
+    recordof(rawDs);
+    string drillname;
+     UNSIGNED4 drillstarttime;
+      UNSIGNED4 Date;
+END;
 completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime),
 
 Athlete360.files_stg.MSOCgps_stgfile,
@@ -21,7 +29,7 @@ Athlete360.files_stg.MSOCgps_stgfile,
 			second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])
 	),
 
-transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, unsigned4 date}, 
+transform(temp1, 
 														SELF.name := RIGHT.name; 
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
@@ -32,54 +40,83 @@ inner
 
 );
 
+//add needed fields to complete gps data and build boundaries to create the time period windows
 inputDs := PROJECT(
         completegpsdata,
         TRANSFORM({RECORDOF(LEFT); integer cnt; 
             decimal15_8 speed_sumval := 0; 
             decimal15_8 heartrate_sumval := 0; 
             decimal10_5 speed_rollingave := 0; 
-            decimal10_5 heartrate_rollingave := 0;
-						decimal15_8 speed_sumval3 := 0; 
-            decimal15_8 heartrate_sumval3 := 0; 
-            decimal10_5 speed_rollingave3 := 0; 
-            decimal10_5 heartrate_rollingave3 := 0;
-						decimal15_8 speed_sumval5 := 0; 
-            decimal15_8 heartrate_sumval5 := 0; 
-            decimal10_5 speed_rollingave5 := 0; 
-            decimal10_5 heartrate_rollingave5 := 0;
+            decimal10_5 heartrate_rollingave := 0; 
             decimal10_5 speed_boundary := 0,
-            decimal10_5 heartrate_boundary := 0,
-						decimal10_5 speed_boundary3 := 0,
-            decimal10_5 heartrate_boundary3 := 0,
-						decimal10_5 speed_boundary5 := 0,
-            decimal10_5 heartrate_boundary5 := 0,
-						decimal15_8 speed_sumvali := 0; 
-            decimal15_8 heartrate_sumvali := 0; 
-            decimal10_5 speed_rollingavei := 0; 
-            decimal10_5 heartrate_rollingavei := 0;
-						decimal15_8 speed_sumval3i := 0; 
-            decimal15_8 heartrate_sumval3i := 0; 
-            decimal10_5 speed_rollingave3i := 0; 
-            decimal10_5 heartrate_rollingave3i := 0;
-						decimal15_8 speed_sumval5i := 0; 
-            decimal15_8 heartrate_sumval5i := 0; 
-            decimal10_5 speed_rollingave5i := 0; 
-            decimal10_5 heartrate_rollingave5i := 0,
-						integer cnt2 := 0},
+            decimal10_5 heartrate_boundary := 0},
             SELF.cnt := COUNTER;
             self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
             self.heartrate_boundary := IF(counter < _limit, left.heartrate, completegpsdata[COUNTER - _limit].heartrate);
-						self.speed_boundary3 := IF(counter < _limit2, left.speed, completegpsdata[COUNTER - _limit2].speed);
-            self.heartrate_boundary3 := IF(counter < _limit2, left.heartrate, completegpsdata[COUNTER - _limit2].heartrate);
-						self.speed_boundary5 := IF(counter < _limit3, left.speed, completegpsdata[COUNTER - _limit3].speed);
-            self.heartrate_boundary5 := IF(counter < _limit3, left.heartrate, completegpsdata[COUNTER - _limit3].heartrate);
             SELF := LEFT;
         )
 );
 
+//add fields that will be used to create the averages
+tempRec := RECORD
+    temp1; 
+    integer cnt; 
+    decimal15_8 speed_sumval := 0; 
+    decimal15_8 heartrate_sumval := 0; 
+    decimal10_5 speed_rollingave := 0; 
+    decimal10_5 heartrate_rollingave := 0;
+		decimal15_8 speed_sumval3 := 0; 
+    decimal15_8 heartrate_sumval3 := 0; 
+    decimal10_5 speed_rollingave3 := 0; 
+    decimal10_5 heartrate_rollingave3 := 0;
+		decimal15_8 speed_sumval5 := 0; 
+    decimal15_8 heartrate_sumval5 := 0; 
+    decimal10_5 speed_rollingave5 := 0; 
+    decimal10_5 heartrate_rollingave5 := 0;
+    decimal10_5 speed_boundary := 0,
+    decimal10_5 heartrate_boundary := 0;
+		decimal10_5 speed_boundary3 := 0,
+    decimal10_5 heartrate_boundary3 := 0,
+		decimal10_5 speed_boundary5 := 0,
+    decimal10_5 heartrate_boundary5 := 0,
+end;
 
+temp2 := RECORD
+        dataset(temprec) recs;
+END;
 
-outputDs := ITERATE(inputDs,
+//add the boundaries to the new layout and define how they will work
+temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transform
+    
+     SELF.recs :=  PROJECT(
+        R,
+        TRANSFORM(tempRec,
+            SELF.cnt := COUNTER;
+            self.speed_boundary := IF(counter < _limit, left.speed, R[COUNTER - _limit].speed);
+            self.heartrate_boundary := IF(counter < _limit, left.heartrate, R[COUNTER - _limit].heartrate);
+						self.speed_boundary3 := IF(counter < _limit2, left.speed, R[COUNTER - _limit2].speed);
+            self.heartrate_boundary3 := IF(counter < _limit2, left.heartrate, R[COUNTER - _limit2].heartrate);
+						self.speed_boundary5 := IF(counter < _limit3, left.speed, R[COUNTER - _limit3].speed);
+            self.heartrate_boundary5 := IF(counter < _limit3, left.heartrate, R[COUNTER - _limit3].heartrate);
+            SELF := LEFT;
+        )
+);
+END;
+
+//denormalize and set data up to seperate the data by athlete
+input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs, NAME), name),
+        inputDs,
+        LEFT.name = RIGHT.name,
+        group,
+        addBoundaries(LEFT, ROWS(RIGHT)));
+				
+temprec NewChildren(temprec R) := TRANSFORM
+SELF := R;
+END;
+NewChilds := NORMALIZE(input_boundaries,LEFT.recs,NewChildren(RIGHT));
+
+//go through by row and set the boundaries and cnt that will be created for each athlete, then layout sum and averages fields
+outputDs := ITERATE(sort(NewChilds, name, cnt),
     TRANSFORM({RECORDOF(LEFT)},
         self.speed_boundary := RIGHT.speed_boundary;//IF(COUNTER < _limit, right.speed, left.speed);
         self.heartrate_boundary := RIGHT.heartrate_boundary;//IF(COUNTER < _limit, right.speed, left.speed);
@@ -88,7 +125,6 @@ outputDs := ITERATE(inputDs,
 				self.speed_boundary5 := RIGHT.speed_boundary5;
         self.heartrate_boundary5 := RIGHT.heartrate_boundary5;
         self.cnt := RIGHT.cnt;
-				self.cnt2 := IF(counter = 1 OR LEFT.name <> RIGHT.name, 1, left.cnt2 + 1);
         self.speed_sumval := IF(self.cnt = 1, 
                             RIGHT.speed, 
                             IF(self.cnt > _limit, 
@@ -119,41 +155,12 @@ outputDs := ITERATE(inputDs,
                                 (left.heartrate_sumval5 - self.heartrate_boundary5), left.heartrate_sumval5) + right.heartrate);                                
         self.speed_rollingave5 := self.speed_sumval5 / IF(self.cnt < _limit3, self.cnt, _limit3);
         self.heartrate_rollingave5 := self.heartrate_sumval5 / IF(self.cnt < _limit3, self.cnt, _limit3);
-				self.speed_sumvali := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit, 
-                                (left.speed_sumvali - self.speed_boundary), left.speed_sumvali) + right.speed);
-        self.heartrate_sumvali := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit, 
-                                (left.heartrate_sumvali - self.heartrate_boundary), left.heartrate_sumvali) + right.heartrate);                                
-        self.speed_rollingavei := self.speed_sumval / IF(self.cnt2 < _limit, self.cnt2, _limit);
-        self.heartrate_rollingavei := self.heartrate_sumval / IF(self.cnt2 < _limit, self.cnt2, _limit);
-				self.speed_sumval3i := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit2, 
-                                (left.speed_sumval3i - self.speed_boundary3), left.speed_sumval3i) + right.speed);
-        self.heartrate_sumval3i := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit2, 
-                                (left.heartrate_sumval3i - self.heartrate_boundary3), left.heartrate_sumval3i) + right.heartrate);                                
-        self.speed_rollingave3i := self.speed_sumval3i / IF(self.cnt2 < _limit2, self.cnt2, _limit2);
-        self.heartrate_rollingave3i := self.heartrate_sumval3i / IF(self.cnt2 < _limit2, self.cnt2, _limit2);
-				self.speed_sumval5i := IF(self.cnt2 = 1, 
-                            RIGHT.speed, 
-                            IF(self.cnt2 > _limit3, 
-                                (left.speed_sumval5i - self.speed_boundary5), left.speed_sumval5i) + right.speed);
-        self.heartrate_sumval5i := IF(self.cnt2 = 1, 
-                            RIGHT.heartrate, 
-                            IF(self.cnt2 > _limit3, 
-                                (left.heartrate_sumval5i - self.heartrate_boundary5), left.heartrate_sumval5i) + right.heartrate);                                
-        self.speed_rollingave5i := self.speed_sumval5i / IF(self.cnt2 < _limit3, self.cnt2, _limit3);
-        self.heartrate_rollingave5i := self.heartrate_sumval5i / IF(self.cnt2 < _limit3, self.cnt2, _limit3);
         self := RIGHT
     )
 
 );
 
+//create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
 findpeaks := dedup(sort(outputDs, name, drillname, -heartrate_rollingave), name, drillname); 
