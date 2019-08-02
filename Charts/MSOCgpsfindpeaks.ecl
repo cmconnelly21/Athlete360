@@ -1,5 +1,5 @@
 ﻿IMPORT Athlete360, std;
-// #option('outputlimit',2000);
+#option('outputlimit',2000);
 
 //pull data from raw gps stage file
 rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
@@ -12,6 +12,7 @@ _limit3 := 3000;
 //add needed fields to raw gps layout and join data from gps stage file
 temp1 := RECORD
     recordof(rawDs);
+		string position;
     string drillname;
      UNSIGNED4 drillstarttime;
       UNSIGNED4 Date;
@@ -30,7 +31,8 @@ Athlete360.files_stg.MSOCgps_stgfile,
 	),
 
 transform(temp1, 
-														SELF.name := RIGHT.name; 
+														SELF.name := RIGHT.name;
+														SELF>position := RIGHT.position;
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
 														SELF.Date := RIGHT.Date;
@@ -163,10 +165,27 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 //create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
-findpeaks := dedup(sort(outputDs, name, drillname, -heartrate_rollingave), name, drillname); 
+findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
-//OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::MSOCGPSfindpeaks',CSV,OVERWRITE);
-// OUTPUT(inputDs, all);
-// output(outputDs, all);
-// output(findpeaks, all);
-EXPORT MSOCgpsfindpeaks := Athlete360.util.fn_promote_ds(Athlete360.util.constants.chart_prefix, 'MSOCgpsfindpeaks', findpeaks);
+//create dataset to show the peak averages for each athlete during each drill
+athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
+
+//create dataset to show average peaks for each drill 
+totalaverages := Project(athletespecificpeaks, 
+							transform({RECORDOF(LEFT);
+								decimal5_2 heartrate_totalave,
+								decimal5_2 heartrate_totalave3,
+								decimal5_2 heartrate_totalave5},
+							self.heartrate_totalave := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave);
+							self.heartrate_totalave3 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave3);
+							self.heartrate_totalave5 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave5);
+							self := LEFT
+								));
+								
+//output the data and create an output file								
+OUTPUT(sort(NewChilds, name, cnt),all);
+output(outputDs, all);
+output(findpeaks, all);
+output(athletespecificpeaks, all);							
+output(totalaverages, all);
+//OUTPUT(totalaverages,,'~Athlete360::OUT::Charts::MSOCGPSfindpeaks',CSV,OVERWRITE);

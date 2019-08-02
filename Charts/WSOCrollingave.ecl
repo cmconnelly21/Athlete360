@@ -113,8 +113,9 @@ dataWithAvgs := project
             SELF := LEFT
         )     
     );
-    
-// output(dataWithAvgs);
+ 
+//output data and create output file
+output(dataWithAvgs);
 
 //OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
 //OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOClr.file);
@@ -126,6 +127,4 @@ dataWithAvgs := project
 	//		SELF := LEFT));
 	//		OUTPUT(Name, all);
 
-// OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::WSOCrollingave',CSV,OVERWRITE);
-
-EXPORT WSOCrollingave := Athlete360.util.fn_promote_ds(Athlete360.util.constants.chart_prefix, 'WSOCrollingave', dataWithAvgs);
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::WSOCrollingave',CSV,OVERWRITE);

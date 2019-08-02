@@ -31,4 +31,4 @@ sprayFiles := NOTHOR(Apply(project(fileList, transform({string name, string clea
         )
 ));
 
-EXPORT spray_build := SEQUENTIAL(sprayFiles );
+EXPORT spray_build := SEQUENTIAL(output(filelist), output(folderDate), output('/var/lib/HPCCSystems/mydropzone/Athlete360/' + folderDate), sprayFiles );

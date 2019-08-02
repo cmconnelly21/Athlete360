@@ -1,23 +1,26 @@
 ﻿Import Athlete360, Intern, std;
 
-#stored('filedate', '20190729');
+#stored('filedate', '20190802');
 //Athlete360.build_athlete360;
 
 // Athlete360.DataPatterns.profile(Athlete360.files_spray.WSOCdatefile, features := '\'fill_rate,best_ecl_types\'');
 
- //SEQUENTIAL(
-     //Athlete360.spray_build,
-//Athlete360.stg_build);
+ // SEQUENTIAL(
+  // Athlete360.spray_build,
+	// Athlete360.stg_build);
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');
 
 // Athlete360.build_stg.build_WSOCjump
 // );
 //Athlete360.spray_build;
+//output(Athlete360.files_spray.MSOCrawgpsfile);
 // Athlete360.stg_build;
 
-Athlete360.build_stg.build_MSOCgps;
+//Athlete360.build_stg.build_MSOCgps;
 Athlete360.build_stg.build_MSOCrawgps;
+//Athlete360.build_stg.build_WSOCgps;
+//Athlete360.build_stg.build_WSOCrawgps;
 // Athlete360.files_spray.WSOCdatefile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_spray.MSOCgpsfile;

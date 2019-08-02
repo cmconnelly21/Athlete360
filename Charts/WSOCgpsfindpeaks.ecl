@@ -1,5 +1,5 @@
 ﻿IMPORT Athlete360, std;
-// #option('outputlimit',2000);
+#option('outputlimit',2000);
 
 //pull data from raw gps stage file
 rawDs := SORT(Athlete360.files_stg.WSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
@@ -165,9 +165,25 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 
 findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
 
-//OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::WSOCGPSfindpeaks',CSV,OVERWRITE);
-// OUTPUT(inputDs, all);
-// output(outputDs, all);
-// output(findpeaks, all);
+//create dataset to show the peak averages for each athlete during each drill
+athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
 
-EXPORT WSOCgpsfindpeaks := Athlete360.util.fn_promote_ds(Athlete360.util.constants.chart_prefix, 'WSOCgpsfindpeaks', findpeaks);
+//create dataset to show average peaks for each drill 
+totalaverages := Project(athletespecificpeaks, 
+							transform({RECORDOF(LEFT);
+								decimal5_2 heartrate_totalave,
+								decimal5_2 heartrate_totalave3,
+								decimal5_2 heartrate_totalave5},
+							self.heartrate_totalave := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave);
+							self.heartrate_totalave3 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave3);
+							self.heartrate_totalave5 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave5);
+							self := LEFT
+								));
+								
+//output the data and create an output file								
+OUTPUT(sort(NewChilds, name, cnt),all);
+output(outputDs, all);
+output(findpeaks, all);
+output(athletespecificpeaks, all);							
+output(totalaverages, all);
+//OUTPUT(totalaverages,,'~Athlete360::OUT::Charts::WSOCGPSfindpeaks',CSV,OVERWRITE);

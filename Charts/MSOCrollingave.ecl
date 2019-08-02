@@ -112,8 +112,9 @@ dataWithAvgs := project
             SELF := LEFT
         )     
     );
-    
-// output(dataWithAvgs);
+
+//output data and create output file    
+output(dataWithAvgs);
 
 //OUTPUT(ATHLETE360.ECLarchive.MSOC.MSOCdatefile.file);
 //OUTPUT(ATHLETE360.ECLarchive.MSOC.MSOClr.file);
@@ -125,5 +126,4 @@ dataWithAvgs := project
 	//		SELF := LEFT));
 	//		OUTPUT(Name, all);
 
-// OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::MSOCrollingave',CSV,OVERWRITE);
-EXPORT MSOCrollingave := Athlete360.util.fn_promote_ds(Athlete360.util.constants.chart_prefix, 'MSOCrollingave', dataWithAvgs);
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::MSOCrollingave',CSV,OVERWRITE);

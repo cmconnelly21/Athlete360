@@ -1,7 +1,7 @@
 ﻿	EXPORT MSOCrawgps_stg := RECORD
 		UNSIGNED3 PlayerID;
 		STRING Name;
-		//UNSIGNED4 Date;
+		UNSIGNED4 Date;
 		UNSIGNED4 Time;
 		DECIMAL10_5 ElapsedTime;
 		DECIMAL10_5 Latitude;

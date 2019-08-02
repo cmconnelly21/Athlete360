@@ -9,4 +9,5 @@
 		STRING Accelimpulse;
 		STRING HeartRate;
 		string19 wuid := workunit;
+		STRING filename {VIRTUAL( logicalfilename )};
 	END;
