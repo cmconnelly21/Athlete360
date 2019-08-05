@@ -1,6 +1,6 @@
 ﻿Import Athlete360, Intern, std;
 
-#stored('filedate', '20190805');
+#stored('filedate', '20190802');
 //Athlete360.build_athlete360;
 
 // Athlete360.DataPatterns.profile(Athlete360.files_spray.WSOCdatefile, features := '\'fill_rate,best_ecl_types\'');

@@ -10,6 +10,7 @@ stgLayout := Athlete360.Layouts.WSOCrawgps_stg;
 stgLayout extractdata (Athlete360.Layouts.WSOCrawgps L):= transform
 																								SELF.time := STD.date.fromstringtotime (L.time[1..8], '%H:%M:%S');
 																								SELF.Name := L.Name;
+																								Self.Date := STD.date.fromstringtodate (L.filename[47..55],'%d-%m-%Y');
 																								SELF.PlayerID := (UNSIGNED3)L.PlayerID;
 																								SELF.HeartRate := (UNSIGNED3)L.HeartRate;
 																								SELF.ElapsedTime := (DECIMAL10_5)L.ElapsedTime;

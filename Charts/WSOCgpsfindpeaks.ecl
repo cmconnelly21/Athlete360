@@ -12,9 +12,9 @@ _limit3 := 3000;
 //add needed fields to raw gps layout and join data from gps stage file
 temp1 := RECORD
     recordof(rawDs);
+		string position;
     string drillname;
      UNSIGNED4 drillstarttime;
-      UNSIGNED4 Date;
 END;
 completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime),
 
@@ -30,7 +30,8 @@ Athlete360.files_stg.WSOCgps_stgfile,
 	),
 
 transform(temp1, 
-														SELF.name := RIGHT.name; 
+														SELF.name := RIGHT.name;
+														SELF.position := RIGHT.position;
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
 														SELF.Date := RIGHT.Date;

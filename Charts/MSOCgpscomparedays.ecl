@@ -21,8 +21,9 @@ Athlete360.files_stg.MSOCgps_stgfile,
 			second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])
 	),
 
-transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, unsigned4 date}, 
-														SELF.name := RIGHT.name; 
+transform({RECORDOF(LEFT), string drillname, UNSIGNED4 drillstarttime, string Position}, 
+														SELF.name := RIGHT.name;
+														SELF.Position := RIGHT.Position;
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
 														SELF.Date := RIGHT.Date;
