@@ -116,9 +116,27 @@ outputDs := ITERATE(inputDs,
 // findpeaks := Topn(outputDs,1,drillname); 
 
 findpeaks := dedup(sort(outputDs, name, drillname, -heartrate_rollingave), name, drillname);
+
+temp3 := RECORD
+  string name;
+  unsigned4 time;
+  decimal10_5 elapsedtime;
+  decimal10_5 speed;
+  unsigned3 heartrate;
+  string20 athleteid;
+  string drillname;
+  unsigned4 drillstarttime;
+  unsigned4 date;
+  decimal10_5 speed_rollingave;
+  decimal10_5 heartrate_rollingave;
+  decimal10_5 speed_rollingave3;
+  decimal10_5 heartrate_rollingave3;
+  decimal10_5 speed_rollingave5;
+  decimal10_5 heartrate_rollingave5;
+ END; 
  
 totalaverages := Project(findpeaks, 
-							transform({RECORDOF(LEFT);
+							transform({RECORDOF(temp3);
 								decimal10_5 heartrate_totalave,
 								decimal10_5 heartrate_totalave3,
 								decimal10_5 heartrate_totalave5},

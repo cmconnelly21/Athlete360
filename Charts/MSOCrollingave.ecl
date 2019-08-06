@@ -100,11 +100,25 @@ replaceMediansOnEmptycompletedatasWithCntSorted := SORT
     );
 
 //create and define the averages using the count to find averages based on previous 2 and 4 days
+temp3 := RECORD
+  unsigned4 date;
+  unsigned3 time;
+  string name;
+  decimal5_2 score;
+  string20 athleteid;
+  unsigned1 trainingload;
+  decimal5_2 trainingload_roll2;
+  decimal5_2 score_roll2;
+  decimal5_2 trainingload_roll4;
+  decimal5_2 score_roll4;
+ END;
+
+
 dataWithAvgs := project
     (
         replaceMediansOnEmptycompletedatasWithCntSorted,
         Transform(
-	        { RECORDOF(LEFT); DECIMAL5_2 TrainingLoad_roll2; DECIMAL5_2 score_roll2; DECIMAL5_2 TrainingLoad_roll4; DECIMAL5_2 score_roll4},           
+	        { RECORDOF(temp3)},           
   	        SELF.TrainingLoad_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt), TrainingLoad);
   	        SELF.score_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt),score);
 						SELF.TrainingLoad_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt), TrainingLoad);

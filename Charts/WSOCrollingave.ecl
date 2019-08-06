@@ -10,16 +10,15 @@ Athlete360.files_stg.WSOCtrainingload_stgfile,
 
 Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
 
-transform({RECORDOF(LEFT), Right.Sessionoverall}, 
+transform({RECORDOF(LEFT), Right.sessionoverall}, 
 														SELF.name := RIGHT.name; 
 														SELF.Date := RIGHT.Date;
-														SELF.Sessionoverall := Right.Sessionoverall;
+														SELF.sessionoverall := Right.sessionoverall;
 														SELF := LEFT;), 
 
 left outer
 
 );
-
 
 //add count to dataset
 inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
@@ -92,7 +91,7 @@ replaceMediansOnEmptycompletedatasWithCnt := iterate
             self := right
         )
     );
-
+		
 //sort by name
 replaceMediansOnEmptycompletedatasWithCntSorted := SORT
     (
@@ -101,20 +100,34 @@ replaceMediansOnEmptycompletedatasWithCntSorted := SORT
     );
 
 //create and define the averages using the count to find averages based on previous 2 and 4 days
+temp3 := RECORD
+  unsigned4 date;
+  unsigned3 time;
+  string name;
+  decimal5_2 wellnesssum;
+  string20 athleteid;
+  unsigned1 sessionoverall;
+  decimal5_2 sessionoverall_roll2;
+  decimal5_2 wellnesssum_roll2;
+  decimal5_2 sessionoverall_roll4;
+  decimal5_2 wellnesssum_roll4;
+ END;
+
+
 dataWithAvgs := project
     (
         replaceMediansOnEmptycompletedatasWithCntSorted,
         Transform(
-	        { RECORDOF(LEFT); DECIMAL5_2 SessionOverall_roll2; DECIMAL5_2 WellnessSum_roll2; DECIMAL5_2 SessionOverall_roll4; DECIMAL5_2 WellnessSum_roll4},           
-  	        SELF.SessionOverall_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt), SessionOverall);
-  	        SELF.WellnessSum_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt),WellnessSum);
-						SELF.SessionOverall_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt), SessionOverall);
-  	        SELF.WellnessSum_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt),WellnessSum);
+	        { RECORDOF(temp3)},           
+  	        SELF.sessionoverall_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt), sessionoverall);
+  	        SELF.wellnesssum_roll2 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-2 AND cnt <= left.cnt),wellnesssum);
+						SELF.sessionoverall_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt), sessionoverall);
+  	        SELF.wellnesssum_roll4 := AVE(replaceMediansOnEmptycompletedatasWithCntSorted(name = LEFT.name AND cnt > LEFT.cnt-4 AND cnt <= left.cnt),wellnesssum);
             SELF := LEFT
         )     
     );
- 
-//output data and create output file
+
+//output data and create output file    
 output(dataWithAvgs);
 
 //OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
