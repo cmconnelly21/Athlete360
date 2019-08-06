@@ -11,7 +11,7 @@
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');
  
-output(regexfind('([0-9][0-9]*\\-[0-9][0-9]*\\-[0-9]{4})','Session-GABRIEL MACHADO-26-7-2019 Session-GABRIEL MACHADO-26-7-2019 SESSION OVERALL_RawData',1));  
+//output(regexfind('([0-9][0-9]*\\-[0-9][0-9]*\\-[0-9]{4})','Session-GABRIEL MACHADO-26-7-2019 Session-GABRIEL MACHADO-26-7-2019 SESSION OVERALL_RawData',1));  
 
 // Athlete360.build_stg.build_WSOCjump
 // );
@@ -82,10 +82,10 @@ output(regexfind('([0-9][0-9]*\\-[0-9][0-9]*\\-[0-9]{4})','Session-GABRIEL MACHA
 // Athlete360.files_stg.WSOCtesting_stgfile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_stg.MSOCtesting_stgfile;
- // Athlete360.files_spray.MSOCgpsfile;
- // TABLE(Athlete360.files_stg.MSOCgps_stgfile, {name, date}, name, date);
- // Athlete360.files_spray.MSOCrawgpsfile;
- // TABLE(Athlete360.files_stg.MSOCrawgps_stgfile, {name, date}, name, date);
+ Athlete360.files_spray.MSOCgpsfile;
+ TABLE(Athlete360.files_stg.MSOCgps_stgfile, {name, date}, name, date);
+ Athlete360.files_spray.MSOCrawgpsfile;
+ TABLE(Athlete360.files_stg.MSOCrawgps_stgfile, {name, date}, name, date);
  //Athlete360.files_spray.athleteinfofile;
  //Athlete360.files_spray.WSOCdatefile;
 
