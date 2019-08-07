@@ -1,9 +1,10 @@
-﻿Import Athlete360, Intern, std;
+﻿IMPORT Athlete360, STD;
 
 #stored('filedate', '20190805');
 //Athlete360.build_athlete360;
 
-// Athlete360.DataPatterns.profile(Athlete360.files_spray.WSOCdatefile, features := '\'fill_rate,best_ecl_types\'');
+// get the layout (processed layout)
+stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 
   // SEQUENTIAL(
    // Athlete360.spray_build,
@@ -40,23 +41,10 @@
 // Athlete360.files_spray.WSOCjumpfile;
 // Athlete360.files_spray.athleteinfofile;
 
-// Athlete360.files_stg.WSOCdate_stgfile;
-// Athlete360.files_stg.MSOCtesting_stgfile;
-// Athlete360.files_stg.MSOCgps_stgfile;
-// Athlete360.files_stg.MSOCgymaware_stgfile;
-// Athlete360.files_stg.MSOCjump_stgfile;
-// Athlete360.files_stg.MSOCnordbord_stgfile;
-// Athlete360.files_stg.MSOCreadiness_stgfile;
-// Athlete360.files_stg.MSOCtrainingload_stgfile;
-// Athlete360.files_stg.WSOCjump_stgfile;
-// Athlete360.files_stg.WSOCnordbord_stgfile;
-// Athlete360.files_stg.WSOCreadiness_stgfile;
-// Athlete360.files_stg.WSOCtesting_stgfile;
-// Athlete360.files_stg.WSOCtrainingload_stgfile;
-// Athlete360.files_stg.WSOCgymaware_stgfile;
-// Athlete360.files_stg.athleteinfo_stgfile;
+//now we link the stagedata with the athleteid related to the names from the athleteinfo file
+completestgdata := join(finalStageData,
 
-//Athlete360.stg_build;
+Athlete360.files_stg.Athleteinfo_stgfile,
 
 // Athlete360.files_spray.WSOCjumpfile;
 // Athlete360.files_stg.WSOCjump_stgfile;
