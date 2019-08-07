@@ -1,6 +1,6 @@
 ﻿import * from $;
 
-#stored('filedate', '20190805');
+#stored('filedate', '20190807');
 
 build_athlete360;
 

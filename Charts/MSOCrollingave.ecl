@@ -140,4 +140,4 @@ output(dataWithAvgs);
 	//		SELF := LEFT));
 	//		OUTPUT(Name, all);
 
-OUTPUT(dataWithAvgs,,'~Athlete360::OUT::Charts::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);

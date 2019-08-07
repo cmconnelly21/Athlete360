@@ -200,10 +200,10 @@ totalaverages := Project(athletespecificpeaks,
 								));
 								
 //output the data and create an output file								
-OUTPUT(sort(NewChilds, name, cnt),all);
-output(outputDs, all);
-output(findpeaks, all);
-output(athletespecificpeaks, all);							
-output(totalaverages, all);
+// OUTPUT(sort(NewChilds, name, cnt),all);
+// output(outputDs, all);
+// output(findpeaks, all);
+// output(athletespecificpeaks, all);							
+// output(totalaverages, all);
 
-//OUTPUT(totalaverages,,'~Athlete360::OUT::Charts::WSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(totalaverages,,'~Athlete360::OUT::despray::WSOCGPSfindpeaks',CSV,OVERWRITE);

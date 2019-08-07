@@ -1,14 +1,16 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20190805');
+#stored('filedate', '20190807');
 //Athlete360.build_athlete360;
 
 // get the layout (processed layout)
-stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
+//stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 
-  // SEQUENTIAL(
+  SEQUENTIAL(
    // Athlete360.spray_build,
- // Athlete360.stg_build);
+ // Athlete360.stg_build,
+ athlete360.charts_build, 
+ Athlete360.despray_build);
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');
  
@@ -42,9 +44,9 @@ stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 // Athlete360.files_spray.athleteinfofile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData,
+// completestgdata := join(finalStageData,
 
-Athlete360.files_stg.Athleteinfo_stgfile,
+// Athlete360.files_stg.Athleteinfo_stgfile,
 
 // Athlete360.files_spray.WSOCjumpfile;
 // Athlete360.files_stg.WSOCjump_stgfile;
@@ -70,10 +72,10 @@ Athlete360.files_stg.Athleteinfo_stgfile,
 // Athlete360.files_stg.WSOCtesting_stgfile;
 // Athlete360.files_spray.MSOCtestingfile;
 // Athlete360.files_stg.MSOCtesting_stgfile;
- Athlete360.files_spray.MSOCgpsfile;
- TABLE(Athlete360.files_stg.MSOCgps_stgfile, {name, date}, name, date);
- Athlete360.files_spray.MSOCrawgpsfile;
- TABLE(Athlete360.files_stg.MSOCrawgps_stgfile, {name, date}, name, date);
+ // Athlete360.files_spray.MSOCgpsfile;
+ // TABLE(Athlete360.files_stg.MSOCgps_stgfile, {name, date}, name, date);
+ // Athlete360.files_spray.MSOCrawgpsfile;
+ // TABLE(Athlete360.files_stg.MSOCrawgps_stgfile, {name, date}, name, date);
  //Athlete360.files_spray.athleteinfofile;
  //Athlete360.files_spray.WSOCdatefile;
 
