@@ -9,7 +9,7 @@ stgLayout := Athlete360.Layouts.WSOCreadiness_stg;
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.WSOCreadiness L):= transform
                   SELF.date := STD.date.FromStringToDate(L.Timestamp,'%m/%d/%Y');
-									SELF.time := STD.date.FromStringToTime(L.Timestamp,'%H:%M:%S');
+									SELF.time := STD.date.FromStringToTime(STD.Str.SplitWords(L.Timestamp, ' ')[2],'%H:%M:%S');
                   self.Name := L.Name;
 									self.Fatigue := (Unsigned1)L.Fatigue;
 									self.MuscleSoreness := (Unsigned1)L.MuscleSoreness;
