@@ -3,8 +3,13 @@
     import STD;
 
     backup := prefix + 'backup::' + filename;
-
-    super := prefix +  IF(STD.str.Find(filename, 'session overall_rawdata') > 0, IF(std.str.Find(filename, 'women') > 0, 'ws_rawgps', 'ms_rawgps'), filename);
+		
+		athleteName := STD.STR.FINDREPLACE(regexfind('(\\-[A-Z]* [A-Z]*\\-)' , filename,1), '-', '');
+		
+		teamName := IF(teamName = '', '', Athlete360.files_stg.Athleteinfo_stgfile(name = trim(athleteName, LEFT, RIGHT))[1].team);
+		
+		
+		super := prefix + IF(teamName ='' , filename, IF(STD.str.Tolowercase(team) = 'wsoc', 'ws_rawgps', 'ms_rawgps'), filename);
 
     sub := prefix + filename + '_' + workunit;
 
