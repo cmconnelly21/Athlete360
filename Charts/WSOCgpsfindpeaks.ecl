@@ -175,27 +175,23 @@ temp3 := RECORD
   unsigned4 time;
   decimal10_5 elapsedtime;
   decimal10_5 speed;
-  unsigned3 heartrate;
   string20 athleteid;
   string drillname;
   unsigned4 drillstarttime;
   unsigned4 date;
   decimal10_5 speed_rollingave;
-  decimal10_5 heartrate_rollingave;
   decimal10_5 speed_rollingave3;
-  decimal10_5 heartrate_rollingave3;
   decimal10_5 speed_rollingave5;
-  decimal10_5 heartrate_rollingave5;
  END; 
 
 totalaverages := Project(athletespecificpeaks, 
 							transform({RECORDOF(temp3);
-								decimal5_2 heartrate_totalave,
-								decimal5_2 heartrate_totalave3,
-								decimal5_2 heartrate_totalave5},
-							self.heartrate_totalave := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave);
-							self.heartrate_totalave3 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave3);
-							self.heartrate_totalave5 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), heartrate_rollingave5);
+								decimal5_2 speed_totalave,
+								decimal5_2 speed_totalave3,
+								decimal5_2 speed_totalave5},
+							self.speed_totalave := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), speed_rollingave);
+							self.speed_totalave3 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), speed_rollingave3);
+							self.speed_totalave5 := AVE(group(athletespecificpeaks(drillname = left.drillname),drillname), speed_rollingave5);
 							self := LEFT
 								));
 								

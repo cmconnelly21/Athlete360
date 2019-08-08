@@ -6,11 +6,11 @@
 // get the layout (processed layout)
 //stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 
-  // SEQUENTIAL(
+  SEQUENTIAL(
    // Athlete360.spray_build,
  // Athlete360.stg_build,
- // athlete360.charts_build, 
- // Athlete360.despray_build);
+ athlete360.charts_build, 
+ Athlete360.despray_build);
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');
  
