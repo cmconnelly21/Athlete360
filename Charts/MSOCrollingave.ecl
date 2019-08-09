@@ -130,14 +130,11 @@ dataWithAvgs := project
 //output data and create output file    
 output(dataWithAvgs);
 
-//OUTPUT(ATHLETE360.ECLarchive.MSOC.MSOCdatefile.file);
-//OUTPUT(ATHLETE360.ECLarchive.MSOC.MSOClr.file);
-//OUTPUT(ATHLETE360.ECLarchive.MSOC.MSOCdatefile.processedfile);
-//Name := JOIN(dataWithAvgs,ATHLETE360.ECLarchive.MSOC.MSOCdatefile.file,
-	//		STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
-	//		TRANSFORM({RECORDOF(LEFT); ATHLETE360.ECLarchive.MSOC.MSOCdatefile.layout.gamedaycount},
-	//		SELF.gamedaycount := RIGHT.gamedaycount;
-	//		SELF := LEFT));
-	//		OUTPUT(Name, all);
+// Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
+			// STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
+			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
+			// SELF.gamedaycount := RIGHT.gamedaycount;
+			// SELF := LEFT));
+			// OUTPUT(Name, all);
 
-OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(datawithavgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
