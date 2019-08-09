@@ -19,6 +19,7 @@
     EXPORT landingzone_ip  := '10.0.0.220';
     
     EXPORT WSOCdate_name := 'ws_dates';
+		EXPORT MSOCdate_name := 'ms_dates';
     EXPORT MSOCtesting_name := 'ms_testing';
     EXPORT MSOCgps_name := 'ms_gps';
 		EXPORT MSOCrawgps_name := 'ms_rawgps';
