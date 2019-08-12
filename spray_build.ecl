@@ -4,7 +4,7 @@ String fileDate := (String) std.Date.Today() : STORED('filedate');
 
 folderDate := Std.Date.DateToString((Unsigned4)fileDate, '%Y-%m-%d');
 
-fileList := std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + folderDate, '**');
+fileList := global(nothor(std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + folderDate, '**')), few);
 
 spray_prefix := '~athlete360::in::spray::';
 
