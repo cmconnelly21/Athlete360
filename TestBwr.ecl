@@ -1,6 +1,6 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20190808');
+#stored('filedate', '20190813');
 //Athlete360.build_athlete360;
 
 // get the layout (processed layout)
@@ -8,9 +8,13 @@
 
   SEQUENTIAL(
    // Athlete360.spray_build,
- // Athlete360.stg_build,
+ // Athlete360.stg_build);
  athlete360.charts_build, 
  Athlete360.despray_build);
+ // Athlete360.files_spray.MSOCrawgpsfile,
+ // Athlete360.files_spray.MSOCgpsfile,
+// Athlete360.build_stg.build_MSOCgps,
+// Athlete360.build_stg.build_MSOCrawgps);
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');
  
@@ -18,18 +22,17 @@
 
 // Athlete360.build_stg.build_WSOCjump
 // );
-//Athlete360.spray_build;
-//output(Athlete360.files_spray.MSOCrawgpsfile);
+// Athlete360.spray_build;
+// Athlete360.files_spray.MSOCrawgpsfile;
 // Athlete360.stg_build;
 
-
-//Athlete360.build_stg.build_MSOCgps;
-// Athlete360.build_stg.build_MSOCrawgps;
+// Athlete360.files_spray.MSOCgpsfile,
+// Athlete360.build_stg.build_MSOCgps,
+// Athlete360.build_stg.build_MSOCrawgps);
 //Athlete360.build_stg.build_WSOCgps;
 //Athlete360.build_stg.build_WSOCrawgps;
 // Athlete360.files_spray.WSOCdatefile;
 // Athlete360.files_spray.MSOCtestingfile;
-// Athlete360.files_spray.MSOCgpsfile;
 // Athlete360.files_spray.MSOCgymawarefile;
 // Athlete360.files_spray.MSOCjumpfile;
 // Athlete360.files_spray.MSOCnordbordfile;
