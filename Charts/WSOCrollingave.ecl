@@ -1,5 +1,6 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
+#option('outputlimit',2000);
 
 //pull data from readiness stage file and join with data from training loads stage file
 rawDs := SORT(Athlete360.files_stg.WSOCreadiness_stgfile, Date, Name) : INDEPENDENT;

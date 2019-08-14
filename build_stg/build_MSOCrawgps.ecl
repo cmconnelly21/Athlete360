@@ -1,4 +1,5 @@
 ﻿IMPORT Athlete360, STD;
+#option('outputlimit',2000);
 
 // First_step get the spray file from files_spray
 sprayFile := Athlete360.files_spray.MSOCrawgpsfile;
@@ -29,8 +30,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCrawgps_stgfile,
-            NAME, ElapsedTime, -wuid),
-        NAME, ElapsedTime
+            NAME, ElapsedTime, Time, -wuid),
+        NAME, ElapsedTime, Time
     );
 
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
