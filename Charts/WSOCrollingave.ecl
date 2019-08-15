@@ -129,16 +129,12 @@ dataWithAvgs := project
     );
 
 //output data and create output file    
-// output(dataWithAvgs);
 
-//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.file);
-//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOClr.file);
-//OUTPUT(ATHLETE360.ECLarchive.WSOC.WSOCdatefile.processedfile);
 Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
 			STD.str.splitwords((string)LEFT.time,' ')[1]= RIGHT.date,
 			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
-			OUTPUT(Name, all);
+			
 
 OUTPUT(name,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);

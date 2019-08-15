@@ -129,13 +129,6 @@ dataWithAvgs := project
     );
 
 //output data and create output file    
-output(dataWithAvgs);
 
-// Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
-			// STD.str.splitwords(LEFT.timestamp,' ')[1]= RIGHT.date,
-			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
-			// SELF.gamedaycount := RIGHT.gamedaycount;
-			// SELF := LEFT));
-			// OUTPUT(Name, all);
 
 OUTPUT(datawithavgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);

@@ -147,8 +147,8 @@ totalaverages := Project(findpeaks,
 								));
 								 
 
-OUTPUT(inputDs, all);
-output(outputDs, all);
-output(findpeaks, all);
-output(totalaverages, all);
+// OUTPUT(inputDs, all);
+// output(outputDs, all);
+// output(findpeaks, all);
+// output(totalaverages, all);
 //OUTPUT(findpeaks,,'~Athlete360::OUT::Charts::MSOCGPScomparedays',CSV,OVERWRITE);
