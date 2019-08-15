@@ -2,8 +2,8 @@
 
 IMPORT Athlete360;
 
-    EXPORT WSOCdate_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_dates', Athlete360.Layouts.WSOCdatefile, THOR, OPT);
-		EXPORT MSOCdate_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_dates', Athlete360.Layouts.MSOCdatefile, THOR, OPT);
+    EXPORT WSOCdate_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_dates', Athlete360.Layouts.WSOCdatefile_stg, THOR, OPT);
+		EXPORT MSOCdate_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_dates', Athlete360.Layouts.MSOCdatefile_stg, THOR, OPT);
 		EXPORT MSOCtesting_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_testing', Athlete360.Layouts.MSOCtesting_stg, THOR, OPT);
 		EXPORT MSOCgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_gps', Athlete360.Layouts.MSOCgps_stg, THOR, OPT);
 		EXPORT MSOCrawgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_rawgps', Athlete360.Layouts.MSOCrawgps_stg, THOR, OPT);

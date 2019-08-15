@@ -1,6 +1,5 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
-#option('outputlimit',2000);
 
 //pull data from readiness stage file and join with data from training loads stage file
 rawDs := SORT(Athlete360.files_stg.WSOCreadiness_stgfile, Date, Name) : INDEPENDENT;
@@ -131,10 +130,12 @@ dataWithAvgs := project
 //output data and create output file    
 
 Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
-			STD.str.splitwords((string)LEFT.time,' ')[1]= RIGHT.date,
+			left.date = RIGHT.date,
 			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
-			
+	// OUTPUT(Name[1..100]);	
+	// OUTPUT(dataWithAvgs[1..100]);
+	// OUTPUT(ATHLETE360.files_stg.WSOCdate_stgfile, all);
 
 OUTPUT(name,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);

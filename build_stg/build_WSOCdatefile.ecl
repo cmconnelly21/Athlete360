@@ -3,8 +3,17 @@
 // First_step get the spray file from files_spray
 sprayFile := Athlete360.files_spray.WSOCdatefile;
 
+stglayout := Athlete360.layouts.WSOCdatefile_stg;
 
-cleanedSprayFile := sprayFile;
+
+stgLayout extractdata (Athlete360.Layouts.WSOCdatefile L):= transform
+                  SELF.date := STD.date.FromStringToDate(L.date,'%m/%d/%Y');
+									SELF := L;
+END;
+									
+
+
+cleanedSprayFile := PROJECT(sprayFile, extractdata(LEFT));
 // after we get the cleaned spray, add wtih currently staged file, dedup by unique fields
 
 finalStageData := DEDUP(

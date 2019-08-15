@@ -33,20 +33,20 @@ finalStageData := DEDUP(
         NAME, ElapsedTime, Time
     );
 
-mapfile := Athlete360.files_stg.athleteinfo_stgfile;
+// mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData,
+// completestgdata := join(finalStageData,
 
-Athlete360.files_stg.Athleteinfo_stgfile,
+// Athlete360.files_stg.Athleteinfo_stgfile,
 
-Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+// Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
 
-transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;), 
+// transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;), 
 
-left outer
+// left outer
 
-);
+// );
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCrawgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCrawgps_name, completestgData);
+EXPORT build_MSOCrawgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCrawgps_name, finalStageData);

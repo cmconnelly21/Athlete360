@@ -22,6 +22,7 @@ Athlete360.files_stg.MSOCgps_stgfile,
 
 	Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
 	trim(right.drillname) <> 'SESSION OVERALL' AND
+	Left.date = Right.date AND
 	Left.Time BETWEEN right.drillstarttime AND 
 	STD.date.AdjustTime(
 			right.drillstarttime, 
@@ -31,13 +32,14 @@ Athlete360.files_stg.MSOCgps_stgfile,
 
 transform(temp1, 
 														SELF.name := RIGHT.name;
+														SELF.athleteid := Right.athleteid;
 														SELF.position := RIGHT.position;
 														SELF.drillname := RIGHT.drillname;
 														SELF.drillstarttime := RIGHT.drillstarttime;
 														SELF.Date := RIGHT.Date;
 														SELF := LEFT;), 
 
-inner
+inner, SMART
 
 );
 
