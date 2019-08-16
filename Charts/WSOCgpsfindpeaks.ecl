@@ -166,7 +166,7 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 //create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
-findpeaks := dedup(sort(DISTRIBUTE(outputDs,drillname, hash64(heartrate, rollingave)), -heartrate_rollingave, LOCAL), drillname, LOCAL); 
+findpeaks := dedup(sort(DISTRIBUTE(outputDs, hash64(drillname, heartrate_rollingave)), drillname, -heartrate_rollingave, LOCAL), drillname, LOCAL); 
 
 //create dataset to show the peak averages for each athlete during each drill
 athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
