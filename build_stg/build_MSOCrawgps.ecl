@@ -29,8 +29,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCrawgps_stgfile,
-            NAME, ElapsedTime, Time, -wuid),
-        NAME, ElapsedTime, Time
+            NAME, Date, ElapsedTime, Time, -wuid),
+        NAME, Date, ElapsedTime, Time
     );
 
 // mapfile := Athlete360.files_stg.athleteinfo_stgfile;

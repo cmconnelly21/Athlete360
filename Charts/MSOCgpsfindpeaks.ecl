@@ -2,7 +2,7 @@
 #option('outputlimit',2000);
 
 //pull data from raw gps stage file
-rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, ElapsedTime) : INDEPENDENT;
+rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, date, ElapsedTime, time) : INDEPENDENT;
 
 //set window size for different time periods, 10 rows = 1 second
 _limit := 600;
@@ -16,7 +16,7 @@ temp1 := RECORD
     string drillname;
      UNSIGNED4 drillstarttime;
 END;
-completegpsdata := join(dedup(sort(rawDs, name, ElapsedTime), name, ElapsedTime),
+completegpsdata := join(dedup(sort(rawDs, name, date, ElapsedTime, time), name, date, ElapsedTime, time),
 
 Athlete360.files_stg.MSOCgps_stgfile,
 
@@ -166,7 +166,7 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 //create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
-findpeaks := dedup(sort(outputDs,drillname, -heartrate_rollingave), drillname); 
+findpeaks := dedup(sort(DISTRIBUTE(outputDs,drillname, hash64(heartrate, rollingave)), -heartrate_rollingave, LOCAL), drillname, LOCAL);
 
 //create dataset to show the peak averages for each athlete during each drill
 athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
