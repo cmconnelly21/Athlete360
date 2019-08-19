@@ -24,7 +24,7 @@ Athlete360.files_stg.MSOCgps_stgfile,
 	trim(right.drillname) <> 'SESSION OVERALL' AND
 	trim(right.drillname) <> 'SESSION OVERALL1' AND
 	Left.date = Right.date AND
-	Left.Time BETWEEN (string)right.drillstarttime AND 
+	Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
 	STD.date.AdjustTime(
 			right.drillstarttime, 
 			minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
@@ -175,7 +175,7 @@ athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingav
 //create dataset to show average peaks for each drill 
 temp3 := RECORD
   string name;
-  unsigned4 time;
+  string12 time;
   decimal10_5 elapsedtime;
   decimal10_5 speed;
   unsigned3 heartrate;
