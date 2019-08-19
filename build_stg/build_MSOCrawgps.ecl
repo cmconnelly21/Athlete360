@@ -8,7 +8,7 @@ stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCrawgps L):= transform
-																								SELF.time := STD.date.fromstringtotime (L.time[1..8], '%H:%M:%S');
+																								SELF.time := L.Time;
 																								SELF.Name := L.Name;
 																								Self.Date := std.date.FromStringToDate(regexfind('([0-9][0-9]*\\-[0-9][0-9]*\\-[0-9]{4})',L.filename,1), '%d-%m-%Y');
 																								SELF.PlayerID := (UNSIGNED3)L.PlayerID;
@@ -29,8 +29,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCrawgps_stgfile,
-            NAME, Date, ElapsedTime, Time, -wuid),
-        NAME, Date, ElapsedTime, Time
+            NAME, Date, Time, -wuid),
+        NAME, Date, Time
     );
 
 // mapfile := Athlete360.files_stg.athleteinfo_stgfile;

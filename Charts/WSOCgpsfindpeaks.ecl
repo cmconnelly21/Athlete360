@@ -2,7 +2,7 @@
 #option('outputlimit',2000);
 
 //pull data from raw gps stage file
-rawDs := SORT(Athlete360.files_stg.WSOCrawgps_stgfile, name, date, ElapsedTime, time) : INDEPENDENT;
+rawDs := SORT(Athlete360.files_stg.WSOCrawgps_stgfile, name, date, time) : INDEPENDENT;
 
 //set window size for different time periods, 10 rows = 1 second
 _limit := 600;
@@ -16,7 +16,7 @@ temp1 := RECORD
     string drillname;
      UNSIGNED4 drillstarttime;
 END;
-completegpsdata := join(dedup(sort(rawDs, name, date, ElapsedTime, time), name, date, ElapsedTime, time),
+completegpsdata := join(dedup(rawDs, name, date, time),
 
 Athlete360.files_stg.WSOCgps_stgfile,
 
@@ -39,7 +39,7 @@ transform(temp1,
 														SELF.Date := RIGHT.Date;
 														SELF := LEFT;), 
 
-left outer, SMART
+left outer, All
 
 );
 
