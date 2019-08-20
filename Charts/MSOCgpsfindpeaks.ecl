@@ -1,9 +1,26 @@
 ﻿IMPORT Athlete360, std;
 #option('outputlimit',2000);
 
-//pull data from raw gps stage file
-rawDs := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, date, time) : INDEPENDENT;
 
+//pull data from raw gps stage file
+rawDs0 := SORT(Athlete360.files_stg.MSOCrawgps_stgfile, name, date, time);
+rawDS1 := DEDUP(rawDs0, name, date, time); 
+// : PERSIST('~cache::deduped_raw_gps', SINGLE);
+rawDS := ITERATE
+    (
+        SORT(PROJECT(rawDS1, {RECORDOF(LEFT), INTEGER cnt := 0}), name, date, time),
+        TRANSFORM
+            (
+                {
+                    RECORDOF(LEFT)
+                },
+                SELF.cnt := IF(COUNTER = 1 OR left.name <> right.name or LEFT.date <> RIGHT.date, 1, LEFT.cnt + 1),
+                SELF := IF(COUNTER = 1 OR left.name <> right.name or LEFT.date <> RIGHT.date, right, LEFT);
+            )
+    );
+
+
+// output(SAMPLE(rawDS,10000,1)[1..1000]);
 //set window size for different time periods, 10 rows = 1 second
 _limit := 600;
 _limit2 := 1800;
@@ -16,55 +33,78 @@ temp1 := RECORD
     string drillname;
      UNSIGNED4 drillstarttime;
 END;
-completegpsdata := join(dedup(rawDs, name, date, time),
 
-Athlete360.files_stg.MSOCgps_stgfile,
-
-	Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
-	trim(right.drillname) <> 'SESSION OVERALL' AND
-	trim(right.drillname) <> 'SESSION OVERALL1' AND
-	Left.date = Right.date AND
-	Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
-	STD.date.AdjustTime(
-			right.drillstarttime, 
-			minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
-			second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])
-	),
-
-transform(temp1, 
-														SELF.name := RIGHT.name;
-														SELF.athleteid := Right.athleteid;
-														SELF.position := RIGHT.position;
-														SELF.drillname := RIGHT.drillname;
-														SELF.drillstarttime := RIGHT.drillstarttime;
-														SELF.Date := RIGHT.Date;
-														SELF := LEFT;), 
-
-left outer, All
-
-);
+completegpsdata := join
+    (
+        rawDS,
+        Athlete360.files_stg.MSOCgps_stgfile,
+        Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
+	        trim(right.drillname) <> 'SESSION OVERALL' AND
+	        trim(right.drillname) <> 'SESSION OVERALL1' AND
+	        Left.date = Right.date AND
+	        Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
+	            STD.date.AdjustTime(
+                    right.drillstarttime, 
+                    minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
+                    second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])),
+        transform
+            (
+                {
+                    temp1,
+                    decimal15_8 speed_sumval := 0,
+                    decimal15_8 heartrate_sumval := 0,
+                    decimal10_5 speed_rollingave := 0, 
+                    decimal10_5 heartrate_rollingave := 0,
+                    decimal10_5 speed_boundary := 0,
+                    decimal10_5 heartrate_boundary := 0
+                }, 
+                SELF.name := RIGHT.name,
+                SELF.athleteid := Right.athleteid,
+                SELF.position := RIGHT.position,
+                SELF.drillname := RIGHT.drillname,
+                SELF.drillstarttime := RIGHT.drillstarttime,
+                SELF.Date := RIGHT.Date,
+                SELF.speed_boundary := LEFT.speed,
+                SELF.heartrate_boundary := LEFT.heartrate,
+                SELF := LEFT
+            ), 
+        left outer, All 
+    );
 
 //add needed fields to complete gps data and build boundaries to create the time period windows
-inputDs := PROJECT(
+inputDS := DISTRIBUTE(JOIN
+    (
         completegpsdata,
-        TRANSFORM({RECORDOF(LEFT); integer cnt; 
-            decimal15_8 speed_sumval := 0; 
-            decimal15_8 heartrate_sumval := 0; 
-            decimal10_5 speed_rollingave := 0; 
-            decimal10_5 heartrate_rollingave := 0; 
-            decimal10_5 speed_boundary := 0,
-            decimal10_5 heartrate_boundary := 0},
-            SELF.cnt := COUNTER;
-            self.speed_boundary := IF(counter < _limit, left.speed, completegpsdata[COUNTER - _limit].speed);
-            self.heartrate_boundary := IF(counter < _limit, left.heartrate, completegpsdata[COUNTER - _limit].heartrate);
-            SELF := LEFT;
-        )
-);
+        completegpsdata,
+        LEFT.cnt - _limit = RIGHT.cnt 
+            AND LEFT.cnt > _limit,
+        TRANSFORM
+            (
+                RECORDOF(LEFT),
+                SELF.speed_boundary := RIGHT.speed,
+                SELF.heartrate_boundary := RIGHT.heartrate,
+                SELF := LEFT
+            ),
+        LEFT OUTER
+    ), HASH64(name));
+
+/*
+inputDs := PROJECT
+    (
+        completegpsdata,
+        TRANSFORM
+            (
+                RECORDOF(LEFT),
+                self.speed_boundary := IF(LEFT.cnt < _limit, left.speed, completegpsdata[LEFT.cnt - _limit].speed);
+                self.heartrate_boundary := IF(LEFT.cnt < _limit, left.heartrate, completegpsdata[LEFT.cnt - _limit].heartrate);
+                SELF := LEFT;
+            )
+    );
+*/
 
 //add fields that will be used to create the averages
 tempRec := RECORD
     temp1; 
-    integer cnt; 
     decimal15_8 speed_sumval := 0; 
     decimal15_8 heartrate_sumval := 0; 
     decimal10_5 speed_rollingave := 0; 
@@ -108,11 +148,11 @@ temp2 addBoundaries(recordof(inputDs) L, DATASET(recordof(inputDs)) R) := transf
 END;
 
 //denormalize and set data up to seperate the data by athlete
-input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs, NAME), name),
-        inputDs,
+input_boundaries := DENORMALIZE(DEDUP(SORT(inputDs(NAME <> ''), NAME, date), name, date),
+        inputDs(NAME <> ''),
         LEFT.name = RIGHT.name,
         group,
-        addBoundaries(LEFT, ROWS(RIGHT)));
+        addBoundaries(LEFT, ROWS(RIGHT)), LOCAL);
 				
 temprec NewChildren(temprec R) := TRANSFORM
 SELF := R;
@@ -167,10 +207,10 @@ outputDs := ITERATE(sort(NewChilds, name, cnt),
 //create dataset to show top averages for each drill during session
 // findpeaks := Topn(outputDs,1,drillname); 
 
-findpeaks := dedup(sort(DISTRIBUTE(outputDs, hash64(drillname, heartrate_rollingave)), drillname, -heartrate_rollingave, LOCAL), drillname, LOCAL);
+findpeaks := dedup(sort(DISTRIBUTE(outputDs, hash64(date, drillname, heartrate_rollingave)), date, drillname, -heartrate_rollingave, LOCAL), date, drillname, LOCAL); 
 
 //create dataset to show the peak averages for each athlete during each drill
-athletespecificpeaks := dedup(sort(outputDs,name,drillname, -heartrate_rollingave), name,drillname);
+athletespecificpeaks := dedup(sort(outputDs,name,date, drillname,drillstarttime, -heartrate_rollingave), name,date, drillname,drillstarttime);
 
 //create dataset to show average peaks for each drill 
 temp3 := RECORD
@@ -178,16 +218,12 @@ temp3 := RECORD
   string12 time;
   decimal10_5 elapsedtime;
   decimal10_5 speed;
-  unsigned3 heartrate;
   string20 athleteid;
   string drillname;
   unsigned4 drillstarttime;
   unsigned4 date;
-  decimal10_5 speed_rollingave;
   decimal10_5 heartrate_rollingave;
-  decimal10_5 speed_rollingave3;
   decimal10_5 heartrate_rollingave3;
-  decimal10_5 speed_rollingave5;
   decimal10_5 heartrate_rollingave5;
  END; 
 
@@ -204,5 +240,4 @@ totalaverages := Project(athletespecificpeaks,
 								
 //output the data and create an output file								
 
-
-OUTPUT(totalaverages,,'~Athlete360::OUT::despray::MSOCgpsfindpeaks',CSV,OVERWRITE);
+OUTPUT(totalaverages,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);

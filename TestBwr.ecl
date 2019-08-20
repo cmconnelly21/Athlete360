@@ -1,6 +1,6 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20190819');
+// #stored('filedate', '20190819');
 //Athlete360.build_athlete360;
 
 // get the layout (processed layout)
