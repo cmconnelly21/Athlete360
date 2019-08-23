@@ -136,7 +136,7 @@ temp3 := RECORD
 finalchartdata := PROJECT(athletespecificpeaks,transform({RECORDOF(temp3)}; SELF := LEFT;));
 
 //create dataset to show average peaks for each drill 
-totalaverages := Project(finalchartdata, 
+totalaverages := Project(finalchartdata(Name<>' '), 
 							transform({RECORDOF(temp3);
 								decimal5_2 speedtotalave1,
 								decimal5_2 speedtotalave3,
@@ -150,13 +150,14 @@ totalaverages := Project(finalchartdata,
 	
 //output the data and create an output file
 	
-output(rawDs3[1..1000]);
-output(rawDSsums[1..1000]);
+// output(rawDs3[1..1000]);
+// output(rawDSsums[1..1000]);
 // OUTPUT(rawDSsums_limit1[1..10000]);
 // OUTPUT(rawDSsums_limit3[1..10000]);
 // OUTPUT(rawDSsums_limit5[1..10000]);
-output(completegpsdata[1..100000]);
-OUTPUT(athletespecificpeaks[1..100000]);
-OUTPUT(finalchartdata[1..100000]);
+// output(completegpsdata[1..100000]);
+// OUTPUT(athletespecificpeaks[1..100000]);
+// OUTPUT(finalchartdata[1..100000]);
+// OUTPUT(totalaverages[1..100000]);
 
-// OUTPUT(totalaverages,,'~Athlete360::OUT::despray::WSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(totalaverages,,'~Athlete360::OUT::despray::WSOCGPSfindpeaks',CSV,OVERWRITE);
