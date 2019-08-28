@@ -1,5 +1,4 @@
 ﻿EXPORT WSOCReadiness := RECORD
-		STRING20 Date;
 		STRING25 Timestamp;
 		STRING20 Name;
 		INTEGER1 Fatigue;
@@ -9,6 +8,5 @@
 		INTEGER1 Hydration;
 		STRING3 Pain;
 		STRING25 Explanation;
-		INTEGER1 Wellnesssum;
 		string19 wuid := workunit;
 	END;

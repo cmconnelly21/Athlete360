@@ -146,6 +146,37 @@ totalaverages := Project(finalchartdata(Name<>' '),
 							self.hrtotalave5 := AVE(group(finalchartdata(drillname = left.drillname),drillname), hrave5);
 							self := LEFT
 								));	
+		
+temp4 := RECORD
+  string name;
+  string12 time;
+  decimal10_5 elapsedtime;
+  decimal10_5 speed;
+  string20 athleteid;
+  string drillname;
+  unsigned4 drillstarttime;
+  unsigned4 date;
+	String10 gamedaycount;
+  decimal10_5 hrave1;
+  decimal10_5 hrave3;
+  decimal10_5 hrave5;
+	decimal5_2 hrtotalave1;
+	decimal5_2 hrtotalave3;
+	decimal5_2 hrtotalave5;
+	
+ END;		
+		
+finalouput := JOIN(
+  totalaverages,
+  Athlete360.Files_stg.MSOCdate_stgfile,
+  left.date = right.date,
+  transform(
+      {recordof(temp4)},
+      SELF.gamedaycount := right.gamedaycount;
+      SELF := LEFT
+    ),
+    LEFT OUTER
+);
 	
 	
 //output the data and create an output file
@@ -158,6 +189,7 @@ totalaverages := Project(finalchartdata(Name<>' '),
 // output(completegpsdata[1..100000]);
 // OUTPUT(athletespecificpeaks[1..100000]);
 // OUTPUT(finalchartdata[1..100000]);
-// OUTPUT(totalaverages[1..100000]);
+// OUTPUT(totalaverages);
+// OUTPUT(finalouput);
 
-OUTPUT(totalaverages,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);

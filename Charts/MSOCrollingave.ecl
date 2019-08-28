@@ -128,7 +128,16 @@ dataWithAvgs := project
         )     
     );
 
-//output data and create output file    
+//output data and create output file
+
+Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
+			left.date = RIGHT.date,
+			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
+			SELF.gamedaycount := RIGHT.gamedaycount;
+			SELF := LEFT));
+	// OUTPUT(Name[1..100]);	
+	// OUTPUT(dataWithAvgs[1..100]);
+	// OUTPUT(ATHLETE360.files_stg.MSOCdate_stgfile, all);    
 
 
-OUTPUT(datawithavgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(name,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);

@@ -20,8 +20,17 @@ left outer
 
 );
 
+Name := JOIN(completedata,ATHLETE360.files_stg.WSOCdate_stgfile,
+			left.date = RIGHT.date,
+			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
+			Self.date := Right.date;
+			SELF.gamedaycount := RIGHT.gamedaycount;
+			SELF := LEFT),
+			Full Outer
+			);
+
 //add count to dataset
-inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
+inputDs := PROJECT(Name, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
 
 
 //define how the count will work
@@ -129,13 +138,14 @@ dataWithAvgs := project
 
 //output data and create output file    
 
-Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
-			left.date = RIGHT.date,
-			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
-			SELF.gamedaycount := RIGHT.gamedaycount;
-			SELF := LEFT));
-	// OUTPUT(Name[1..100]);	
-	// OUTPUT(dataWithAvgs[1..100]);
+// Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
+			// left.date = RIGHT.date,
+			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
+			// SELF.gamedaycount := RIGHT.gamedaycount;
+			// SELF := LEFT));
+		OUTPUT(completedata[1..10000]);
+	OUTPUT(Name[1..10000]);	
+	OUTPUT(dataWithAvgs[1..10000]);
 	// OUTPUT(ATHLETE360.files_stg.WSOCdate_stgfile, all);
 
-OUTPUT(name,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);
+// OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);

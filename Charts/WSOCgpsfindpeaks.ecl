@@ -148,6 +148,38 @@ totalaverages := Project(finalchartdata(Name<>' '),
 								));	
 	
 	
+temp4 := RECORD
+  string name;
+  string12 time;
+  decimal10_5 elapsedtime;
+  decimal10_5 speed;
+  string20 athleteid;
+  string drillname;
+  unsigned4 drillstarttime;
+  unsigned4 date;
+	String10 gamedaycount;
+  decimal10_5 speedave1;
+  decimal10_5 speedave3;
+  decimal10_5 speedave5;
+	decimal5_2 speedtotalave1;
+	decimal5_2 speedtotalave3;
+	decimal5_2 speedtotalave5;
+	
+ END;		
+		
+finalouput := JOIN(
+  totalaverages,
+  Athlete360.Files_stg.WSOCdate_stgfile,
+  left.date = right.date,
+  transform(
+      {recordof(temp4)},
+      SELF.gamedaycount := right.gamedaycount;
+      SELF := LEFT
+    ),
+    LEFT OUTER
+);
+	
+	
 //output the data and create an output file
 	
 // output(rawDs3[1..1000]);
@@ -158,6 +190,7 @@ totalaverages := Project(finalchartdata(Name<>' '),
 // output(completegpsdata[1..100000]);
 // OUTPUT(athletespecificpeaks[1..100000]);
 // OUTPUT(finalchartdata[1..100000]);
-// OUTPUT(totalaverages[1..100000]);
+// OUTPUT(totalaverages);
+// OUTPUT(finalouput);
 
-OUTPUT(totalaverages,,'~Athlete360::OUT::despray::WSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(finalouput,,'~Athlete360::OUT::despray::WSOCGPSfindpeaks',CSV,OVERWRITE);
