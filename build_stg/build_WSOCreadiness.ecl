@@ -88,19 +88,30 @@ replaceMediansOnEmptycompletedatas := JOIN
     (
         completestgdata,
         addmissingdates,
-        LEFT.name = RIGHT.name,
+        LEFT.name = RIGHT.name AND
+				LEFT.date = RIGHT.date,
         TRANSFORM(RECORDOF(LEFT),
-            SELF.wellnesssum := IF(LEFT.wellnesssum > 0, LEFT.wellnesssum, RIGHT.wellnesssum);
+									SELF.date := LEFT.date;
+									SELF.time := LEFT.time;
+                  self.Name := LEFT.Name;
+									self.Fatigue := IF(LEFT.Fatigue <> 0, LEFT.Fatigue, RIGHT.Fatigue);
+									self.MuscleSoreness := IF(LEFT.MuscleSoreness <> 0, LEFT.MuscleSoreness, RIGHT.MuscleSoreness);
+									self.SleepQuality := IF(LEFT.SleepQuality <> 0, LEFT.SleepQuality, RIGHT.SleepQuality);
+									self.Stress := IF(LEFT.Stress <> 0, LEFT.Stress, RIGHT.Stress);
+									self.Hydration := IF(LEFT.Hydration <> 0, LEFT.Hydration, RIGHT.Hydration);
+									SELF.Pain := LEFT.Pain;
+									SELF.Explanation := LEFT.Explanation;
+									self.WellnessSum := IF(LEFT.wellnesssum <> 0, LEFT.wellnesssum, RIGHT.wellnesssum);
+									SELF.wuid := workunit;
             // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
-            SELF := LEFT
         ),
-        Left Outer
+        Full Outer
     );
 
 OUTPUT(cleanedsprayfile[1..5000]);		
 OUTPUT(completestgdata[1..5000]);
 OUTPUT(completedataWithMedians[1..5000]);
-OUTPUT(addmissingdates[1..5000]);
+OUTPUT(sort(addmissingdates(date<>0),name,date)[1..5000]);
 OUTPUT(replaceMediansOnEmptycompletedatas[1..5000]);
 
 		

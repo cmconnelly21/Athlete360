@@ -1,6 +1,6 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20190828');
+// #stored('filedate', '20190828');
 //Athlete360.build_athlete360;
 
 // get the layout (processed layout)
@@ -10,13 +10,13 @@
 // Athlete360.build_stg.build_WSOCdatefile;
 // Athlete360.build_stg.build_MSOCdatefile;
   SEQUENTIAL(
-   Athlete360.spray_build,
+   // Athlete360.spray_build,
  // Athlete360.stg_build,
- // athlete360.charts_build, 
-  // Athlete360.despray_build,
+ athlete360.charts_build, 
+  Athlete360.despray_build,
  // Athlete360.files_spray.WSOCrawgpsfile,
  // Athlete360.files_spray.WSOCgpsfile,
- Athlete360.build_stg.build_WSOCdatefile,
+ // Athlete360.build_stg.build_WSOCdatefile,
  // Athlete360.build_stg.build_WSOCgps,
 // Athlete360.build_stg.build_WSOCrawgps,
 // Athlete360.build_stg.build_WSOCreadiness,
