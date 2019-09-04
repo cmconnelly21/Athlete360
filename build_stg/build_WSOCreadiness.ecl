@@ -86,14 +86,14 @@ addmissingdates := JOIN(ATHLETE360.files_stg.WSOCdate_stgfile, completedataWithM
 
 replaceMediansOnEmptycompletedatas := JOIN
     (
-        completestgdata,
-        addmissingdates,
+        completestgdata(name <> ' '),
+        addmissingdates(date <> 0),
         LEFT.name = RIGHT.name AND
 				LEFT.date = RIGHT.date,
-        TRANSFORM(RECORDOF(LEFT),
-									SELF.date := LEFT.date;
-									SELF.time := LEFT.time;
-                  self.Name := LEFT.Name;
+        TRANSFORM({RECORDOF(LEFT), boolean isdummy := FALSE},
+									SELF.date := IF(LEFT.date <> 0, LEFT.date, RIGHT.date);
+									SELF.time := IF(LEFT.time <> 0, LEFT.time, RIGHT.time);
+                  self.Name := IF(LEFT.Name <> ' ', LEFT.Name, RIGHT.Name);
 									self.Fatigue := IF(LEFT.Fatigue <> 0, LEFT.Fatigue, RIGHT.Fatigue);
 									self.MuscleSoreness := IF(LEFT.MuscleSoreness <> 0, LEFT.MuscleSoreness, RIGHT.MuscleSoreness);
 									self.SleepQuality := IF(LEFT.SleepQuality <> 0, LEFT.SleepQuality, RIGHT.SleepQuality);
@@ -102,19 +102,20 @@ replaceMediansOnEmptycompletedatas := JOIN
 									SELF.Pain := LEFT.Pain;
 									SELF.Explanation := LEFT.Explanation;
 									self.WellnessSum := IF(LEFT.wellnesssum <> 0, LEFT.wellnesssum, RIGHT.wellnesssum);
+									self.isdummy := IF(left.name = ' ' AND left.date = 0, true, false);
 									SELF.wuid := workunit;
             // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
         ),
         Full Outer
     );
 
-OUTPUT(cleanedsprayfile[1..5000]);		
-OUTPUT(completestgdata[1..5000]);
-OUTPUT(completedataWithMedians[1..5000]);
-OUTPUT(sort(addmissingdates(date<>0),name,date)[1..5000]);
-OUTPUT(replaceMediansOnEmptycompletedatas[1..5000]);
+// OUTPUT(cleanedsprayfile[1..5000]);		
+// OUTPUT(completestgdata[1..5000]);
+// OUTPUT(completedataWithMedians[1..5000]);
+// OUTPUT(sort(addmissingdates(date<>0),name,date)[1..5000]);
+// OUTPUT(replaceMediansOnEmptycompletedatas[1..5000]);
 
 		
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-// EXPORT build_WSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCreadiness_name, replaceMediansOnEmptycompletedatas);
+EXPORT build_WSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WSOCreadiness_name, replaceMediansOnEmptycompletedatas);

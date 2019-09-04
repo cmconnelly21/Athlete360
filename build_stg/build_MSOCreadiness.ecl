@@ -38,7 +38,7 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData,
+completestgdata := join(finalStageData(time <> 0),
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
@@ -49,6 +49,72 @@ transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
 left outer
 
 );
+
+completedataUniqueName := DEDUP(SORT(completestgdata, name), name);
+
+
+RECORDOF(completestgdata) denormalizeToFindMedian(RECORDOF(completestgdata) L, DATASET(RECORDOF(completestgdata)) R1) := TRANSFORM
+    R := R1[1..30];
+		
+    SELF.Score := IF(COUNT(R) % 2 = 1, 
+                            SORT(R, Score)[(COUNT(R) / 2 ) + 1].Score, 
+                            (SORT(R, Score)[(COUNT(R) / 2 ) + 1].Score  + SORT(R, Score)[(COUNT(R) / 2)].Score ) / 2
+                        );
+    // SELF.sessionoverall := IF(COUNT(R) % 2 = 1, 
+                            // SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall, 
+                            // (SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall  + SORT(R, sessionoverall)[(COUNT(R) / 2)].sessionoverall ) / 2
+                        // );
+    
+    SELF := L;
+
+ END;
+
+//denormalize to seperate by athlete to find median values
+completedataWithMedians := DENORMALIZE
+    (
+        completedataUniqueName, 
+        completestgdata,
+        LEFT.name = RIGHT.name,
+        GROUP,
+        denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
+    );
+		// JOIN(DATE, 30
+		// completedataWithMedians, 3
+		// TRUE,
+		// 90 RECS
+		
+addmissingdates := JOIN(ATHLETE360.files_stg.MSOCdate_stgfile, completedataWithMedians, true, ALL);
+
+replaceMediansOnEmptycompletedatas := JOIN
+    (
+        completestgdata(name <> ' '),
+        addmissingdates(date <> 0),
+        LEFT.name = RIGHT.name AND
+				LEFT.date = RIGHT.date,
+        TRANSFORM({RECORDOF(LEFT), boolean isdummy := FALSE},
+									SELF.date := IF(LEFT.date <> 0, LEFT.date, RIGHT.date);
+									SELF.time := IF(LEFT.time <> 0, LEFT.time, RIGHT.time);
+                  self.Name := IF(LEFT.Name <> ' ', LEFT.Name, RIGHT.Name);
+									self.Fatigue := IF(LEFT.Fatigue <> 0, LEFT.Fatigue, RIGHT.Fatigue);
+									self.Soreness := IF(LEFT.Soreness <> 0, LEFT.Soreness, RIGHT.Soreness);
+									self.SleepQuality := IF(LEFT.SleepQuality <> 0, LEFT.SleepQuality, RIGHT.SleepQuality);
+									self.Stress := IF(LEFT.Stress <> 0, LEFT.Stress, RIGHT.Stress);
+									self.mood := IF(LEFT.mood <> 0, LEFT.mood, RIGHT.mood);
+									SELF.SleepHours := IF(LEFT.SleepHours <> 0, LEFT.SleepHours, RIGHT.SleepHours);
+									self.Score := IF(LEFT.Score <> 0, LEFT.Score, RIGHT.Score);
+									self.isdummy := IF(left.name = ' ' AND left.date = 0, true, false);
+									SELF.wuid := workunit;
+            // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
+        ),
+        Full Outer
+    );
+
+// OUTPUT(cleanedsprayfile[1..5000]);		
+// OUTPUT(completestgdata[1..5000]);
+// OUTPUT(completedataWithMedians[1..5000]);
+// OUTPUT(sort(addmissingdates(date<>0),name,date)[1..5000]);
+// OUTPUT(replaceMediansOnEmptycompletedatas[1..5000]);
+
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, completestgData);
+EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, replaceMediansOnEmptycompletedatas);

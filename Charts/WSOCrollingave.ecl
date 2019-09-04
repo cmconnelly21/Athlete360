@@ -36,36 +36,12 @@ inputDs := PROJECT(Name, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := CO
 //define how the count will work
 completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
-RECORDOF(completedata) denormalizeToFindMedian(RECORDOF(completedata) L, DATASET(RECORDOF(completedata)) R) := TRANSFORM
-     
-    SELF.wellnesssum := IF(COUNT(R) % 2 = 1, 
-                            SORT(R, wellnesssum)[(COUNT(R) / 2 ) + 1].wellnesssum, 
-                            (SORT(R, wellnesssum)[(COUNT(R) / 2 ) + 1].wellnesssum  + SORT(R, wellnesssum)[(COUNT(R) / 2)].wellnesssum ) / 2
-                        );
-    SELF.sessionoverall := IF(COUNT(R) % 2 = 1, 
-                            SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall, 
-                            (SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall  + SORT(R, sessionoverall)[(COUNT(R) / 2)].sessionoverall ) / 2
-                        );
-    
-    SELF := L;
-
- END;
-
-//denormalize to seperate by athlete to find median values
-completedataWithMedians := DENORMALIZE
-    (
-        completedataUniqueName, 
-        completedata,
-        LEFT.name = RIGHT.name,
-        GROUP,
-        denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
-    );
 
 //define what median values to find
 replaceMediansOnEmptycompletedatas := JOIN
     (
         completedata,
-        completedataWithMedians,
+        completedataUniqueName,
         LEFT.name = RIGHT.name,
         TRANSFORM(RECORDOF(LEFT),
             SELF.wellnesssum := IF(LEFT.wellnesssum <> 0, LEFT.wellnesssum, RIGHT.wellnesssum);
@@ -143,9 +119,9 @@ dataWithAvgs := project
 			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
 			// SELF.gamedaycount := RIGHT.gamedaycount;
 			// SELF := LEFT));
-		OUTPUT(completedata[1..10000]);
-	OUTPUT(Name[1..10000]);	
-	OUTPUT(dataWithAvgs[1..10000]);
+		// OUTPUT(completedata[1..10000]);
+	// OUTPUT(Name[1..10000]);	
+	// OUTPUT(dataWithAvgs[1..10000]);
 	// OUTPUT(ATHLETE360.files_stg.WSOCdate_stgfile, all);
 
-// OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);

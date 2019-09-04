@@ -28,36 +28,12 @@ inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.c
 //define how the count will work
 completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
-RECORDOF(completedata) denormalizeToFindMedian(RECORDOF(completedata) L, DATASET(RECORDOF(completedata)) R) := TRANSFORM
-     
-    SELF.score := IF(COUNT(R) % 2 = 1, 
-                            SORT(R, score)[(COUNT(R) / 2 ) + 1].score, 
-                            (SORT(R, score)[(COUNT(R) / 2 ) + 1].score  + SORT(R, score)[(COUNT(R) / 2)].score ) / 2
-                        );
-    SELF.TrainingLoad := IF(COUNT(R) % 2 = 1, 
-                            SORT(R, TrainingLoad)[(COUNT(R) / 2 ) + 1].TrainingLoad, 
-                            (SORT(R, TrainingLoad)[(COUNT(R) / 2 ) + 1].TrainingLoad  + SORT(R, TrainingLoad)[(COUNT(R) / 2)].TrainingLoad ) / 2
-                        );
-    
-    SELF := L;
-
- END;
-
-//denormalize to seperate by athlete to find median values
-completedataWithMedians := DENORMALIZE
-    (
-        completedataUniqueName, 
-        completedata,
-        LEFT.name = RIGHT.name,
-        GROUP,
-        denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
-    );
 
 //define what median values to find
 replaceMediansOnEmptycompletedatas := JOIN
     (
         completedata,
-        completedataWithMedians,
+        completedataUniqueName,
         LEFT.name = RIGHT.name,
         TRANSFORM(RECORDOF(LEFT),
             SELF.score := IF(LEFT.score <> 0, LEFT.score, RIGHT.score);
@@ -130,14 +106,14 @@ dataWithAvgs := project
 
 //output data and create output file
 
-Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
-			left.date = RIGHT.date,
-			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
-			SELF.gamedaycount := RIGHT.gamedaycount;
-			SELF := LEFT));
+// Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
+			// left.date = RIGHT.date,
+			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
+			// SELF.gamedaycount := RIGHT.gamedaycount;
+			// SELF := LEFT));
 	// OUTPUT(Name[1..100]);	
 	// OUTPUT(dataWithAvgs[1..100]);
 	// OUTPUT(ATHLETE360.files_stg.MSOCdate_stgfile, all);    
 
 
-OUTPUT(name,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
