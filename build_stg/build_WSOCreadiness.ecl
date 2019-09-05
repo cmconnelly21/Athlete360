@@ -90,7 +90,7 @@ replaceMediansOnEmptycompletedatas := JOIN
         addmissingdates(date <> 0),
         LEFT.name = RIGHT.name AND
 				LEFT.date = RIGHT.date,
-        TRANSFORM({RECORDOF(LEFT), boolean isdummy := FALSE},
+        TRANSFORM({RECORDOF(LEFT)},
 									SELF.date := IF(LEFT.date <> 0, LEFT.date, RIGHT.date);
 									SELF.time := IF(LEFT.time <> 0, LEFT.time, RIGHT.time);
                   self.Name := IF(LEFT.Name <> ' ', LEFT.Name, RIGHT.Name);
@@ -101,8 +101,8 @@ replaceMediansOnEmptycompletedatas := JOIN
 									self.Hydration := IF(LEFT.Hydration <> 0, LEFT.Hydration, RIGHT.Hydration);
 									SELF.Pain := LEFT.Pain;
 									SELF.Explanation := LEFT.Explanation;
+									SELF.Athleteid := IF(LEFT.Athleteid <> ' ', LEFT.Athleteid, RIGHT.Athleteid);
 									self.WellnessSum := IF(LEFT.wellnesssum <> 0, LEFT.wellnesssum, RIGHT.wellnesssum);
-									self.isdummy := IF(left.name = ' ' AND left.date = 0, true, false);
 									SELF.wuid := workunit;
             // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
         ),

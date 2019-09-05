@@ -1,36 +1,41 @@
 ﻿IMPORT Athlete360;
 IMPORT STD;
+#option('outputlimit',2000);
 
 //pull data from readiness stage file and join with data from training loads stage file
 rawDs := SORT(Athlete360.files_stg.WSOCreadiness_stgfile, Date, Name) : INDEPENDENT;
 
-completedata := join(dedup(sort(rawDs, name), name),
+completedata := join(dedup(sort(rawDs, name, date), name, date),
 
 Athlete360.files_stg.WSOCtrainingload_stgfile,
 
-Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
+Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND
+left.date = right.date,
 
-transform({RECORDOF(LEFT), Right.sessionoverall}, 
-														SELF.name := RIGHT.name; 
-														SELF.Date := RIGHT.Date;
-														SELF.sessionoverall := Right.sessionoverall;
-														SELF := LEFT;), 
+transform({RECORDOF(LEFT), Right.sessionoverall},
+									SELF.date := IF(left.date <> right.date, left.date, right.date);
+									SELF.time := IF(left.date <> right.date, left.time, right.time);
+                  self.Name := IF(left.date <> right.date, left.Name, right.Name);
+									self.Fatigue := IF(left.date <> right.date, left.Fatigue, left.Fatigue);
+									self.MuscleSoreness := IF(left.date <> right.date, left.MuscleSoreness, left.MuscleSoreness);
+									self.SleepQuality := IF(left.date <> right.date, left.SleepQuality, left.SleepQuality);
+									self.Stress := IF(left.date <> right.date, left.Stress, left.Stress);
+									self.Hydration := IF(left.date <> right.date, left.Hydration, left.Hydration);
+									SELF.Pain := IF(left.date <> right.date, left.Pain, left.Pain);
+									SELF.Explanation := IF(left.date <> right.date, left.Explanation, left.Explanation);
+									SELF.Athleteid := IF(left.date <> right.date, left.Athleteid, right.Athleteid);
+									self.WellnessSum := IF(left.date <> right.date, left.WellnessSum, left.WellnessSum);
+									SELF.sessionoverall := IF(left.date <> right.date, 0, right.sessionoverall);
+									SELF.wuid := workunit; 
+									),
 
-left outer
+ left outer
 
 );
 
-Name := JOIN(completedata,ATHLETE360.files_stg.WSOCdate_stgfile,
-			left.date = RIGHT.date,
-			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
-			Self.date := Right.date;
-			SELF.gamedaycount := RIGHT.gamedaycount;
-			SELF := LEFT),
-			Full Outer
-			);
 
 //add count to dataset
-inputDs := PROJECT(Name, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
+// inputDs := PROJECT(completedata, TRANSFORM({RECORDOF(LEFT); integer cnt}, SELF.cnt := COUNTER; self := left));
 
 
 //define how the count will work
@@ -71,7 +76,7 @@ replaceMediansOnEmptycompletedatasWithCnt := iterate
                 Name,Date
             ), 
         transform(
-            {completedata, integer cnt}, 
+            {replaceMediansOnEmptycompletedatas, integer cnt}, 
             self.cnt := IF(counter = 1 OR left.name <> right.name, 1, left.cnt+ 1 ); 
             self := right
         )
@@ -114,14 +119,14 @@ dataWithAvgs := project
 
 //output data and create output file    
 
-// Name := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
-			// left.date = RIGHT.date,
-			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
-			// SELF.gamedaycount := RIGHT.gamedaycount;
-			// SELF := LEFT));
-		// OUTPUT(completedata[1..10000]);
-	// OUTPUT(Name[1..10000]);	
-	// OUTPUT(dataWithAvgs[1..10000]);
-	// OUTPUT(ATHLETE360.files_stg.WSOCdate_stgfile, all);
+ gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.WSOCdate_stgfile,
+			left.date = RIGHT.date,
+			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.WSOCdate_stgfile.gamedaycount},
+			SELF.gamedaycount := RIGHT.gamedaycount;
+			SELF := LEFT));
+	// OUTPUT(rawds[1..100000]);
+	// OUTPUT(completedata[1..100000]);
+	// OUTPUT(dataWithAvgs[1..100000]);
+	// OUTPUT(gameday[1..100000]);
 
-OUTPUT(dataWithAvgs,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);
+OUTPUT(gameday,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);
