@@ -5,7 +5,7 @@ IMPORT STD;
 //pull data from readiness stage file and join with data from training loads stage file
 rawDs := SORT(Athlete360.files_stg.MSOCreadiness_stgfile, Date, Name) : INDEPENDENT;
 
-completedata := join(dedup(sort(rawDs, name), name),
+completedata := join(dedup(sort(rawDs, name, date), name, date),
 
 Athlete360.files_stg.MSOCtrainingload_stgfile,
 
@@ -74,7 +74,7 @@ replaceMediansOnEmptycompletedatasWithCnt := iterate
                 Name,Date
             ), 
         transform(
-            {completedata, integer cnt}, 
+            {replaceMediansOnEmptycompletedatas, integer cnt}, 
             self.cnt := IF(counter = 1 OR left.name <> right.name, 1, left.cnt+ 1 ); 
             self := right
         )
@@ -122,9 +122,10 @@ gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
 			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
-	// OUTPUT(Name[1..100]);	
-	// OUTPUT(dataWithAvgs[1..100]);
-	// OUTPUT(ATHLETE360.files_stg.MSOCdate_stgfile, all);    
+	OUTPUT(rawds[1..100000]);
+	OUTPUT(completedata[1..100000]);
+	OUTPUT(dataWithAvgs[1..100000]);
+	OUTPUT(gameday[1..100000]);  
 
 
-OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+// OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
