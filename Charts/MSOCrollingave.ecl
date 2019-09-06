@@ -122,10 +122,10 @@ gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
 			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
-	OUTPUT(rawds[1..100000]);
-	OUTPUT(completedata[1..100000]);
-	OUTPUT(dataWithAvgs[1..100000]);
-	OUTPUT(gameday[1..100000]);  
+	// OUTPUT(rawds[1..100000]);
+	// OUTPUT(completedata[1..100000]);
+	// OUTPUT(dataWithAvgs[1..100000]);
+	// OUTPUT(gameday[1..100000]);  
 
 
-// OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
