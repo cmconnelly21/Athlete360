@@ -8,7 +8,8 @@ stglayout := Athlete360.layouts.MSOCdatefile_stg;
 
 stgLayout extractdata (Athlete360.Layouts.MSOCdatefile L):= transform
                   SELF.date := STD.date.FromStringToDate(L.date,'%m/%d/%Y');
-									SELF := L;
+									SELF.gamedaycount := (STRING20)L.gamedaycount;
+									SELF.wuid := (STRING19)workunit;
 END;
 									
 

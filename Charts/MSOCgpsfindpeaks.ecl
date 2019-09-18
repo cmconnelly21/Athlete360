@@ -158,7 +158,7 @@ temp4 := RECORD
   string drillname;
   unsigned4 drillstarttime;
   unsigned4 date;
-	String10 gamedaycount;
+	String12 gamedaycount;
   decimal10_5 hrave1;
   decimal10_5 hrave3;
   decimal10_5 hrave5;
@@ -192,6 +192,6 @@ finalouput := JOIN(
 // OUTPUT(athletespecificpeaks[1..100000]);
 // OUTPUT(finalchartdata[1..100000]);
 // OUTPUT(totalaverages);
-// OUTPUT(finalouput);
+// OUTPUT(finalouput[1..10000]);
 
 OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
