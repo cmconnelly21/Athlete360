@@ -91,10 +91,10 @@ END;
 completegpsdata := join
     (
         rawDSaves,
-        Athlete360.files_stg.MSOCgps_stgfile,
+        Athlete360.files_stg.MSOCgps_stgfile(drillname not in ['SESSION OVERALL','SESSION OVERALL1']),
         Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
-	        trim(right.drillname) <> 'SESSION OVERALL' AND
-	        trim(right.drillname) <> 'SESSION OVERALL1' AND
+	        // trim(right.drillname) <> 'SESSION OVERALL' AND
+	        // trim(right.drillname) <> 'SESSION OVERALL1' AND
 	        Left.date = Right.date AND
 	        Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
 	            STD.date.AdjustTime(
@@ -111,7 +111,7 @@ completegpsdata := join
                 SELF.Date := RIGHT.Date,
                 SELF := LEFT
             ), 
-        left outer, All 
+        lookup 
     );
 //create dataset to show top averages for each drill during session
 findpeaks := dedup(sort(DISTRIBUTE(completegpsdata, hash64(date, drillname, hrave1)), date, drillname, -hrave1, LOCAL), date, drillname, LOCAL);

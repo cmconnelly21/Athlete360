@@ -7,8 +7,46 @@
 // rawDS1 := DEDUP(rawDs0, name, date, time); 
 rawDS1 := Athlete360.files_stg.MSOCrawgps_stgfile;
 
+temp0 := RECORD
+    recordof(rawDS1);
+		string position;
+    string drillname;
+     UNSIGNED4 drillstarttime;
+END;
 
-rawDs3 := 	SORT(project(rawDS1,Transform({RECORDOF(LEFT),
+completegpsdata := join
+    (
+        rawDS1,
+        Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1ST HALF','2ND HALF','1ST OT','2ND OT']),
+        Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
+					// trim(right.drillname) = '1ST HALF' AND
+					// trim(right.drillname) = '2ND HALF' AND
+	        Left.date = Right.date AND
+	        Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
+	            STD.date.AdjustTime(
+                    right.drillstarttime, 
+                    minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
+                    second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])),
+        transform
+            ({RECORDOF(temp0)},
+                SELF.name := RIGHT.name,
+                SELF.athleteid := Right.athleteid,
+                SELF.position := RIGHT.position,
+                SELF.drillname := RIGHT.drillname,
+                SELF.drillstarttime := RIGHT.drillstarttime,
+                SELF.Date := RIGHT.Date,
+                SELF := LEFT
+            ),
+						LOOKUP
+    );
+//create dataset to show top averages for each drill during session
+// findpeaks := dedup(sort(DISTRIBUTE(completegpsdata, hash64(date, drillname, hrave1)), date, drillname, -hrave1, LOCAL), date, drillname, LOCAL);
+
+//create dataset to show the peak averages for each athlete during each drill
+// athletespecificpeaks := dedup(sort(DISTRIBUTE(completegpsdata,hash64(date, drillname, hrave1)),name,date, drillname,drillstarttime, -hrave1, LOCAL),
+
+
+rawDs3 := 	SORT(project(completegpsdata,Transform({RECORDOF(LEFT),
 																			Integer cnt := 0,
 																			DECIMAL10_5 speedsumval := 0, 
 																			Integer hrsumval := 0},
@@ -40,33 +78,8 @@ rawDSsums_limit1 := JOIN(
     LEFT OUTER,
      LOOKUP
 );
-//add fields that will be used to create the 3 min periods
-rawDSsums_limit3 := JOIN(
-  rawDSsums_limit1,
-  rawDSsums,
-  left.name = right.name and left.date = right.date, 
-	// and left.cnt -1800 = right.cnt,
-  transform(
-      {recordof(left), decimal10_5 sumspeedlimit3, integer sumhrlimit3},
-      SELF.sumspeedlimit3 := IF(right.name = '', LEFT.speedsumval, LEFT.speedsumval - right.speedsumval);
-      SELF.sumhrlimit3 :=  IF(right.name = '', LEFT.hrsumval, LEFT.hrsumval - right.hrsumval);
-      SELF := LEFT
-    ),
-    LEFT OUTER,
-     LOOKUP
-);
-//add fields that will be used to create the 5 min periods
-rawDSsums_limit5 := JOIN(
-  rawDSsums_limit3,
-  rawDSsums,
-  left.name = right.name and left.date = right.date, 
-	// and left.cnt -3000 = right.cnt,
-  transform(
-      {recordof(left), decimal10_5 sumspeedlimit5,integer sumhrlimit5},
-      SELF.sumspeedlimit5 := IF(right.name = '', LEFT.speedsumval, LEFT.speedsumval - right.speedsumval);
-      SELF.sumhrlimit5 :=  IF(right.name = '', LEFT.hrsumval, LEFT.hrsumval - right.hrsumval);
-      SELF := LEFT
-    ),
-    LEFT OUTER,
-     LOOKUP
-);
+
+// OUTPUT(rawDS1[300000..400000]);
+// OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname='2ND HALF'));
+OUTPUT(completegpsdata);
+// OUTPUT(rawDSsums[300000..400000]);
