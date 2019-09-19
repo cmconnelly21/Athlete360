@@ -179,6 +179,21 @@ finalouput := JOIN(
     ),
     LEFT OUTER
 );
+
+
+
+Weekave := Project(finalouput(Name<>' '), 
+							transform({RECORDOF(temp4);
+								decimal5_2 weekave1,
+								decimal5_2 weekave3,
+								decimal5_2 weekave5,
+								unsigned2 weeknum},
+							self.weeknum := Athlete360.util.DateAddendum.ISODayOfWeekFromDate(left.date);
+							self.weekave1 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave1);
+							self.weekave3 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave3);
+							self.weekave5 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave5);
+							self := LEFT
+								));
 	
 	
 //output the data and create an output file
