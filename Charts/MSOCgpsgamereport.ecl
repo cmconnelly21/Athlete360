@@ -12,6 +12,7 @@ temp0 := RECORD
 		string position;
     string drillname;
      UNSIGNED4 drillstarttime;
+		 Integer bucketnum;
 END;
 
 completegpsdata := join
@@ -35,10 +36,15 @@ completegpsdata := join
                 SELF.drillname := RIGHT.drillname,
                 SELF.drillstarttime := RIGHT.drillstarttime,
                 SELF.Date := RIGHT.Date,
+								SELF.time := Left.time;
+								SELF.bucketnum := Athlete360.util.get_gametimebuckets(SELF.drillstarttime,Std.date.FromStringToTime(SELF.time[1..8],'%H:%M:%S')),
                 SELF := LEFT
             ),
 						LOOKUP
     );
+
+
+
 //create dataset to show top averages for each drill during session
 // findpeaks := dedup(sort(DISTRIBUTE(completegpsdata, hash64(date, drillname, hrave1)), date, drillname, -hrave1, LOCAL), date, drillname, LOCAL);
 
@@ -62,13 +68,14 @@ lay1 iterateme(lay1 L, lay1 R, integer cntr) := transform
 										self := R;// IF(SELF.cnt = 1, R, L);
 end;										
 
+name, date, drillname, bucket, avevalue
+
 rawDSsums := Iterate(rawDs3, iterateme(LEFT, RIGHT, COUNTER));
 //add fields that will be used to create the 1 min periods										
 rawDSsums_limit1 := JOIN(
   rawDSsums,
   rawDSsums,
-  left.name = right.name and left.date = right.date,
-	// and left.cnt-600 = right.cnt,
+  left.name = right.name and left.date = right.date,and left.cnt-600 = right.cnt,
   transform(
       {recordof(left), decimal10_5 sumspeedlimit1, integer sumhrlimit1},
       SELF.sumspeedlimit1 := IF(right.name = '', LEFT.speedsumval, LEFT.speedsumval - right.speedsumval);
@@ -81,5 +88,5 @@ rawDSsums_limit1 := JOIN(
 
 // OUTPUT(rawDS1[300000..400000]);
 // OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname='2ND HALF'));
-OUTPUT(completegpsdata);
+OUTPUT(SAMPLE(group(completegpsdata, bucketnum), 100, 1));
 // OUTPUT(rawDSsums[300000..400000]);

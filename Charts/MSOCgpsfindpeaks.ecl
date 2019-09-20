@@ -184,14 +184,14 @@ finalouput := JOIN(
 
 Weekave := Project(finalouput(Name<>' '), 
 							transform({RECORDOF(temp4);
-								decimal5_2 weekave1,
-								decimal5_2 weekave3,
-								decimal5_2 weekave5,
+								// decimal5_2 weekave1,
+								// decimal5_2 weekave3,
+								// decimal5_2 weekave5,
 								unsigned2 weeknum},
-							self.weeknum := Athlete360.util.DateAddendum.ISODayOfWeekFromDate(left.date);
-							self.weekave1 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave1);
-							self.weekave3 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave3);
-							self.weekave5 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave5);
+							self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
+							// self.weekave1 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave1);
+							// self.weekave3 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave3);
+							// self.weekave5 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave5);
 							self := LEFT
 								));
 	
@@ -208,5 +208,6 @@ Weekave := Project(finalouput(Name<>' '),
 // OUTPUT(finalchartdata[1..100000]);
 // OUTPUT(totalaverages);
 // OUTPUT(finalouput[1..10000]);
+OUTPUT(weekave);
 
-OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
+// OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
