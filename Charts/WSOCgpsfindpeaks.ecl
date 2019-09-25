@@ -148,7 +148,7 @@ temp4 := RECORD
   string drillname;
   unsigned4 drillstarttime;
   unsigned4 date;
-	String10 gamedaycount;
+	String12 gamedaycount;
   decimal10_5 speedave1;
   decimal10_5 speedave3;
   decimal10_5 speedave5;

@@ -14,6 +14,10 @@
     EXPORT chart_out_WSOCgpsfindpeaks := 'WSOCgpsfindpeaks';
     EXPORT chart_out_MSOCrollingave := 'MSOCrollingave';
     EXPORT chart_out_WSOCrollingave := 'WSOCrollingave';
+		EXPORT chart_out_WSOCGPSgamereport := 'WSOCGPSgamereport';
+		EXPORT chart_out_MSOCGPSgamereport := 'MSOCGPSgamereport';
+		EXPORT chart_out_WSOCGPSdistance := 'WSOCGPSdistance';
+		EXPORT chart_out_MSOCGPSdistance := 'MSOCGPSdistance';
 
 
     EXPORT landingzone_ip  := '10.0.0.220';
