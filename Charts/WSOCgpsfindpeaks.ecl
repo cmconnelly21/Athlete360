@@ -136,18 +136,7 @@ temp3 := RECORD
 	
 finalchartdata := PROJECT(athletespecificpeaks,transform({RECORDOF(temp3)}; SELF := LEFT;));
 
-//create dataset to show average peaks for each drill 
-totalaverages := Project(finalchartdata(Name<>' '), 
-							transform({RECORDOF(temp3);
-								decimal5_2 speedtotalave1,
-								decimal5_2 speedtotalave3,
-								decimal5_2 speedtotalave5},
-							self.speedtotalave1 := AVE(group(finalchartdata(drillname = left.drillname),drillname), speedave1);
-							self.speedtotalave3 := AVE(group(finalchartdata(drillname = left.drillname),drillname), speedave3);
-							self.speedtotalave5 := AVE(group(finalchartdata(drillname = left.drillname),drillname), speedave5);
-							self := LEFT
-								));	
-	
+//create dataset to show average peaks for each drill 	
 	
 temp4 := RECORD
   string name;
@@ -163,23 +152,22 @@ temp4 := RECORD
   decimal10_5 speedave1;
   decimal10_5 speedave3;
   decimal10_5 speedave5;
-	decimal5_2 speedtotalave1;
-	decimal5_2 speedtotalave3;
-	decimal5_2 speedtotalave5;
 	
  END;		
 		
 finalouput := JOIN(
-  totalaverages,
-  Athlete360.Files_stg.WSOCdate_stgfile,
+  finalchartdata,
+  Athlete360.Files_stg.MSOCdate_stgfile,
   left.date = right.date,
   transform(
-      {recordof(temp4)},
+      {recordof(temp4), unsigned2 weeknum},
       SELF.gamedaycount := right.gamedaycount;
+			self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
       SELF := LEFT
     ),
     LEFT OUTER
 );
+
 	
 	
 //output the data and create an output file

@@ -137,16 +137,7 @@ temp3 := RECORD
 finalchartdata := PROJECT(athletespecificpeaks,transform({RECORDOF(temp3)}; SELF := LEFT;));
 
 //create dataset to show average peaks for each drill 
-totalaverages := Project(finalchartdata(Name<>' '), 
-							transform({RECORDOF(temp3);
-								decimal5_2 hrtotalave1,
-								decimal5_2 hrtotalave3,
-								decimal5_2 hrtotalave5},
-							self.hrtotalave1 := AVE(group(finalchartdata(drillname = left.drillname),drillname), hrave1);
-							self.hrtotalave3 := AVE(group(finalchartdata(drillname = left.drillname),drillname), hrave3);
-							self.hrtotalave5 := AVE(group(finalchartdata(drillname = left.drillname),drillname), hrave5);
-							self := LEFT
-								));	
+
 		
 temp4 := RECORD
   string name;
@@ -162,19 +153,17 @@ temp4 := RECORD
   decimal10_5 hrave1;
   decimal10_5 hrave3;
   decimal10_5 hrave5;
-	decimal5_2 hrtotalave1;
-	decimal5_2 hrtotalave3;
-	decimal5_2 hrtotalave5;
 	
  END;		
 		
 finalouput := JOIN(
-  totalaverages,
+  finalchartdata,
   Athlete360.Files_stg.MSOCdate_stgfile,
   left.date = right.date,
   transform(
-      {recordof(temp4)},
+      {recordof(temp4), unsigned2 weeknum},
       SELF.gamedaycount := right.gamedaycount;
+			self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
       SELF := LEFT
     ),
     LEFT OUTER
@@ -182,19 +171,6 @@ finalouput := JOIN(
 
 
 
-Weekave := Project(finalouput(Name<>' '), 
-							transform({RECORDOF(temp4);
-								// decimal5_2 weekave1,
-								// decimal5_2 weekave3,
-								// decimal5_2 weekave5,
-								unsigned2 weeknum},
-							self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
-							// self.weekave1 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave1);
-							// self.weekave3 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave3);
-							// self.weekave5 := AVE(group(finalouput(drillname = left.drillname),weeknum), hrave5);
-							self := LEFT
-								));
-	
 	
 //output the data and create an output file
 	
@@ -208,6 +184,6 @@ Weekave := Project(finalouput(Name<>' '),
 // OUTPUT(finalchartdata[1..100000]);
 // OUTPUT(totalaverages);
 // OUTPUT(finalouput[1..10000]);
-OUTPUT(weekave);
+// OUTPUT(finalouput);
 
-// OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);

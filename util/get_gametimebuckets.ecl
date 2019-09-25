@@ -6,6 +6,6 @@ Export get_gametimebuckets(Unsigned3 starttime, Unsigned3 endtime):= FUNCTION
 mDiff :=  std.date.Minute(endTime) - std.date.Minute(startTime);
 hDiff :=  std.date.Hour(endTime) - std.date.Hour(startTime);
 
-Return (Integer)(((Integer)((Integer)((hdiff * 60 + mdiff) / 15))) +1);
+Return (Integer)(((Integer)((Integer)(((hdiff * 60) + mdiff) / 15))) +1);
 
 END;

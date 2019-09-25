@@ -7,6 +7,19 @@
 // rawDS1 := DEDUP(rawDs0, name, date, time); 
 rawDS1 := Athlete360.files_stg.MSOCrawgps_stgfile;
 
+
+filteredGps := Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']);
+
+// ITERATE(
+	// ,
+	// TRANSFORM({RECORDOF(left); string newDrillStartTime},
+		// SELF.newDrillStartTime := 
+				// IF(counter = 1 or (LEFT.name <> right.name or left.date <> right.date or left.drillname = right.drillname ),
+						// right.drillstarttime,
+						// LEFT.drillstarttime
+				// );
+				
+
 temp0 := RECORD
     recordof(rawDS1);
 		string position;
@@ -18,10 +31,8 @@ END;
 completegpsdata := join
     (
         rawDS1,
-        Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1ST HALF','2ND HALF','1ST OT','2ND OT']),
+        Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']),
         Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
-					// trim(right.drillname) = '1ST HALF' AND
-					// trim(right.drillname) = '2ND HALF' AND
 	        Left.date = Right.date AND
 	        Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
 	            STD.date.AdjustTime(
@@ -29,7 +40,7 @@ completegpsdata := join
                     minute_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[1]), 
                     second_delta := ((integer)std.str.splitwords((string)right.drilltotaltime, '.')[2])),
         transform
-            ({RECORDOF(temp0)},
+            ({RECORDOF(Left), string position, string drillname, UNSIGNED4 drillstarttime, Integer bucketnum},
                 SELF.name := RIGHT.name,
                 SELF.athleteid := Right.athleteid,
                 SELF.position := RIGHT.position,
@@ -37,56 +48,87 @@ completegpsdata := join
                 SELF.drillstarttime := RIGHT.drillstarttime,
                 SELF.Date := RIGHT.Date,
 								SELF.time := Left.time;
-								SELF.bucketnum := Athlete360.util.get_gametimebuckets(SELF.drillstarttime,Std.date.FromStringToTime(SELF.time[1..8],'%H:%M:%S')),
+								SELF.bucketnum := 0;//Athlete360.util.get_gametimebuckets(SELF.drillstarttime,Std.date.FromStringToTime(SELF.time[1..8],'%H:%M:%S')),
                 SELF := LEFT
             ),
 						LOOKUP
     );
+		
 
-
-
-//create dataset to show top averages for each drill during session
-// findpeaks := dedup(sort(DISTRIBUTE(completegpsdata, hash64(date, drillname, hrave1)), date, drillname, -hrave1, LOCAL), date, drillname, LOCAL);
-
-//create dataset to show the peak averages for each athlete during each drill
-// athletespecificpeaks := dedup(sort(DISTRIBUTE(completegpsdata,hash64(date, drillname, hrave1)),name,date, drillname,drillstarttime, -hrave1, LOCAL),
-
-
-rawDs3 := 	SORT(project(completegpsdata,Transform({RECORDOF(LEFT),
-																			Integer cnt := 0,
-																			DECIMAL10_5 speedsumval := 0, 
-																			Integer hrsumval := 0},
-																			self := Left)), name, date, time);
-
-// create layout and apply to build the sum fields for speed and HR
-lay1 := recordof(rawDs3);
-
+newdata := PROJECT(SORT(completegpsdata, NAME, DATE, DRILLNAME,TIME), 
+	transform({recordof(left); unsigned3 drillstarttime_new := 0}, self := left));
+	
+lay1 := recordof(newdata);
+		
 lay1 iterateme(lay1 L, lay1 R, integer cntr) := transform
-										SELF.cnt := IF(cntr = 1 or L.name <> R.name or L.date <> R.date, 1, L.cnt + 1),
-										self.speedsumval := IF(SELF.cnt = 1, r.speed, L.speedsumval + R.speed);
-										self.hrsumval := IF(SELF.cnt = 1, r.heartrate, L.hrsumval +  r.heartrate);
+										self.drillstarttime_new := 
+											IF(cntr = 1 or L.name <> R.name or L.date <> R.date or L.drillname <> R.drillname, 
+													r.drillstarttime, 
+													L.drillstarttime_new);
 										self := R;// IF(SELF.cnt = 1, R, L);
 end;										
 
-name, date, drillname, bucket, avevalue
+rawDSsums := Iterate(newdata, iterateme(LEFT, RIGHT, COUNTER));
 
-rawDSsums := Iterate(rawDs3, iterateme(LEFT, RIGHT, COUNTER));
-//add fields that will be used to create the 1 min periods										
-rawDSsums_limit1 := JOIN(
-  rawDSsums,
-  rawDSsums,
-  left.name = right.name and left.date = right.date,and left.cnt-600 = right.cnt,
-  transform(
-      {recordof(left), decimal10_5 sumspeedlimit1, integer sumhrlimit1},
-      SELF.sumspeedlimit1 := IF(right.name = '', LEFT.speedsumval, LEFT.speedsumval - right.speedsumval);
-      SELF.sumhrlimit1 :=  IF(right.name = '', LEFT.hrsumval, LEFT.hrsumval - right.hrsumval);
-      SELF := LEFT
-    ),
-    LEFT OUTER,
-     LOOKUP
+finalResult := PROJECT(	rawDSsums,
+		transform(recordof(left), 
+			self.bucketnum := Athlete360.util.get_gametimebuckets(left.drillstarttime_new,Std.date.FromStringToTime(left.time[1..8],'%H:%M:%S'));
+			SELF := LEFT
+			)
+		);
+		
+DATA_DISTANCE := SORT(
+	TABLE(finalResult, 
+		{name, date, drillname, bucketnum,
+		decimal5_2 avg_speed := AVE(group, speed);
+		decimal8_3 distance := AVE(group, speed) * (MAX(group, elapsedtime) - MIN(Group, elapsedtime));
+		decimal8_3 time_diff :=  ((MAX(group, elapsedtime) - MIN(Group, elapsedtime))/60);
+		},
+		name, date, drillname, bucketnum,
+		MERGE
+		), name, date, drillname, bucketnum
 );
 
-// OUTPUT(rawDS1[300000..400000]);
-// OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname='2ND HALF'));
-OUTPUT(SAMPLE(group(completegpsdata, bucketnum), 100, 1));
-// OUTPUT(rawDSsums[300000..400000]);
+// output(sort(completegpsdata(trim(name) = 'AIDAN FOSTER' and date = 20190910	and drillname = '2ND HALF' and bucketnum = 1), elapsedtime), all);
+
+
+
+
+// inputDs := PROJECT(
+        // completegpsdata,
+        // TRANSFORM({RECORDOF(LEFT); integer cnt; 
+						// decimal15_8 speedtotal := 0;
+						// decimal15_8 distance := 0;
+						// decimal15_2 practime := 0};
+            // SELF.cnt := COUNTER;
+						// self := left;
+        // )
+// );
+
+
+
+// outputDs := ITERATE(inputDs,
+    // TRANSFORM({RECORDOF(LEFT)},
+		// self.cnt := IF(COUNTER = 1 or left.name <> RIGHT.name or left.date <> RIGHT.date or left.drillname <> RIGHT.drillname, 1, left.cnt + 1);
+		// self.practime := left.cnt/10;
+		// self.speedtotal := IF(self.cnt = 1, right.speed, left.speedtotal + right.speed);
+		// self.distance := (left.practime * (left.speedtotal/left.cnt));
+		// self := RIGHT
+				
+				
+				
+    // )
+
+// );
+
+// aveByBucket := table(
+	// outputDs,
+	// {name, date, drillname, bucketnum, avevalue :=  AVE(GROUP, distance)},
+	// name, date, drillname,bucketnum	,
+	// merge);
+// output(sort(finalResult(trim(name) = 'AIDAN FOSTER' and date = 20190910	and drillname = '2ND HALF'), elapsedtime), all);	
+// output(outputDs[1..100000]);
+// OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']));	
+// output(finalResult[1..50000]);	
+// output(DATA_DISTANCE , all);
+OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCGPSgamereport',CSV,OVERWRITE);
