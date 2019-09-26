@@ -54,4 +54,4 @@ DATA_DISTANCE := SORT(
 		
 // output(DATA_DISTANCE , all);
 		
-OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::WSOCGPSdistance',CSV,OVERWRITE);
+OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::WSOCgpsdistance',CSV,OVERWRITE);

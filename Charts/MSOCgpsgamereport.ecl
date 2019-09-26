@@ -131,4 +131,4 @@ DATA_DISTANCE := SORT(
 // OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']));	
 // output(finalResult[1..50000]);	
 // output(DATA_DISTANCE , all);
-OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCGPSgamereport',CSV,OVERWRITE);
+OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCgpsgamereport',CSV,OVERWRITE);
