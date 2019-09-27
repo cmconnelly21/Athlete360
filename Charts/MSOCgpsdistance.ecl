@@ -50,8 +50,21 @@ DATA_DISTANCE := SORT(
 		MERGE
 		), name, date, drillname
 );		
-		
+
+
+finalouput := JOIN(
+  DATA_DISTANCE,
+  Athlete360.Files_stg.MSOCdate_stgfile,
+  left.date = right.date,
+  transform(
+      {recordof(left), unsigned2 weeknum, string gamedaycount},
+      SELF.gamedaycount := right.gamedaycount;
+			self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
+      SELF := LEFT
+    ),
+    LEFT OUTER
+);
 		
 // output(DATA_DISTANCE , all);		
 
-OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCgpsdistance',CSV,OVERWRITE);
+OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCgpsdistance',CSV,OVERWRITE);
