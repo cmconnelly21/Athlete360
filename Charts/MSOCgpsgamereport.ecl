@@ -8,7 +8,7 @@
 rawDS1 := Athlete360.files_stg.MSOCrawgps_stgfile;
 
 
-filteredGps := Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']);
+filteredGps := Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1ST HALF','2ND HALF','1ST OT','2ND OT']);
 
 // ITERATE(
 	// ,
@@ -31,7 +31,7 @@ END;
 completegpsdata := join
     (
         rawDS1,
-        Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']),
+        filteredGps,
         Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name) AND 
 	        Left.date = Right.date AND
 	        Std.date.FromStringToTime(Left.Time[1..8],'%H:%M:%S') BETWEEN right.drillstarttime AND 
@@ -79,14 +79,14 @@ finalResult := PROJECT(	rawDSsums,
 		
 DATA_DISTANCE := SORT(
 	TABLE(finalResult, 
-		{name, date, drillname, bucketnum,
+		{name, date, Position, drillname, bucketnum,
 		decimal5_2 avg_speed := AVE(group, speed);
 		decimal8_3 distance := AVE(group, speed) * (MAX(group, elapsedtime) - MIN(Group, elapsedtime));
 		decimal8_3 time_diff :=  ((MAX(group, elapsedtime) - MIN(Group, elapsedtime))/60);
 		},
-		name, date, drillname, bucketnum,
+		name, date, Position, drillname, bucketnum,
 		MERGE
-		), name, date, drillname, bucketnum
+		), name, date, Position, drillname, bucketnum
 );
 
 // output(sort(completegpsdata(trim(name) = 'AIDAN FOSTER' and date = 20190910	and drillname = '2ND HALF' and bucketnum = 1), elapsedtime), all);
@@ -127,8 +127,10 @@ DATA_DISTANCE := SORT(
 	// name, date, drillname,bucketnum	,
 	// merge);
 // output(sort(finalResult(trim(name) = 'AIDAN FOSTER' and date = 20190910	and drillname = '2ND HALF'), elapsedtime), all);	
+// output(rawDS1);
 // output(outputDs[1..100000]);
-// OUTPUT(Athlete360.files_stg.MSOCgps_stgfile(drillname in ['1st HALF','2ND HALF','1st OT','2ND OT']));	
-// output(finalResult[1..50000]);	
+// OUTPUT(filteredGps, all);
+// output(completegpsdata);	
+// output(finalResult);	
 // output(DATA_DISTANCE , all);
 OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCgpsgamereport',CSV,OVERWRITE);

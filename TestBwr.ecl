@@ -1,8 +1,8 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20190926');
+#stored('filedate', '20191009');
 //Athlete360.build_athlete360;
-
+	
 // get the layout (processed layout)
 //stgLayout := Athlete360.Layouts.MSOCrawgps_stg;
 

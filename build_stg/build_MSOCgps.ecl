@@ -8,9 +8,9 @@ stgLayout := Athlete360.Layouts.MSOCgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
+																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
 																								SELF.Name := L.Name;
-																								SELF.Drillname := L.Drillname;
+																								SELF.Drillname := Athlete360.util.toUpperTrim(L.Drillname);
 																								SELF.Week := (UNSIGNED1)L.Week;
 																								SELF.Position := L.Position;
 																								SELF.Impacts := L.Impacts;

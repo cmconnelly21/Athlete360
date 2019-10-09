@@ -127,6 +127,6 @@ dataWithAvgs := project
 	// OUTPUT(rawds[1..100000]);
 	// OUTPUT(completedata[1..100000]);
 	// OUTPUT(dataWithAvgs[1..100000]);
-	// OUTPUT(gameday[1..100000]);
+	// OUTPUT(gameday);
 
 OUTPUT(gameday,,'~Athlete360::OUT::despray::WSOCrollingave',CSV,OVERWRITE);
