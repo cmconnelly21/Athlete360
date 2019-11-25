@@ -10,20 +10,22 @@
 // Athlete360.build_stg.build_WSOCdatefile;
 // Athlete360.build_stg.build_MSOCdatefile;
   SEQUENTIAL(
-   // Athlete360.spray_build,
+   Athlete360.spray_build,
  // Athlete360.stg_build,
- athlete360.charts_build, 
-  Athlete360.despray_build,
+ // athlete360.charts_build, 
+  // Athlete360.despray_build,
  // Athlete360.files_spray.WSOCrawgpsfile,
  // Athlete360.files_spray.WSOCgpsfile,
  // Athlete360.build_stg.build_WSOCdatefile,
  // Athlete360.build_stg.build_MSOCdatefile,
+ Athlete360.build_stg.build_MSOCgpsNUM,
  // Athlete360.build_stg.build_MSOCgps,
 // Athlete360.build_stg.build_MSOCrawgps,
 // Athlete360.build_stg.build_WSOCreadiness,
 // Athlete360.build_stg.build_WSOCtrainingload,
 // Athlete360.build_stg.build_MSOCreadiness,
 // Athlete360.build_stg.build_MSOCtrainingload
+Athlete360.build_stg.build_MSOCtrainingloadNUM
 );
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');

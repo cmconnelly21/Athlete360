@@ -1,7 +1,7 @@
 ﻿EXPORT MSOCtrainingloadNUM_stg := RECORD
 		UNSIGNED4 Date;
 		UNSIGNED3 Time;
-		STRING Name;
+		UNSIGNED4 Name;
 		DECIMAL5_2 Rating;
 		UNSIGNED1 Duration;
 		UNSIGNED1 Trainingload;

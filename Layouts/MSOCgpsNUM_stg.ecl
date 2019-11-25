@@ -1,5 +1,5 @@
 ﻿EXPORT MSOCgpsNUM_stg :=RECORD
-		STRING50 Name;
+		UNSIGNED4 Name;
 		UNSIGNED1 Position;
 		UNSIGNED1 Sessiontype;
 		UNSIGNED1 Week;
