@@ -26,6 +26,7 @@
 		EXPORT MSOCdate_name := 'ms_dates';
     EXPORT MSOCtesting_name := 'ms_testing';
     EXPORT MSOCgps_name := 'ms_gps';
+		EXPORT MSOCgpsNUM_name := 'ms_gpsNUM';
 		EXPORT MSOCrawgps_name := 'ms_rawgps';
 		EXPORT WSOCgps_name := 'ws_gps';
 		EXPORT WSOCrawgps_name := 'ws_rawgps';
@@ -39,6 +40,7 @@
     EXPORT WSOCreadiness_name := 'ws_readiness';
     EXPORT WSOCtesting_name := 'ws_testing';
     EXPORT WSOCtrainingload_name := 'ws_trainingload';
+		EXPORT MSOCtrainingloadNUM_name := 'ms_trainingloadNUM';
     EXPORT WSOCgymaware_name := 'ws_gymaware';
 		EXPORT Athleteinfo_name := 'athleteinfo';
 

@@ -129,6 +129,7 @@ DATA_DISTANCE := SORT(
 // output(sort(finalResult(trim(name) = 'AIDAN FOSTER' and date = 20190910	and drillname = '2ND HALF'), elapsedtime), all);	
 // output(rawDS1);
 // output(outputDs[1..100000]);
+// output(Athlete360.files_stg.MSOCgps_stgfile,all);
 // OUTPUT(filteredGps, all);
 // output(completegpsdata);	
 // output(finalResult);	
