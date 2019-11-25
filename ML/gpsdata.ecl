@@ -32,4 +32,4 @@ gpsTestData := PROJECT(myDataES[5001..6968], {RECORDOF(gpsdata)}); // Treat next
 
 //make cell-oriented data format N*M
 ML_Core.ToField(gpsTrainData, gpsTrainDataNF);
-ML_Core.ToField(gpsTrainData, gpsTrainDataNF);
+ML_Core.ToField(gpsTestData, gpsTestDataNF);
