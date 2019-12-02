@@ -44,7 +44,7 @@ Athlete360.files_stg.Athleteinfo_stgfile,
 
 Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
 
-transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
+transform({RECORDOF(LEFT)}, SELF.Athleteid := (UNSIGNED3)RIGHT.athleteid; SELF := LEFT;),
 
 left outer
 
@@ -102,7 +102,7 @@ replaceMediansOnEmptycompletedatas := JOIN
 									self.mood := IF(LEFT.mood <> 0, LEFT.mood, RIGHT.mood);
 									SELF.SleepHours := IF(LEFT.SleepHours <> 0, LEFT.SleepHours, RIGHT.SleepHours);
 									self.Score := IF(LEFT.Score <> 0, LEFT.Score, RIGHT.Score);
-									SELF.Athleteid := IF(LEFT.Athleteid <> ' ', LEFT.Athleteid, RIGHT.Athleteid);
+									SELF.Athleteid := IF(LEFT.Athleteid <> 0, LEFT.Athleteid, RIGHT.Athleteid);
 									SELF.wuid := workunit;
             // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
         ),

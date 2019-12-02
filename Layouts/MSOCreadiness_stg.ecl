@@ -10,5 +10,5 @@
 		UNSIGNED1 Sleepquality;
 		UNSIGNED1 Sleephours;
 		string19 wuid := workunit;
-		string20 athleteid := '';
+		UNSIGNED3 athleteid := 0;
 	END;

@@ -11,5 +11,5 @@
 		decimal10_5 trial4;
 		decimal10_5 trial5;
 		string19 wuid := workunit;
-		string20 athleteid := '';
+		string20 athleteid := 0;
 	END;

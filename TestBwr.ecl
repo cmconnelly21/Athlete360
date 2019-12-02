@@ -1,6 +1,6 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20191125');
+#stored('filedate', '20191202');
 //Athlete360.build_athlete360;
 	
 // get the layout (processed layout)
@@ -18,14 +18,14 @@
  // Athlete360.files_spray.WSOCgpsfile,
  // Athlete360.build_stg.build_WSOCdatefile,
  // Athlete360.build_stg.build_MSOCdatefile,
- Athlete360.build_stg.build_MSOCgpsNUM,
+ // Athlete360.build_stg.build_MSOCgpsNUM,
  // Athlete360.build_stg.build_MSOCgps,
 // Athlete360.build_stg.build_MSOCrawgps,
 // Athlete360.build_stg.build_WSOCreadiness,
 // Athlete360.build_stg.build_WSOCtrainingload,
-// Athlete360.build_stg.build_MSOCreadiness,
+Athlete360.build_stg.build_MSOCreadiness,
 // Athlete360.build_stg.build_MSOCtrainingload
-Athlete360.build_stg.build_MSOCtrainingloadNUM
+// Athlete360.build_stg.build_MSOCtrainingloadNUM
 );
 
 // // std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + '2019-06-24', '**');

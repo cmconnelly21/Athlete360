@@ -8,5 +8,5 @@
 		STRING Category;
 		STRING Team;
 		string19 wuid := workunit;
-		string20 athleteid := '';
+		string20 athleteid := 0;
 	END;

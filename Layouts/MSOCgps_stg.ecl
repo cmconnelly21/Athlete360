@@ -69,5 +69,5 @@
 		DECIMAL10_5 explosivedis;
 		STRING highintensityburstdur;
 		string19 wuid := workunit;
-    string20 athleteid := '';
+    UNSIGNED3 athleteid := 0;
 END;
