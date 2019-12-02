@@ -72,7 +72,7 @@ myDepTestData := PROJECT(myTestDataNF(number = 73), TRANSFORM(RECORDOF(LEFT), SE
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest() // We use the default configuration parameters.  That usually works fine.
+myLearnerR :=  LearningTrees.RegressionForest(); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
 myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
@@ -86,3 +86,4 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 
 
 OUTPUT(fulldata,all);
+OUTPUT(assessmentR,all);
