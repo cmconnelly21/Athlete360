@@ -86,5 +86,5 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
-OUTPUT(fulldata,all);
-// OUTPUT(assessmentR,all);
+// OUTPUT(fulldata,all);
+OUTPUT(assessmentR,all);
