@@ -42,7 +42,7 @@ Athlete360.files_stg.Athleteinfo_stgfile,
 
 Athlete360.util.toUpperTrim(left.name) = Athlete360.util.toUpperTrim(right.name),
 
-transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
+transform({RECORDOF(LEFT)}, SELF.Athleteid := (unsigned3)RIGHT.athleteid; SELF := LEFT;),
 
 left outer
 

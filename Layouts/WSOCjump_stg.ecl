@@ -1,4 +1,4 @@
-EXPORT WSOCjump_stg := RECORD
+﻿EXPORT WSOCjump_stg := RECORD
     string30 name;
     string30 test;
     UNSIGNED4 date;
@@ -9,5 +9,5 @@ EXPORT WSOCjump_stg := RECORD
     decimal10_5 trial2;
     decimal10_5 trial3;
     string19 wuid := workunit;
-    string20 athleteid := '';
+   UNSIGNED3 athleteid := 0;
 END;

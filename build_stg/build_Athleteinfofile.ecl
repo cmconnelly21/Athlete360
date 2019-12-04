@@ -1,14 +1,27 @@
-IMPORT Athlete360, STD;
+﻿IMPORT Athlete360, STD;
 
 // First_step get the spray file from files_spray
-sprayFile := Athlete360.files_spray.Athleteinfofile ;
+sprayFile := Athlete360.files_spray.Athleteinfofile;
 
 // get the layout (processed layout)
-stgLayout := Athlete360.Layouts.Athleteinfo;
+stgLayout := Athlete360.Layouts.Athleteinfo_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
-cleanedSprayFile := sprayFile;
+stgLayout extractdata (Athlete360.Layouts.Athleteinfo L):= transform
+                  SELF.Name := L.Name;
+									SELF.Team := L.Team;
+									SELF.Position := L.Position;
+									SELF.Year := (UNSIGNED3)L.Year;
+									SELF.athleteID := (UNSIGNED3)L.athleteID;
+									SELF.wuid := (STRING19)workunit;
+									self := L;
+END;
+									
+
+
+cleanedSprayFile := PROJECT(sprayFile, extractdata(LEFT));
 // after we get the cleaned spray, add wtih currently staged file, dedup by unique fields
+
 
 finalStageData := DEDUP(
         SORT(

@@ -25,5 +25,5 @@
 		DECIMAL5_2 Weight_bestset;
 		DECIMAL10_5 Workavg;
 		string19 wuid := workunit;
-    string20 athleteid := 0;
+    UNSIGNED3 athleteid := 0;
 	END;

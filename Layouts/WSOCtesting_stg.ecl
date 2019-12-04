@@ -12,5 +12,5 @@
 		DECIMAL5_2 Average;
 		DECIMAL5_2 Bestscore;
 		string19 wuid := workunit;
-    string20 athleteid := '';
+    UNSIGNED3 athleteid := 0;
 	END;
