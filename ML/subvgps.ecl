@@ -53,7 +53,7 @@ myDataES := SORT(myDataE, rnd);
 
 myTrainData := PROJECT(myDataES[1..1000], {RECORDOF(fulldata)});  // Treat first 75% as training data.  Transform back to the original format.
 
-myTestData := PROJECT(myDataES[1000..1295], {RECORDOF(fulldata)}); // Treat next 25% as test data
+myTestData := PROJECT(myDataES[1000..1280], {RECORDOF(fulldata)}); // Treat next 25% as test data
 
 
 //make cell-oriented data format N*M
@@ -84,6 +84,7 @@ predictedDeps := myLearnerR.Predict(myModelR, myIndTestData);
 assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData);
 
 
-
+// OUTPUT(gpsdata,all);
+// OUTPUT(subdata,all);
 OUTPUT(fulldata,all);
-OUTPUT(assessmentR,all);
+// OUTPUT(assessmentR,all);
