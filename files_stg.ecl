@@ -14,6 +14,7 @@ IMPORT Athlete360;
 		EXPORT MSOCjump_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_jump', Athlete360.Layouts.MSOCjump_stg, THOR, OPT);
 		EXPORT MSOCnordbord_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_nordbord', Athlete360.Layouts.MSOCnordbord_stg, THOR, OPT);
 		EXPORT MSOCreadiness_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_readiness', Athlete360.Layouts.MSOCreadiness_stg, THOR, OPT);
+		EXPORT MSOCreadinessNUM_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_readinessNUM', Athlete360.Layouts.MSOCreadinessNUM_stg, THOR, OPT);
 		EXPORT MSOCtrainingloadNUM_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_trainingloadNUM', Athlete360.Layouts.MSOCtrainingloadNUM_stg, THOR, OPT);
 		EXPORT MSOCtrainingload_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ms_trainingload', Athlete360.Layouts.MSOCtrainingload_stg, THOR, OPT);
 		EXPORT WSOCjump_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_jump', Athlete360.Layouts.WSOCjump_stg, THOR, OPT);

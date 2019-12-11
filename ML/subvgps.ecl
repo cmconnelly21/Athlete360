@@ -6,9 +6,28 @@
 // trainingloaddata := Athlete360.files_stg.MSOCtrainingloadNUM_stgfile
 
 gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillname = 116);
-subdata := Athlete360.files_stg.MSOCreadiness_stgfile;
+subdata := Athlete360.files_stg.MSOCreadinessNUM_stgfile;
 
 // layout := project(rawDS1,Transform({RECORDOF(LEFT)},self := Left));
+
+
+temp1 := RECORD
+UNSIGNED4 athleteid;
+UNSIGNED1 position;
+UNSIGNED1 sessiontype;
+UNSIGNED1 week;
+UNSIGNED3 DayNum;
+UNSIGNED3 drillname;
+DECIMAL10_5 drilldistance;
+DECIMAL5_2 distancepermin;
+DECIMAL5_2 highspeeddistance;
+DECIMAL5_2 hrexertion;
+DECIMAL5_2 sprints;
+DECIMAL5_2 dynamicstressloadtotal;
+DECIMAL5_2 totalloading;
+DECIMAL5_2 impacts;
+END;
+
 
 //join datasets
 fulldata := join
@@ -16,11 +35,11 @@ fulldata := join
         gpsdata,
         subdata,
         left.name = right.athleteid AND 
-	        Left.date = Right.date,
+	        Left.DayNum = Right.DayNum+1,
         transform
-            ({RECORDOF(Left), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
+            ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-                SELF.name := Left.name,
+                SELF.athleteid := right.athleteid,
                 SELF.score := right.score;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
@@ -28,7 +47,7 @@ fulldata := join
 								SELF.stress := right.stress;
 								SELF.sleepquality := right.sleepquality;
 								SELF.sleephours := right.sleephours;
-                SELF.Date := Left.Date,
+                SELF.DayNum := Left.DayNum,
 								SELF.time := right.time;
                 SELF := LEFT
             ),
@@ -51,9 +70,9 @@ myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM
 myDataES := SORT(myDataE, rnd);
 
 
-myTrainData := PROJECT(myDataES[1..1000], {RECORDOF(fulldata)});  // Treat first 75% as training data.  Transform back to the original format.
+myTrainData := PROJECT(myDataES[1..920], {RECORDOF(fulldata)});  // Treat first 75% as training data.  Transform back to the original format.
 
-myTestData := PROJECT(myDataES[1000..1280], {RECORDOF(fulldata)}); // Treat next 25% as test data
+myTestData := PROJECT(myDataES[920..1215], {RECORDOF(fulldata)}); // Treat next 25% as test data
 
 
 //make cell-oriented data format N*M
@@ -61,18 +80,18 @@ ML_Core.ToField(myTrainData, myTrainDataNF);
 ML_Core.ToField(myTestData, myTestDataNF);
 
 //set independent and dependent variables
-myIndTrainData := myTrainDataNF(number = 10); // Number is the field number
+myIndTrainData := myTrainDataNF(number in [8]); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 73), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTrainData := PROJECT(myTrainDataNF(number = 16), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
-myIndTestData := myTestDataNF(number = 10);
+myIndTestData := myTestDataNF(number in [8]);
 
-myDepTestData := PROJECT(myTestDataNF(number = 73), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTestData := PROJECT(myTestDataNF(number = 16), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest(); // We use the default configuration parameters.  That usually works fine.
+myLearnerR :=  LearningTrees.RegressionForest(numTrees := 4, maxDepth := 4); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
 myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
@@ -86,5 +105,7 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
-// OUTPUT(fulldata,all);
+OUTPUT(fulldata,all);
+// OUTPUT(myModelR,all);
+// OUTPUT(predictedDeps,all);
 OUTPUT(assessmentR,all);

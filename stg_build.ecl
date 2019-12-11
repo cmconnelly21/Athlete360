@@ -15,6 +15,7 @@ export stg_build := sequential(
 		Athlete360.build_stg.build_WSOCreadiness,
 		Athlete360.build_stg.build_WSOCtrainingload,
 		Athlete360.build_stg.build_MSOCreadiness,
+		Athlete360.build_stg.build_MSOCreadinessNUM,
 		Athlete360.build_stg.build_MSOCtrainingload,
 		Athlete360.build_stg.build_MSOCtrainingloadNUM,
 		Athlete360.build_stg.build_WSOCdatefile,

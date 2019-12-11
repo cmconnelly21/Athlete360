@@ -95,7 +95,7 @@ temp3 := RECORD
   unsigned3 time;
   string name;
   decimal5_2 wellnesssum;
-  string20 athleteid;
+  unsigned3 athleteid;
   unsigned1 sessionoverall;
   decimal5_2 sessionoverall_roll2;
   decimal5_2 wellnesssum_roll2;

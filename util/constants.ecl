@@ -34,6 +34,7 @@
     EXPORT MSOCjump_name := 'ms_jump';
     EXPORT MSOCnordbord_name := 'ms_nordbord';
     EXPORT MSOCreadiness_name := 'ms_readiness';
+		EXPORT MSOCreadinessNUM_name := 'ms_readinessNUM';
     EXPORT MSOCtrainingload_name := 'ms_trainingload';
     EXPORT WSOCjump_name := 'ws_jump';
     EXPORT WSOCnordbord_name := 'ws_nordbord';

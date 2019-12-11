@@ -14,6 +14,7 @@ IMPORT Athlete360;
 		EXPORT MSOCjumpfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_jump', Athlete360.Layouts.MSOCjump, CSV(HEADING(9)), OPT);
 		EXPORT MSOCnordbordfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_nordbord', Athlete360.Layouts.MSOCnordbord, CSV(HEADING(3)), OPT);
 		EXPORT MSOCreadinessfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_readiness', Athlete360.Layouts.MSOCreadiness, CSV(HEADING(1)), OPT);
+		EXPORT MSOCreadinessNUMfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_readinessNUM', Athlete360.Layouts.MSOCreadinessNUM, CSV(HEADING(1)), OPT);
 		EXPORT MSOCtrainingloadfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_trainingload', Athlete360.Layouts.MSOCtrainingload, CSV(HEADING(1)), OPT);
 		EXPORT MSOCtrainingloadNUMfile := DATASET( Athlete360.util.constants.spray_prefix + 'ms_trainingloadNUM', Athlete360.Layouts.MSOCtrainingloadNUM, CSV(HEADING(1)), OPT);
 		EXPORT WSOCjumpfile := DATASET( Athlete360.util.constants.spray_prefix + 'ws_jump', Athlete360.Layouts.WSOCjump, CSV(HEADING(9)), OPT);

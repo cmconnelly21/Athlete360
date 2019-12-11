@@ -10,6 +10,7 @@ stgLayout := Athlete360.Layouts.MSOCgpsNUM_stg;
 stgLayout extractdata (Athlete360.Layouts.MSOCgpsNUM L):= transform
 																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
 																								SELF.Name := (Unsigned4)L.Name;
+																								SELF.DayNum := (unsigned3)L.DayNum;
 																								SELF.Drillname := (UNSIGNED3)L.Drillname;
 																								SELF.Week := (UNSIGNED1)L.Week;
 																								SELF.Position := (UNSIGNED1)L.Position;

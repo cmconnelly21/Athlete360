@@ -3,6 +3,7 @@
 		STRING Position;
 		STRING Sessiontype;
 		STRING Week;
+		STRING DayNum;
 		STRING Date;
 		STRING Drillname;
 		STRING Drillstarttime;

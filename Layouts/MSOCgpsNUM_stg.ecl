@@ -3,6 +3,7 @@
 		UNSIGNED1 Position;
 		UNSIGNED1 Sessiontype;
 		UNSIGNED1 Week;
+		UNSIGNED3 DayNum;
 		UNSIGNED4 Date;
 		UNSIGNED3 Drillname;
 		UNSIGNED4 Drillstarttime;
