@@ -30,15 +30,16 @@ END;
 
 
 //join datasets
-joindata := join
+fulldata := join
     (
         gpsdata,
         subdata,
         left.name = right.athleteid AND 
 	        Left.DayNum = Right.DayNum+1,
         transform
-            ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
+            ({RECORDOF(temp1), integer id, unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
+                SELF.id := COUNTER;
 								SELF.athleteid := right.athleteid,
                 SELF.score := right.score;
 								SELF.fatigue := right.fatigue;
@@ -54,7 +55,7 @@ joindata := join
 						LOOKUP
     );
 
-fulldata := project(joindata,Transform({RECORDOF(LEFT), integer id := 0}, Self.id := COUNTER, Self := LEFT));
+
 // Extended data format
 
 
