@@ -30,7 +30,7 @@ END;
 
 
 //join datasets
-fulldata := join
+joindata := join
     (
         gpsdata,
         subdata,
@@ -39,7 +39,7 @@ fulldata := join
         transform
             ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-                SELF.athleteid := right.athleteid,
+								SELF.athleteid := right.athleteid,
                 SELF.score := right.score;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
@@ -54,7 +54,7 @@ fulldata := join
 						LOOKUP
     );
 
-
+fulldata := project(joindata,Transform({RECORDOF(LEFT), integer id := 0}, Self.id := COUNTER, Self := LEFT));
 // Extended data format
 
 
@@ -82,30 +82,32 @@ ML_Core.ToField(myTestData, myTestDataNF);
 //set independent and dependent variables
 myIndTrainData := myTrainDataNF(number in [8]); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 16), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+// myDepTrainData := PROJECT(myTrainDataNF(number = 16), TRANSFORM(ML_Core.Types.DiscreteField, SELF.number := 1, SELF := LEFT));
 
 
 myIndTestData := myTestDataNF(number in [8]);
 
-myDepTestData := PROJECT(myTestDataNF(number = 16), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
+// myDepTestData := PROJECT(myTestDataNF(number = 16), TRANSFORM(ML_Core.Types.DiscreteField, SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest(numTrees := 4, maxDepth := 4); // We use the default configuration parameters.  That usually works fine.
+// myLearnerR :=  LearningTrees.RegressionForest(numTrees := 4, maxDepth := 4); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
-myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
+// myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
 
 //run prediction test
-predictedDeps := myLearnerR.Predict(myModelR, myIndTestData);
+// predictedDeps := myLearnerR.Predict(myModelR, myIndTestData);
 
 //assess results
-assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData);
+// assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData);
 
 
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
 OUTPUT(fulldata,all);
+// OUTPUT(myIndTrainData,all);
+// OUTPUT(myDepTrainData,all);
 // OUTPUT(myModelR,all);
 // OUTPUT(predictedDeps,all);
-OUTPUT(assessmentR,all);
+// OUTPUT(assessmentR,all);
