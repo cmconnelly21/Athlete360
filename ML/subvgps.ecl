@@ -68,10 +68,11 @@ myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt), UNSIGNED4 id}, SELF
 // Shuffle your data by sorting on the random field
 l_ML := RECORD
   UNSIGNED4 id;
+	UNSIGNED4 athleteid;
   DECIMAL5_2 drilldistance;
 	DECIMAL5_2 highspeeddistance;
-	DECIMAL5_2 hrexertion;
-	DECIMAL5_2 dynamicstressloadtotal;
+	// DECIMAL5_2 hrexertion;
+	DECIMAL5_2 distancepermin;
 	DECIMAL5_2 impacts;
   UNSIGNED2 score;
 END;
@@ -80,9 +81,9 @@ myDataES := PROJECT(SORT(myDataE, rnd), TRANSFORM(l_ML, SELF := LEFT));
 // myDataES := SORT(myDataE, rnd);
 
 
-myTrainData := myDataES[1..920];  // Treat first 75% as training data.  Transform back to the original format.
+myTrainData := myDataES[1..915];  // Treat first 75% as training data.  Transform back to the original format.
 
-myTestData := myDataES[920..1215]; // Treat next 25% as test data
+myTestData := myDataES[915..1215]; // Treat next 25% as test data
 
 
 //make cell-oriented data format N*M
@@ -90,14 +91,14 @@ ML_Core.ToField(myTrainData, myTrainDataNF);
 ML_Core.ToField(myTestData, myTestDataNF);
 
 //set independent and dependent variables
-myIndTrainData := myTrainDataNF(number < 2); // Number is the field number
+myIndTrainData := myTrainDataNF(number < 6); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 2), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTrainData := PROJECT(myTrainDataNF(number = 6), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
-myIndTestData := myTestDataNF(number < 7);
+myIndTestData := myTestDataNF(number < 6);
 
-myDepTestData := PROJECT(myTestDataNF(number = 7), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
+myDepTestData := PROJECT(myTestDataNF(number = 6), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
 
 
 //set module for learningtree
@@ -116,10 +117,12 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
 // OUTPUT(fulldata,all);
-OUTPUT(myDataES,all);
-OUTPUT(myTrainDataNF,all);
-OUTPUT(myIndTrainData,all);
-OUTPUT(myDepTrainData,all);
+// OUTPUT(myDataES,all);
+// OUTPUT(myTrainDataNF,all);
+// OUTPUT(myIndTrainData,all);
+// OUTPUT(myDepTrainData,all);
+// OUTPUT(myIndTestData,all);
+// OUTPUT(myDepTestData,all);
 // OUTPUT(myModelR,all);
 // OUTPUT(predictedDeps,all);
-// OUTPUT(assessmentR,all);
+OUTPUT(assessmentR,all);
