@@ -9,11 +9,19 @@ stgLayout := Athlete360.Layouts.MSOCgpsNUM_stg;
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCgpsNUM L):= transform
 																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
-																								SELF.Name := (Unsigned4)L.Name;
+																								SELF.Id := (Unsigned4)L.Id;
+																								SELF.Athid := (Unsigned4)L.Athid;
 																								SELF.DayNum := (unsigned3)L.DayNum;
 																								SELF.Drillname := (UNSIGNED3)L.Drillname;
 																								SELF.Week := (UNSIGNED1)L.Week;
-																								SELF.Position := (UNSIGNED1)L.Position;
+																								SELF.FOR := (UNSIGNED1)L.FOR;
+																								SELF.CM := (UNSIGNED1)L.CM;
+																								SELF.CAM := (UNSIGNED1)L.CAM;
+																								SELF.CDM := (UNSIGNED1)L.CDM;
+																								SELF.WM := (UNSIGNED1)L.WM;
+																								SELF.FB := (UNSIGNED1)L.FB;
+																								SELF.OB := (UNSIGNED1)L.OB;
+																								SELF.GK := (UNSIGNED1)L.GK;
 																								SELF.Impacts := (DECIMAL5_2)L.Impacts;
 																								SELF.Impactsz1 := (DECIMAL5_2)L.Impactsz1;
 																								SELF.Impactsz2 := (DECIMAL5_2)L.Impactsz2;
@@ -37,7 +45,8 @@ stgLayout extractdata (Athlete360.Layouts.MSOCgpsNUM L):= transform
 																								SELF.Decelerationsz6 := (DECIMAL5_2)L.Decelerationsz6;
 																								SELF.highintensityburstnum := (DECIMAL5_2)L.highintensityburstnum;
 																								SELF.highintensityburstdur := (DECIMAL5_2)L.highintensityburstdur;
-																								SELF.Sessiontype := (UNSIGNED1)L.Sessiontype;
+																								SELF.Session1 := (UNSIGNED1)L.Session1;
+																								SELF.Session2 := (UNSIGNED1)L.Session2;
 																								SELF.Drillstarttime := STD.date.fromstringtotime (L.Drillstarttime[1..8], '%H:%M:%S');
 																								SELF.Drilltotaltime := (DECIMAL5_2)L.Drilltotaltime;
 																								SELF.Drilldistance := (DECIMAL10_5)L.Drilldistance;
@@ -89,8 +98,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCgpsNUM_stgfile,
-            NAME, DATE, DRILLNAME, Drillstarttime, drilltotaltime, -wuid),
-        NAME, DATE, DRILLNAME, Drillstarttime, drilltotaltime
+            Athid, DATE, DRILLNAME, Drillstarttime, drilltotaltime, -wuid),
+        Athid, DATE, DRILLNAME, Drillstarttime, drilltotaltime
     );
 
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;

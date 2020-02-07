@@ -1,7 +1,16 @@
 ﻿EXPORT MSOCgpsNUM_stg :=RECORD
-		UNSIGNED4 Name;
-		UNSIGNED1 Position;
-		UNSIGNED1 Sessiontype;
+		UNSIGNED4 Id;
+		UNSIGNED4 Athid;
+		UNSIGNED1 FOR;
+		UNSIGNED1 CM;
+		UNSIGNED1 CAM;
+		UNSIGNED1 CDM;
+		UNSIGNED1 WM;
+		UNSIGNED1 FB;
+		UNSIGNED1 OB;
+		UNSIGNED1 GK;
+		UNSIGNED1 Session1;
+		UNSIGNED1 Session2;
 		UNSIGNED1 Week;
 		UNSIGNED3 DayNum;
 		UNSIGNED4 Date;
@@ -70,5 +79,5 @@
 		DECIMAL10_5 explosivedis;
 		DECIMAL5_2 highintensityburstdur;
 		string19 wuid := workunit;
-    string20 athleteid := '';
+    // string20 athleteid := '';
 END;

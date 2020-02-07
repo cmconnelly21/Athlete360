@@ -12,9 +12,18 @@ subdata := Athlete360.files_stg.MSOCreadinessNUM_stgfile;
 
 
 temp1 := RECORD
+UNSIGNED4 id;
 UNSIGNED4 athleteid;
-UNSIGNED1 position;
-UNSIGNED1 sessiontype;
+UNSIGNED1 FOR;
+UNSIGNED1 CM;
+UNSIGNED1 CAM;
+UNSIGNED1 CDM;
+UNSIGNED1 WM;
+UNSIGNED1 FB;
+UNSIGNED1 OB;
+UNSIGNED1 GK;
+UNSIGNED1 Session1;
+UNSIGNED1 Session2;
 UNSIGNED1 week;
 UNSIGNED3 DayNum;
 UNSIGNED3 drillname;
@@ -34,12 +43,12 @@ fulldata := join
     (
         gpsdata,
         subdata,
-        left.name = right.athleteid AND 
+        left.athleteid = right.athleteid AND 
 	        Left.DayNum = Right.DayNum+1,
         transform
             ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-								SELF.athleteid := right.athleteid,
+								SELF.athleteid := Left.athleteid,
                 SELF.score := right.score;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
@@ -62,7 +71,8 @@ mydataExt := project(fulldata,Transform({RECORDOF(LEFT), UNSIGNED4 rnd := 0},sel
 
 
 // Assign a random number to each record
-myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt), UNSIGNED4 id}, SELF.rnd := RANDOM(), SELF.id := COUNTER, SELF := LEFT));
+// myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt), UNSIGNED4 id}, SELF.rnd := RANDOM(), SELF.id := COUNTER, SELF := LEFT));
+myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM(), SELF := LEFT));
 // myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM(), SELF := LEFT));
 
 // Shuffle your data by sorting on the random field
