@@ -30,11 +30,13 @@ UNSIGNED3 drillname;
 DECIMAL10_5 drilldistance;
 DECIMAL5_2 distancepermin;
 DECIMAL5_2 highspeeddistance;
-DECIMAL5_2 hrexertion;
+DECIMAL5_2 AverageHR;
+DECIMAL5_2 Timeabove85;
 DECIMAL5_2 sprints;
 DECIMAL5_2 dynamicstressloadtotal;
-DECIMAL5_2 totalloading;
+DECIMAL5_2 HSRpermin;
 DECIMAL5_2 impacts;
+DECIMAL5_2 Drilltotaltime;
 END;
 
 
@@ -79,9 +81,9 @@ myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM
 l_ML := RECORD
   UNSIGNED4 id;
 	UNSIGNED4 athleteid;
-  DECIMAL5_2 drilldistance;
-	DECIMAL5_2 highspeeddistance;
-	// DECIMAL5_2 hrexertion;
+  // DECIMAL5_2 drilldistance;
+	// DECIMAL5_2 HSRpermin;
+	DECIMAL5_2 Timeabove85;
 	DECIMAL5_2 distancepermin;
 	DECIMAL5_2 impacts;
   UNSIGNED2 score;
@@ -101,18 +103,18 @@ ML_Core.ToField(myTrainData, myTrainDataNF);
 ML_Core.ToField(myTestData, myTestDataNF);
 
 //set independent and dependent variables
-myIndTrainData := myTrainDataNF(number < 6); // Number is the field number
+myIndTrainData := myTrainDataNF(number < 5); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 6), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTrainData := PROJECT(myTrainDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
-myIndTestData := myTestDataNF(number < 6);
+myIndTestData := myTestDataNF(number < 5);
 
-myDepTestData := PROJECT(myTestDataNF(number = 6), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
+myDepTestData := PROJECT(myTestDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest(numTrees := 4, maxDepth := 4); // We use the default configuration parameters.  That usually works fine.
+myLearnerR :=  LearningTrees.RegressionForest(numTrees := 20, maxDepth := 20); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
 myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
@@ -122,6 +124,8 @@ predictedDeps := myLearnerR.Predict(myModelR, myIndTestData);
 
 //assess results
 assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData);
+
+importance := myLearnerR.FeatureImportance(myModelR);
 
 
 // OUTPUT(gpsdata,all);
@@ -136,3 +140,4 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 // OUTPUT(myModelR,all);
 // OUTPUT(predictedDeps,all);
 OUTPUT(assessmentR,all);
+OUTPUT(importance,all);
