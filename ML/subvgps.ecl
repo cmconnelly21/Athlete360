@@ -13,7 +13,7 @@ subdata := Athlete360.files_stg.MSOCreadinessNUM_stgfile;
 
 temp1 := RECORD
 UNSIGNED4 id;
-UNSIGNED4 athleteid;
+UNSIGNED4 athid;
 UNSIGNED1 FOR;
 UNSIGNED1 CM;
 UNSIGNED1 CAM;
@@ -45,12 +45,11 @@ fulldata := join
     (
         gpsdata,
         subdata,
-        left.athleteid = right.athleteid AND 
+        left.athid = right.athleteid AND 
 	        Left.DayNum = Right.DayNum+1,
         transform
             ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-								SELF.athleteid := Left.athleteid,
                 SELF.score := right.score;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
@@ -80,7 +79,7 @@ myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM
 // Shuffle your data by sorting on the random field
 l_ML := RECORD
   UNSIGNED4 id;
-	UNSIGNED4 athleteid;
+	UNSIGNED4 athid;
   // DECIMAL5_2 drilldistance;
 	// DECIMAL5_2 HSRpermin;
 	DECIMAL5_2 Timeabove85;
