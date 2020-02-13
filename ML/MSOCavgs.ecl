@@ -30,30 +30,45 @@ DECIMAL5_2 impacts;
 DECIMAL5_2 Drilltotaltime;
 END;
 
-gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
+gpsdata1 := SORT(PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left)),athid);
 
+gpsdata2 := GROUP(gpsdata1,athid);
 
+DATA_AVE := PROJECT(gpsdata2,TRANSFORM
+		({RECORDOF(gpsdata2), decimal5_2 ave_distance, decimal5_2 ave_distpermin, decimal5_2 ave_HSdist, decimal5_2 ave_AVEHR, 
+		decimal5_2 ave_timeabove85, decimal5_2 ave_sprints, decimal5_2 ave_playerload, decimal5_2 ave_HSRpermin, 
+		decimal5_2 ave_impacts, decimal5_2 ave_time},
+				Self.ave_distance := AVE(drilldistance);
+				Self.ave_distpermin := AVE(distancepermin);
+				Self.ave_HSdist := AVE(highspeeddistance);
+				Self.ave_AVEHR := AVE(AverageHR);
+				Self.ave_Timeabove85 := AVE(Timeabove85);
+				Self.ave_sprints := AVE(sprints);
+				Self.ave_playerload := AVE(dynamicstressloadtotal);
+				Self.ave_HSRpermin := AVE(HSRpermin);
+				Self.ave_impacts := AVE(impacts);
+				Self.ave_time := AVE(drilltotaltime);
+				Self := Left;
+			));
 
-DATA_AVE := SORT(
-	TABLE(gpsdata1, 
-		{athid,
-		decimal5_2 avg_distance := AVE(group, drilldistance);
-		decimal5_2 avg_distpermin := AVE(group,distancepermin);
-		decimal5_2 avg_HSdist := AVE(group,highspeeddistance);
-		decimal5_2 avg_AVEHR := AVE(group,AverageHR);
-		decimal5_2 avg_Timeabove85 := AVE(group,Timeabove85);
-		decimal5_2 avg_sprints := AVE(group,sprints);
-		decimal5_2 avg_playerload := AVE(group,dynamicstressloadtotal);
-		decimal5_2 avg_HSRpermin := AVE(group,HSRpermin);
-		decimal5_2 avg_impacts := AVE(group,impacts);
-		decimal5_2 avg_time := AVE(group,drilltotaltime);
-		},
-		athid,
-		MERGE,
-		), athid
-);
-
-
+// DATA_AVE := SORT(
+	// TABLE(gpsdata1, 
+		// {athid,
+		// decimal5_2 avg_distance := AVE(group, drilldistance);
+		// decimal5_2 avg_distpermin := AVE(group,distancepermin);
+		// decimal5_2 avg_HSdist := AVE(group,highspeeddistance);
+		// decimal5_2 avg_AVEHR := AVE(group,AverageHR);
+		// decimal5_2 avg_Timeabove85 := AVE(group,Timeabove85);
+		// decimal5_2 avg_sprints := AVE(group,sprints);
+		// decimal5_2 avg_playerload := AVE(group,dynamicstressloadtotal);
+		// decimal5_2 avg_HSRpermin := AVE(group,HSRpermin);
+		// decimal5_2 avg_impacts := AVE(group,impacts);
+		// decimal5_2 avg_time := AVE(group,drilltotaltime);
+		// },
+		// athid,
+		// MERGE,
+		// ), athid
+// );
 
 // DATA_FINAL := SORT(
 	// TABLE(DATA_AVE, 
