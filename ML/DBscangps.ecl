@@ -9,20 +9,20 @@ gps1 := PROJECT(gpsdata, TRANSFORM(RECORDOF(LEFT), SELF.id := COUNTER, Self := L
 ML_Core.ToField(gps1, gpsrecs);
 
 gpsrecsf := gpsrecs(number>16);
-gps2 := PROJECT(gpsrecsf, TRANSFORM(RECORDOF(LEFT), SELF.id := COUNTER, SELF.number := LEFT.number -16, Self := LEFT));
+gps2 := PROJECT(gpsrecsf, TRANSFORM(RECORDOF(LEFT), SELF.number := LEFT.number -16, Self := LEFT));
 
 // set up the model for analysis
-Model := DBSCAN.DBSCAN().fit(gps2);
+Model := DBSCAN.DBSCAN(eps := 1200.0, minPts := 3).fit(gps2);
 
 // Check how many clusters there are
-NumClusters := DBSCAN.DBSCAN().Num_Clusters(Model);
+NumClusters := DBSCAN.DBSCAN(eps := 1200.0, minPts := 3).Num_Clusters(Model);
 
 // Check for outliers and label them
-NumOutliers :=  DBSCAN.DBSCAN().Num_Outliers(Model);
+NumOutliers :=  DBSCAN.DBSCAN(eps := 1200.0, minPts := 3).Num_Outliers(Model);
 Outliers := Model(label = 0);
 
 // Predict the cluster index of the new samples
-// Labels := DBSCAN.DBSCAN().Predict(Model, NewSamples);
+// Labels := DBSCAN.DBSCAN(eps := 1000.0, minPts := 3).Predict(Model, NewSamples);
 
 // OUTPUT(gpsdata, ALL, NAMED('gpsdata'));
 // OUTPUT(gps1, ALL, NAMED('gps1'));
