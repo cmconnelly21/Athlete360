@@ -1,7 +1,16 @@
 ﻿EXPORT MSOCgpsNUM := RECORD
-		STRING Name;
-		STRING Position;
-		STRING Sessiontype;
+		STRING Id;
+		STRING Athid;
+		STRING FOR;
+		STRING CM;
+		STRING CAM;
+		STRING CDM;
+		STRING WM;
+		STRING FB;
+		STRING OB;
+		STRING GK;
+		STRING Session1;
+		STRING Session2;
 		STRING Week;
 		STRING DayNum;
 		STRING Date;
