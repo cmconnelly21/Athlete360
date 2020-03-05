@@ -53,6 +53,25 @@ gpsdata1 := SORT(PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left)),ath
 
 DATA_AVE := SORT(
 	TABLE(gpsdata1, 
+		{athid, Date,
+		decimal5_2 avg_distance := AVE(group, drilldistance);
+		decimal5_2 avg_distpermin := AVE(group,distancepermin);
+		decimal5_2 avg_HSdist := AVE(group,highspeeddistance);
+		decimal5_2 avg_AVEHR := AVE(group,AverageHR);
+		decimal5_2 avg_Timeabove85 := AVE(group,Timeabove85);
+		decimal5_2 avg_sprints := AVE(group,sprints);
+		decimal5_2 avg_playerload := AVE(group,dynamicstressloadtotal);
+		decimal5_2 avg_HSRpermin := AVE(group,HSRpermin);
+		decimal5_2 avg_impacts := AVE(group,impacts);
+		decimal5_2 avg_time := AVE(group,drilltotaltime);
+		},
+		athid, Date,
+		MERGE
+		), athid
+);
+
+DATA_AVE_ID := SORT(
+	TABLE(gpsdata1, 
 		{athid,
 		decimal5_2 avg_distance := AVE(group, drilldistance);
 		decimal5_2 avg_distpermin := AVE(group,distancepermin);
@@ -71,7 +90,7 @@ DATA_AVE := SORT(
 );
 
 DATA_FINAL := SORT(
-	TABLE(DATA_AVE, 
+	TABLE(gpsdata1, 
 		{athid,
 		decimal5_2 z_distance := drilldistance/ave_distance;
 		decimal5_2 z_distpermin := distancepermin/ave_distpermin;
