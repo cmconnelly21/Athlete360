@@ -109,11 +109,11 @@ myDepTrainData := PROJECT(myTrainDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), S
 
 myIndTestData := myTestDataNF(number < 5);
 
-myDepTestData := PROJECT(myTestDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT)); //[74,75,76,77,78,79]
+myDepTestData := PROJECT(myTestDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest(numTrees := 20, maxDepth := 20); // We use the default configuration parameters.  That usually works fine.
+myLearnerR :=  LearningTrees.RegressionForest(numTrees := 140, maxDepth := 8); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
 myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
