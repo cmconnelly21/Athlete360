@@ -4,6 +4,7 @@ gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillname = 116);
 
 temp1 := RECORD
 UNSIGNED4 id;
+UNSIGNED4 Date;
 UNSIGNED4 athid;
 UNSIGNED1 FOR;
 UNSIGNED1 CM;
@@ -36,7 +37,7 @@ gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
 
 // DATA_AVE := SORT(
 	// TABLE(gpsdata1, 
-		// {athid, Date,
+		// {athid, date,
 		// decimal5_2 avg_distance := AVE(group, drilldistance);
 		// decimal5_2 avg_distpermin := AVE(group,distancepermin);
 		// decimal5_2 avg_HSdist := AVE(group,highspeeddistance);
@@ -50,7 +51,7 @@ gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
 		// },
 		// athid, Date,
 		// MERGE
-		// ), athid
+		// ), athid, Date
 // );
 
 DATA_AVE_ID := SORT(
@@ -66,6 +67,16 @@ DATA_AVE_ID := SORT(
 		decimal5_2 avg_HSRpermin := AVE(group,HSRpermin);
 		decimal5_2 avg_impacts := AVE(group,impacts);
 		decimal5_2 avg_time := AVE(group,drilltotaltime);
+		decimal5_2 SD_distance := SQRT(VARIANCE(group, drilldistance));
+		decimal5_2 SD_distpermin := SQRT(VARIANCE(group,distancepermin));
+		decimal5_2 SD_HSdist := SQRT(VARIANCE(group,highspeeddistance));
+		decimal5_2 SD_AVEHR := SQRT(VARIANCE(group,AverageHR));
+		decimal5_2 SD_Timeabove85 := SQRT(VARIANCE(group,Timeabove85));
+		decimal5_2 SD_sprints := SQRT(VARIANCE(group,sprints));
+		decimal5_2 SD_playerload := SQRT(VARIANCE(group,dynamicstressloadtotal));
+		decimal5_2 SD_HSRpermin := SQRT(VARIANCE(group,HSRpermin));
+		decimal5_2 SD_impacts := SQRT(VARIANCE(group,impacts));
+		decimal5_2 SD_time := SQRT(VARIANCE(group,drilltotaltime));
 		},
 		athid,
 		MERGE
@@ -73,6 +84,22 @@ DATA_AVE_ID := SORT(
 );
 
 New_layout := RECORD
+UNSIGNED4 id;
+UNSIGNED4 Date;
+UNSIGNED4 athid;
+UNSIGNED1 FOR;
+UNSIGNED1 CM;
+UNSIGNED1 CAM;
+UNSIGNED1 CDM;
+UNSIGNED1 WM;
+UNSIGNED1 FB;
+UNSIGNED1 OB;
+UNSIGNED1 GK;
+UNSIGNED1 Session1;
+UNSIGNED1 Session2;
+UNSIGNED1 week;
+UNSIGNED3 DayNum;
+UNSIGNED3 drillname;
 decimal5_2 z_distance;
 decimal5_2 z_distpermin;
 decimal5_2 z_HSdist;
@@ -89,18 +116,19 @@ END;
 Finaldata := join(gpsdata1, DATA_AVE_ID,
 									Left.athid = Right.athid,
 									Transform(New_layout,
-														Self.z_distance := left.Drilldistance-right.avg_distance,
-														Self.z_distpermin := left.distancepermin-right.avg_distpermin,
-														Self.z_HSdist := left.highspeeddistance-right.avg_HSdist,
-														Self.z_AVEHR := left.AverageHR-right.avg_AVEHR,
-														Self.z_Timeabove85 := left.Timeabove85-right.avg_timeabove85,
-														Self.z_sprints := left.sprints-right.avg_sprints,
-														Self.z_playerload := left.dynamicstressloadtotal-right.avg_playerload,
-														Self.z_HSRpermin := left.HSRpermin-right.avg_HSRpermin,
-														Self.z_impacts := left.impacts-right.avg_impacts,
-														Self.z_time := left.drilltotaltime-right.avg_time
+														Self.z_distance := (left.Drilldistance-right.avg_distance)/right.SD_distance,
+														Self.z_distpermin := (left.distancepermin-right.avg_distpermin)/right.SD_distpermin,
+														Self.z_HSdist := (left.highspeeddistance-right.avg_HSdist)/right.SD_HSdist,
+														Self.z_AVEHR := (left.AverageHR-right.avg_AVEHR)/right.SD_AVEHR,
+														Self.z_Timeabove85 := (left.Timeabove85-right.avg_timeabove85)/right.SD_timeabove85,
+														Self.z_sprints := (left.sprints-right.avg_sprints)/right.SD_sprints,
+														Self.z_playerload := (left.dynamicstressloadtotal-right.avg_playerload)/right.SD_playerload,
+														Self.z_HSRpermin := (left.HSRpermin-right.avg_HSRpermin)/right.SD_HSRpermin,
+														Self.z_impacts := (left.impacts-right.avg_impacts)/right.SD_impacts,
+														Self.z_time := (left.drilltotaltime-right.avg_time)/right.SD_time,
+														Self := Left
 														),
-														INNER,
+														INNER, ALL
 														);
 
 
