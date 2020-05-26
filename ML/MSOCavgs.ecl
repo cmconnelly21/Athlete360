@@ -57,16 +57,16 @@ gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
 DATA_AVE_ID := SORT(
 	TABLE(gpsdata1, 
 		{athid,
-		decimal5_2 avg_distance := AVE(group, drilldistance);
-		decimal5_2 avg_distpermin := AVE(group,distancepermin);
-		decimal5_2 avg_HSdist := AVE(group,highspeeddistance);
-		decimal5_2 avg_AVEHR := AVE(group,AverageHR);
-		decimal5_2 avg_Timeabove85 := AVE(group,Timeabove85);
-		decimal5_2 avg_sprints := AVE(group,sprints);
-		decimal5_2 avg_playerload := AVE(group,dynamicstressloadtotal);
-		decimal5_2 avg_HSRpermin := AVE(group,HSRpermin);
-		decimal5_2 avg_impacts := AVE(group,impacts);
-		decimal5_2 avg_time := AVE(group,drilltotaltime);
+		decimal15_3 avg_distance := AVE(group, drilldistance);
+		decimal15_3 avg_distpermin := AVE(group,distancepermin);
+		decimal15_3 avg_HSdist := AVE(group,highspeeddistance);
+		decimal15_3 avg_AVEHR := AVE(group,AverageHR);
+		decimal15_3 avg_Timeabove85 := AVE(group,Timeabove85);
+		decimal15_3 avg_sprints := AVE(group,sprints);
+		decimal15_3 avg_playerload := AVE(group,dynamicstressloadtotal);
+		decimal15_3 avg_HSRpermin := AVE(group,HSRpermin);
+		decimal15_3 avg_impacts := AVE(group,impacts);
+		decimal15_3 avg_time := AVE(group,drilltotaltime);
 		decimal5_2 SD_distance := SQRT(VARIANCE(group, drilldistance));
 		decimal5_2 SD_distpermin := SQRT(VARIANCE(group,distancepermin));
 		decimal5_2 SD_HSdist := SQRT(VARIANCE(group,highspeeddistance));
@@ -113,7 +113,7 @@ decimal5_2 z_time;
 END;
 
 
-Finaldata := join(gpsdata1, DATA_AVE_ID,
+EXPORT MSOCavgs := join(gpsdata1, DATA_AVE_ID,
 									Left.athid = Right.athid,
 									Transform(New_layout,
 														Self.z_distance := (left.Drilldistance-right.avg_distance)/right.SD_distance,
@@ -132,7 +132,8 @@ Finaldata := join(gpsdata1, DATA_AVE_ID,
 														);
 
 
+// EXPORT MSOCavgs := ('~athlete360::in::MSOCavgs.csv',Finaldata,CSV(HEADING(1)));
 
-OUTPUT(gpsdata1);
-OUTPUT(DATA_AVE_ID);
-OUTPUT(finaldata);
+// OUTPUT(gpsdata1, all);
+// OUTPUT(DATA_AVE_ID, all);
+// OUTPUT(finaldata, all);

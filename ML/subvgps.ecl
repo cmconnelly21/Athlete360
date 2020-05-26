@@ -5,14 +5,40 @@
 
 // trainingloaddata := Athlete360.files_stg.MSOCtrainingloadNUM_stgfile
 
-gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillname = 116);
+gpsdata := Athlete360.ML.MSOCavgs(drillname = 116);
 subdata := Athlete360.files_stg.MSOCreadinessNUM_stgfile;
 
 // layout := project(rawDS1,Transform({RECORDOF(LEFT)},self := Left));
 
 
 temp1 := RECORD
+// UNSIGNED4 id;
+// UNSIGNED4 athid;
+// UNSIGNED1 FOR;
+// UNSIGNED1 CM;
+// UNSIGNED1 CAM;
+// UNSIGNED1 CDM;
+// UNSIGNED1 WM;
+// UNSIGNED1 FB;
+// UNSIGNED1 OB;
+// UNSIGNED1 GK;
+// UNSIGNED1 Session1;
+// UNSIGNED1 Session2;
+// UNSIGNED1 week;
+// UNSIGNED3 DayNum;
+// UNSIGNED3 drillname;
+// DECIMAL10_5 drilldistance;
+// DECIMAL5_2 distancepermin;
+// DECIMAL5_2 highspeeddistance;
+// DECIMAL5_2 AverageHR;
+// DECIMAL5_2 Timeabove85;
+// DECIMAL5_2 sprints;
+// DECIMAL5_2 dynamicstressloadtotal;
+// DECIMAL5_2 HSRpermin;
+// DECIMAL5_2 impacts;
+// DECIMAL5_2 Drilltotaltime;
 UNSIGNED4 id;
+UNSIGNED4 Date;
 UNSIGNED4 athid;
 UNSIGNED1 FOR;
 UNSIGNED1 CM;
@@ -27,16 +53,16 @@ UNSIGNED1 Session2;
 UNSIGNED1 week;
 UNSIGNED3 DayNum;
 UNSIGNED3 drillname;
-DECIMAL10_5 drilldistance;
-DECIMAL5_2 distancepermin;
-DECIMAL5_2 highspeeddistance;
-DECIMAL5_2 AverageHR;
-DECIMAL5_2 Timeabove85;
-DECIMAL5_2 sprints;
-DECIMAL5_2 dynamicstressloadtotal;
-DECIMAL5_2 HSRpermin;
-DECIMAL5_2 impacts;
-DECIMAL5_2 Drilltotaltime;
+decimal5_2 z_distance;
+decimal5_2 z_distpermin;
+decimal5_2 z_HSdist;
+decimal5_2 Z_AVEHR;
+decimal5_2 z_Timeabove85;
+decimal5_2 z_sprints;
+decimal5_2 z_playerload;
+decimal5_2 z_HSRpermin;
+decimal5_2 z_impacts;
+decimal5_2 z_time;
 END;
 
 
@@ -51,6 +77,7 @@ fulldata := join
             ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
                 SELF.score := right.score;
+								SELF.date := right.date;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
 								SELF.soreness := right.soreness;
@@ -64,27 +91,44 @@ fulldata := join
 						LOOKUP
     );
 
+fulldata2 := join
+    (
+        fulldata,
+        subdata,
+        left.athid = right.athleteid AND 
+	        Left.DayNum = Right.DayNum,
+        transform
+            ({RECORDOF(temp1), unsigned1 score, unsigned1 prevscore, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
+															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
+								SELF.prevscore := right.score;
+                SELF := LEFT
+            ),
+						LOOKUP
+    );
+
 
 // Extended data format
 
 
-mydataExt := project(fulldata,Transform({RECORDOF(LEFT), UNSIGNED4 rnd := 0},self := Left)); // A random number
+mydataExt := project(fulldata2,Transform({RECORDOF(LEFT), UNSIGNED4 rnd := 0},self := Left)); // A random number
 
 
 // Assign a random number to each record
 // myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt), UNSIGNED4 id}, SELF.rnd := RANDOM(), SELF.id := COUNTER, SELF := LEFT));
-myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM(), SELF := LEFT));
+myDataE := PROJECT(fulldata2, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM(), SELF := LEFT));
 // myDataE := PROJECT(fulldata, TRANSFORM({RECORDOF(mydataExt)}, SELF.rnd := RANDOM(), SELF := LEFT));
 
 // Shuffle your data by sorting on the random field
 l_ML := RECORD
   UNSIGNED4 id;
 	UNSIGNED4 athid;
-  // DECIMAL5_2 drilldistance;
-	// DECIMAL5_2 HSRpermin;
-	DECIMAL5_2 Timeabove85;
-	DECIMAL5_2 distancepermin;
-	DECIMAL5_2 impacts;
+	UNSIGNED4 date;
+  // DECIMAL5_2 z_distance;
+	// DECIMAL5_2 z_HSRpermin;
+	DECIMAL5_2 z_Timeabove85;
+	DECIMAL5_2 z_distpermin;
+	DECIMAL5_2 z_impacts;
+	UNSIGNED2 prevscore;
   UNSIGNED2 score;
 END;
 
@@ -102,18 +146,18 @@ ML_Core.ToField(myTrainData, myTrainDataNF);
 ML_Core.ToField(myTestData, myTestDataNF);
 
 //set independent and dependent variables
-myIndTrainData := myTrainDataNF(number < 5); // Number is the field number
+myIndTrainData := myTrainDataNF(number < 7); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTrainData := PROJECT(myTrainDataNF(number = 7), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
-myIndTestData := myTestDataNF(number < 5);
+myIndTestData := myTestDataNF(number < 7);
 
-myDepTestData := PROJECT(myTestDataNF(number = 5), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTestData := PROJECT(myTestDataNF(number = 7), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
 //set module for learningtree
-myLearnerR :=  LearningTrees.RegressionForest(numTrees := 140, maxDepth := 8); // We use the default configuration parameters.  That usually works fine.
+myLearnerR :=  LearningTrees.RegressionForest(numTrees := 100, maxDepth := 225); // We use the default configuration parameters.  That usually works fine.
 
 //give the model to the learningtree
 myModelR := myLearnerR.GetModel(myIndTrainData, myDepTrainData);
