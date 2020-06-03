@@ -41,19 +41,28 @@ completedataUniqueName := DEDUP(SORT(completedata, name), name);
 
 
 //define what median values to find
-replaceMediansOnEmptycompletedatas := JOIN
-    (
-        completedata,
-        completedataUniqueName,
-        LEFT.name = RIGHT.name,
-        TRANSFORM(RECORDOF(LEFT),
-            SELF.score := IF(LEFT.score <> 0, LEFT.score, RIGHT.score);
-            SELF.TrainingLoad := IF(LEFT.TrainingLoad <> 0, LEFT.TrainingLoad, RIGHT.TrainingLoad);
-            SELF := LEFT
-        ),
-        LEFT OUTER
-    );
+// replaceMediansOnEmptycompletedatas := JOIN
+    // (
+        // completedata,
+        // completedataUniqueName,
+        // LEFT.name = RIGHT.name,
+        // TRANSFORM(RECORDOF(LEFT),
+            // SELF.score := IF(LEFT.score <> 0, LEFT.score, RIGHT.score);
+            // SELF.TrainingLoad := IF(LEFT.TrainingLoad <> 0, LEFT.TrainingLoad, RIGHT.TrainingLoad);
+            // SELF := LEFT
+        // ),
+        // LEFT OUTER
+    // );
+		
+		
 
+replaceMediansOnEmptycompletedatas := ITERATE(
+		SORT(completedata, name, -date),
+		transform({recordof(LEFT)},
+			self.score := if(left.score = 0 and left.name = right.name, right.score, left.score);
+			self := left;
+		)
+);
 //add median values to dataset
 replaceMediansOnEmptycompletedatasProj := PROJECT
     (
@@ -93,7 +102,7 @@ temp3 := RECORD
   unsigned3 time;
   string name;
   decimal5_2 score;
-  string20 athleteid;
+  unsigned4 athleteid;
   unsigned1 trainingload;
   decimal5_2 trainingload_roll2;
   decimal5_2 score_roll2;
@@ -123,9 +132,10 @@ gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
 	// OUTPUT(rawds[1..100000]);
-	// OUTPUT(completedata[1..100000]);
+	OUTPUT(completedata,all);
+	OUTPUT(replaceMediansOnEmptycompletedatas,all);
 	// OUTPUT(dataWithAvgs[1..100000]);
 	// OUTPUT(gameday[1..100000]);  
 
 
-OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+// OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);

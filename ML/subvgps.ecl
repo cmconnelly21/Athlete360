@@ -5,7 +5,7 @@
 
 // trainingloaddata := Athlete360.files_stg.MSOCtrainingloadNUM_stgfile
 
-gpsdata := Athlete360.ML.MSOCavgs(drillname = 116);
+gpsdata := Athlete360.ML.MSOC_gps_avgs(drillname = 116);
 subdata := Athlete360.files_stg.MSOCreadinessNUM_stgfile;
 
 // layout := project(rawDS1,Transform({RECORDOF(LEFT)},self := Left));
@@ -74,9 +74,9 @@ fulldata := join
         left.athid = right.athleteid AND 
 	        Left.DayNum = Right.DayNum+1,
         transform
-            ({RECORDOF(temp1), unsigned1 score, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
+            ({RECORDOF(temp1), decimal5_2 prevscore, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-                SELF.score := right.score;
+                SELF.prevscore := right.score;
 								SELF.date := right.date;
 								SELF.fatigue := right.fatigue;
 								SELF.mood := right.mood;
@@ -98,9 +98,9 @@ fulldata2 := join
         left.athid = right.athleteid AND 
 	        Left.DayNum = Right.DayNum,
         transform
-            ({RECORDOF(temp1), unsigned1 score, unsigned1 prevscore, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
+            ({RECORDOF(temp1), decimal5_2 score, decimal5_2 prevscore, unsigned1 fatigue, unsigned1 mood, unsigned1 soreness, 
 															unsigned1 stress, unsigned1 sleepquality, unsigned1 sleephours, unsigned4 time},
-								SELF.prevscore := right.score;
+								SELF.score := right.score;
                 SELF := LEFT
             ),
 						LOOKUP
@@ -128,8 +128,8 @@ l_ML := RECORD
 	DECIMAL5_2 z_Timeabove85;
 	DECIMAL5_2 z_distpermin;
 	DECIMAL5_2 z_impacts;
-	UNSIGNED2 prevscore;
-  UNSIGNED2 score;
+	DECIMAL5_2 prevscore;
+  DECIMAL5_2 score;
 END;
 
 myDataES := PROJECT(SORT(myDataE, rnd), TRANSFORM(l_ML, SELF := LEFT));
@@ -172,8 +172,9 @@ importance := myLearnerR.FeatureImportance(myModelR);
 
 
 // OUTPUT(gpsdata,all);
-// OUTPUT(subdata,all);
-// OUTPUT(fulldata,all);
+OUTPUT(subdata,all);
+OUTPUT(fulldata,all);
+OUTPUT(fulldata2,all);
 // OUTPUT(myDataES,all);
 // OUTPUT(myTrainDataNF,all);
 // OUTPUT(myIndTrainData,all);

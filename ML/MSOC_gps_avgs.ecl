@@ -113,7 +113,7 @@ decimal5_2 z_time;
 END;
 
 
-EXPORT MSOCavgs := join(gpsdata1, DATA_AVE_ID,
+EXPORT MSOC_gps_avgs := join(gpsdata1, DATA_AVE_ID,
 									Left.athid = Right.athid,
 									Transform(New_layout,
 														Self.z_distance := (left.Drilldistance-right.avg_distance)/right.SD_distance,
