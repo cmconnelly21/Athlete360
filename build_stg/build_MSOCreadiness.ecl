@@ -20,6 +20,7 @@ stgLayout extractdata (Athlete360.Layouts.MSOCreadiness L):= transform
 									self.Stress := (Unsigned1)L.Stress;
 									self.SleepQuality := (Unsigned1)L.SleepQuality;
 									self.SleepHours := (unsigned1)L.SleepHours;
+									self.daynum := 0;
 									SELF.wuid := workunit;
 																								
 END;																					 
@@ -50,71 +51,75 @@ left outer
 
 );
 
-completedataUniqueName := DEDUP(SORT(completestgdata, name), name);
 
+addmissingdates := JOIN(ATHLETE360.files_stg.MSOCdate_stgfile, DEDUP(SORT(completestgdata, name), name), true, ALL);
 
-RECORDOF(completestgdata) denormalizeToFindMedian(RECORDOF(completestgdata) L, DATASET(RECORDOF(completestgdata)) R1) := TRANSFORM
-    R := R1[1..30];
-		
-    SELF.Score := IF(COUNT(R) % 2 = 1, 
-                            SORT(R, Score)[(COUNT(R) / 2 ) + 1].Score, 
-                            (SORT(R, Score)[(COUNT(R) / 2 ) + 1].Score  + SORT(R, Score)[(COUNT(R) / 2)].Score ) / 2
-                        );
-    // SELF.sessionoverall := IF(COUNT(R) % 2 = 1, 
-                            // SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall, 
-                            // (SORT(R, sessionoverall)[(COUNT(R) / 2 ) + 1].sessionoverall  + SORT(R, sessionoverall)[(COUNT(R) / 2)].sessionoverall ) / 2
-                        // );
-    
-    SELF := L;
-
- END;
-
-//denormalize to seperate by athlete to find median values
-completedataWithMedians := DENORMALIZE
+PlaceEmptysOncompletedatas := JOIN
     (
-        completedataUniqueName, 
-        completestgdata,
-        LEFT.name = RIGHT.name,
-        GROUP,
-        denormalizeToFindMedian(LEFT, ROWS(RIGHT))        
-    );
-		// JOIN(DATE, 30
-		// completedataWithMedians, 3
-		// TRUE,
-		// 90 RECS
-		
-addmissingdates := JOIN(ATHLETE360.files_stg.MSOCdate_stgfile, completedataWithMedians, true, ALL);
-
-replaceMediansOnEmptycompletedatas := JOIN
-    (
-        completestgdata(name <> ' '),
-        addmissingdates(date <> 0),
+        completestgdata(name <> ' '), 
+        addmissingdates(date <> 0), 
         LEFT.name = RIGHT.name AND
 				LEFT.date = RIGHT.date,
         TRANSFORM({RECORDOF(LEFT)},
+									self.daynum := Right.daynum;
 									SELF.date := IF(LEFT.date <> 0, LEFT.date, RIGHT.date);
 									SELF.time := IF(LEFT.time <> 0, LEFT.time, RIGHT.time);
                   self.Name := IF(LEFT.Name <> ' ', LEFT.Name, RIGHT.Name);
-									self.Fatigue := IF(LEFT.Fatigue <> 0, LEFT.Fatigue, RIGHT.Fatigue);
-									self.Soreness := IF(LEFT.Soreness <> 0, LEFT.Soreness, RIGHT.Soreness);
-									self.SleepQuality := IF(LEFT.SleepQuality <> 0, LEFT.SleepQuality, RIGHT.SleepQuality);
-									self.Stress := IF(LEFT.Stress <> 0, LEFT.Stress, RIGHT.Stress);
-									self.mood := IF(LEFT.mood <> 0, LEFT.mood, RIGHT.mood);
-									SELF.SleepHours := IF(LEFT.SleepHours <> 0, LEFT.SleepHours, RIGHT.SleepHours);
-									self.Score := IF(LEFT.Score <> 0, LEFT.Score, RIGHT.Score);
+									self.Fatigue := IF(right.date <> 0 and left.date = 0, 0, LEFT.Fatigue);
+									self.Soreness := IF(right.date <> 0 and left.date = 0, 0, LEFT.Soreness);
+									self.SleepQuality := IF(right.date <> 0 and left.date = 0, 0, LEFT.SleepQuality);
+									self.Stress := IF(right.date <> 0 and left.date = 0, 0, LEFT.Stress);
+									self.mood := IF(right.date <> 0 and left.date = 0, 0, LEFT.mood);
+									SELF.SleepHours := IF(right.date <> 0 and left.date = 0, 0, LEFT.SleepHours);
+									self.Score := IF(right.date <> 0 and left.date = 0, 0, LEFT.Score);
 									SELF.Athleteid := IF(LEFT.Athleteid <> 0, LEFT.Athleteid, RIGHT.Athleteid);
 									SELF.wuid := workunit;
             // SELF.sessionoverall := IF(LEFT.sessionoverall <> 0, LEFT.sessionoverall, RIGHT.sessionoverall);
         ),
         Full Outer
     );
+		
+
+completetestdata_sorted := SORT(
+        project(PlaceEmptysOncompletedatas(name <> ''), transform({recordof(completestgdata), decimal5_2 old_score}, self := left; self := [])),
+        name, date, time);	
+
+replacePreviousOnEmptycompletedatas := ITERATE(
+        completetestdata_sorted,
+		transform({recordof(completestgdata), decimal5_2 old_score},
+			self.score := if(counter = 1 or left.name != right.name, right.score, if(right.score = 0 and left.name = right.name, left.score, right.score));// if(counter = 1 or (left.score = 0 and left.name = right.name), right.score, left.score);
+            self.old_score := right.score;
+			// self.name := if(counter = 1, right.name, left.name);
+			self := right;//if(left.name = '' , right, left);
+		)
+);
+
+temp1 := RECORD
+		UNSIGNED4 Date;
+		UNSIGNED3 Time;
+		unsigned3 daynum;
+		STRING Name;
+		DECIMAL5_2 Score;
+		UNSIGNED1 Fatigue;
+		UNSIGNED1 Mood;
+		UNSIGNED1 Soreness;
+		UNSIGNED1 Stress;
+		UNSIGNED1 Sleepquality;
+		UNSIGNED1 Sleephours;
+		string19 wuid := workunit;
+		UNSIGNED3 athleteid := 0;
+	END;
+	
+Finalresult := project(replacePreviousOnEmptycompletedatas,Transform({RECORDOF(temp1)},self.athleteid := (Integer)left.athleteid;self := Left));
 
 // OUTPUT(cleanedsprayfile[1..5000]);		
-// OUTPUT(completestgdata[1..5000]);
-// OUTPUT(completedataWithMedians[1..5000]);
+// OUTPUT(completestgdata(date > 20190812)[1..5000]);
 // OUTPUT(sort(addmissingdates(date<>0),name,date)[1..5000]);
-// OUTPUT(replaceMediansOnEmptycompletedatas[1..5000]);
+// OUTPUT(PlaceEmptysOncompletedatas[1..5000]);
+// OUTPUT(completetestdata_sorted[1..5000]);
+// OUTPUT(replacePreviousOnEmptycompletedatas[1..5000]);
+// OUTPUT(finalresult[1..5000]);
 
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, replaceMediansOnEmptycompletedatas);
+EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, finalresult);

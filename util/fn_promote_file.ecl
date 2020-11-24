@@ -7,10 +7,12 @@
 		super := prefix + cleanName; 
 
     sub := prefix + filename + '_' + workunit;
+		
+		return STD.File.AddSuperFile(super, sub);
 
-    RETURN  STD.File.PromoteSuperFileList(
-            [super, backup],
-            sub,
-            true
-    );
+    // RETURN  STD.File.PromoteSuperFileList(
+            // [super, backup],
+            // sub,
+            // true
+    // );
 END;

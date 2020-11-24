@@ -124,7 +124,7 @@ temp3 := RECORD
   string12 time;
   decimal10_5 elapsedtime;
   decimal10_5 speed;
-  string20 athleteid;
+  unsigned3 athleteid;
 	string12 position;
   string drillname;
   unsigned4 drillstarttime;
@@ -143,7 +143,7 @@ temp4 := RECORD
   string12 time;
   decimal10_5 elapsedtime;
   decimal10_5 speed;
-  string20 athleteid;
+  unsigned3 athleteid;
 	string12 position;
   string drillname;
   unsigned4 drillstarttime;

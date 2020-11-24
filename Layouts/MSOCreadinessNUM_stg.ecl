@@ -2,7 +2,6 @@
 		UNSIGNED4 Date;
 		UNSIGNED3 DayNum;
 		UNSIGNED3 Time;
-		STRING Name;
 		DECIMAL5_2 Score;
 		UNSIGNED1 Fatigue;
 		UNSIGNED1 Mood;

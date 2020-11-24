@@ -1,7 +1,7 @@
 ﻿IMPORT Athlete360, ML_Core, STD, DBSCAN;
 
 //load data
-gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillname = 116);
+gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillnum = 92);
 
 gps1 := PROJECT(gpsdata, TRANSFORM(RECORDOF(LEFT), SELF.id := COUNTER, Self := LEFT));
 

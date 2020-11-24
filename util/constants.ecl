@@ -44,5 +44,6 @@
 		EXPORT MSOCtrainingloadNUM_name := 'ms_trainingloadNUM';
     EXPORT WSOCgymaware_name := 'ws_gymaware';
 		EXPORT Athleteinfo_name := 'athleteinfo';
+		EXPORT SOCdrills_name := 'soc_drills';
 
 END;

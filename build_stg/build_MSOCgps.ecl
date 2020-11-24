@@ -8,33 +8,33 @@ stgLayout := Athlete360.Layouts.MSOCgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
+																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
 																								SELF.Name := L.Name;
 																								SELF.Drillname := Athlete360.util.toUpperTrim(L.Drillname);
 																								SELF.Week := (UNSIGNED1)L.Week;
 																								SELF.Position := L.Position;
-																								SELF.Impacts := L.Impacts;
-																								SELF.Impactsz1 := L.Impactsz1;
-																								SELF.Impactsz2 := L.Impactsz2;
-																								SELF.Impactsz3 := L.Impactsz3;
-																								SELF.Impactsz4 := L.Impactsz4;
-																								SELF.Impactsz5 := L.Impactsz5;
-																								SELF.Impactsz6 := L.Impactsz6;
-																								SELF.Accelerations := L.Accelerations;
-																								SELF.Accelerationsz1 := L.Accelerationsz1;
-																								SELF.Accelerationsz2 := L.Accelerationsz2;
-																								SELF.Accelerationsz3 := L.Accelerationsz3;
-																								SELF.Accelerationsz4 := L.Accelerationsz4;
-																								SELF.Accelerationsz5 := L.Accelerationsz5;
-																								SELF.Accelerationsz6 := L.Accelerationsz6;
-																								SELF.Decelerations := L.Decelerations;
-																								SELF.Decelerationsz1 := L.Decelerationsz1;
-																								SELF.Decelerationsz2 := L.Decelerationsz2;
-																								SELF.Decelerationsz3 := L.Decelerationsz3;
-																								SELF.Decelerationsz4 := L.Decelerationsz4;
-																								SELF.Decelerationsz5 := L.Decelerationsz5;
-																								SELF.Decelerationsz6 := L.Decelerationsz6;
-																								SELF.highintensityburstnum := L.highintensityburstnum;
+																								SELF.Impacts := (DECIMAL5_2)L.Impacts;
+																								SELF.Impactsz1 := (DECIMAL5_2)L.Impactsz1;
+																								SELF.Impactsz2 := (DECIMAL5_2)L.Impactsz2;
+																								SELF.Impactsz3 := (DECIMAL5_2)L.Impactsz3;
+																								SELF.Impactsz4 := (DECIMAL5_2)L.Impactsz4;
+																								SELF.Impactsz5 := (DECIMAL5_2)L.Impactsz5;
+																								SELF.Impactsz6 := (DECIMAL5_2)L.Impactsz6;
+																								SELF.Accelerations := (DECIMAL5_2)L.Accelerations;
+																								SELF.Accelerationsz1 := (DECIMAL5_2)L.Accelerationsz1;
+																								SELF.Accelerationsz2 := (DECIMAL5_2)L.Accelerationsz2;
+																								SELF.Accelerationsz3 := (DECIMAL5_2)L.Accelerationsz3;
+																								SELF.Accelerationsz4 := (DECIMAL5_2)L.Accelerationsz4;
+																								SELF.Accelerationsz5 := (DECIMAL5_2)L.Accelerationsz5;
+																								SELF.Accelerationsz6 := (DECIMAL5_2)L.Accelerationsz6;
+																								SELF.Decelerations := (DECIMAL5_2)L.Decelerations;
+																								SELF.Decelerationsz1 := (DECIMAL5_2)L.Decelerationsz1;
+																								SELF.Decelerationsz2 := (DECIMAL5_2)L.Decelerationsz2;
+																								SELF.Decelerationsz3 := (DECIMAL5_2)L.Decelerationsz3;
+																								SELF.Decelerationsz4 := (DECIMAL5_2)L.Decelerationsz4;
+																								SELF.Decelerationsz5 := (DECIMAL5_2)L.Decelerationsz5;
+																								SELF.Decelerationsz6 := (DECIMAL5_2)L.Decelerationsz6;
+																								SELF.highintensityburstnum := (DECIMAL5_2)L.highintensityburstnum;
 																								SELF.highintensityburstdur := L.highintensityburstdur;
 																								SELF.Sessiontype := L.Sessiontype;
 																								SELF.Drillstarttime := STD.date.fromstringtotime (L.Drillstarttime[1..8], '%H:%M:%S');
@@ -77,6 +77,9 @@ stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
 																								SELF.Decelerationsdisz4 := (DECIMAL5_2)L.Decelerationsdisz4;
 																								SELF.Decelerationsdisz5 := (DECIMAL5_2)L.Decelerationsdisz5;
 																								SELF.Decelerationsdisz6 := (DECIMAL5_2)L.Decelerationsdisz6;
+																								SELF.Gamedaycount := ' ';
+																								SELF.daynum := 0;
+																								SELF.drillnum := 0;
 																								SELF.wuid := workunit;
 																								
 END;																					 
@@ -95,7 +98,7 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData,
+completestgdata1 := join(finalStageData,
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
@@ -106,6 +109,40 @@ transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
 left outer
 
 );
+
+completestgdata2 := join(completestgdata1,
+
+Athlete360.files_stg.MSOCdate_stgfile,
+
+left.date = right.date,
+
+transform({RECORDOF(LEFT)}, 
+				SELF.gamedaycount := RIGHT.gamedaycount;
+				SELF.daynum := Right.daynum;
+				SELF := LEFT;), 
+
+left outer
+
+);
+
+drillnum_for_other := Athlete360.files_stg.SOCdrills_stgfile(drillname = 'other')[1].drillnum;
+
+completestgdata3 := sort(join(completestgdata2,
+
+Athlete360.files_stg.SOCdrills_stgfile,
+
+Athlete360.util.toUpperTrim(left.drillname) = Athlete360.util.toUpperTrim(right.drillname),
+
+transform({RECORDOF(LEFT)},
+				SELF.drillnum := IF(Right.drillname = '', drillnum_for_other, Right.drillnum);
+				SELF := LEFT;), 
+
+left outer
+
+),name,date);
+
+// OUTPUT(drillnum_for_other);
+// OUTPUT(completestgdata3);
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCgps_name, completestgData);
+EXPORT build_MSOCgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCgps_name, completestgData3);

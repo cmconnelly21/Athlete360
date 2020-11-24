@@ -9,6 +9,7 @@ stglayout := Athlete360.layouts.MSOCdatefile_stg;
 stgLayout extractdata (Athlete360.Layouts.MSOCdatefile L):= transform
                   SELF.date := STD.date.FromStringToDate(L.date,'%m/%d/%Y');
 									SELF.gamedaycount := (STRING20)L.gamedaycount;
+									self.daynum :=0;
 									SELF.wuid := (STRING19)workunit;
 END;
 									
@@ -17,12 +18,17 @@ END;
 cleanedSprayFile := PROJECT(sprayFile, extractdata(LEFT));
 // after we get the cleaned spray, add wtih currently staged file, dedup by unique fields
 
-finalStageData := DEDUP(
+sortStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCdate_stgfile,
             DATE, -wuid),
         DATE
     );
+
+FinalStageData := Project(sortStageData,transform({RECORDOF(sortStageData)},
+																				SELF.DayNum := COUNTER;
+																				SELF := LEFT));
+																				
 
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile

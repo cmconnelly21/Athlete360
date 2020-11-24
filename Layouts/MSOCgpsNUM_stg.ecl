@@ -3,10 +3,8 @@
 		UNSIGNED4 Athid;
 		UNSIGNED1 FOR;
 		UNSIGNED1 CM;
-		UNSIGNED1 CAM;
-		UNSIGNED1 CDM;
-		UNSIGNED1 WM;
-		UNSIGNED1 FB;
+		UNSIGNED1 W;
+		UNSIGNED1 CB;
 		UNSIGNED1 OB;
 		UNSIGNED1 GK;
 		UNSIGNED1 Session1;
@@ -14,7 +12,7 @@
 		UNSIGNED1 Week;
 		UNSIGNED3 DayNum;
 		UNSIGNED4 Date;
-		UNSIGNED3 Drillname;
+		UNSIGNED3 Drillnum;
 		UNSIGNED4 Drillstarttime;
 		DECIMAL5_2 Drilltotaltime;
 		DECIMAL10_5 Drilldistance;
@@ -78,6 +76,7 @@
 		DECIMAL10_5 metabolicdis;
 		DECIMAL10_5 explosivedis;
 		DECIMAL5_2 highintensityburstdur;
+		STRING gamedaycount;
 		string19 wuid := workunit;
     // string20 athleteid := '';
 END;

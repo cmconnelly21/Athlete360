@@ -9,6 +9,7 @@
 		UNSIGNED1 Stress;
 		UNSIGNED1 Sleepquality;
 		UNSIGNED1 Sleephours;
+		UNSIGNED3 daynum;
 		string19 wuid := workunit;
 		UNSIGNED3 athleteid := 0;
 	END;

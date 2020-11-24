@@ -1,23 +1,21 @@
 ﻿IMPORT Athlete360, STD;
 
-gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillname = 116);
+gpsdata := Athlete360.files_stg.MSOCgpsNUM_stgfile(drillnum = 92);
 
 temp1 := RECORD
 UNSIGNED4 id;
 UNSIGNED4 athid;
 UNSIGNED1 FOR;
 UNSIGNED1 CM;
-UNSIGNED1 CAM;
-UNSIGNED1 CDM;
-UNSIGNED1 WM;
-UNSIGNED1 FB;
+UNSIGNED1 W;
+UNSIGNED1 CB;
 UNSIGNED1 OB;
 UNSIGNED1 GK;
 UNSIGNED1 Session1;
 UNSIGNED1 Session2;
 UNSIGNED1 week;
 UNSIGNED3 DayNum;
-UNSIGNED3 drillname;
+UNSIGNED3 drillnum;
 DECIMAL10_5 drilldistance;
 DECIMAL5_2 distancepermin;
 DECIMAL5_2 highspeeddistance;
@@ -73,6 +71,19 @@ DATA_AVE_ID := SORT(
 );
 
 New_layout := RECORD
+UNSIGNED4 id;
+UNSIGNED4 athid;
+UNSIGNED1 FOR;
+UNSIGNED1 CM;
+UNSIGNED1 W;
+UNSIGNED1 CB;
+UNSIGNED1 OB;
+UNSIGNED1 GK;
+UNSIGNED1 Session1;
+UNSIGNED1 Session2;
+UNSIGNED1 week;
+UNSIGNED3 DayNum;
+UNSIGNED3 drillnum;
 decimal5_2 z_distance;
 decimal5_2 z_distpermin;
 decimal5_2 z_HSdist;
@@ -98,9 +109,10 @@ Finaldata := join(gpsdata1, DATA_AVE_ID,
 														Self.z_playerload := left.dynamicstressloadtotal-right.avg_playerload,
 														Self.z_HSRpermin := left.HSRpermin-right.avg_HSRpermin,
 														Self.z_impacts := left.impacts-right.avg_impacts,
-														Self.z_time := left.drilltotaltime-right.avg_time
+														Self.z_time := left.drilltotaltime-right.avg_time,
+														Self := Left
 														),
-														INNER,
+														INNER, ALL
 														);
 
 

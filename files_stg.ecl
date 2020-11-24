@@ -24,4 +24,5 @@ IMPORT Athlete360;
 		EXPORT WSOCtrainingload_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_trainingload', Athlete360.Layouts.WSOCtrainingload_stg, THOR, OPT);
 		EXPORT WSOCgymaware_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_gymaware', Athlete360.Layouts.WSOCgymaware_stg, THOR, OPT);
 		EXPORT Athleteinfo_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'athleteinfo', Athlete360.Layouts.Athleteinfo_stg, THOR, OPT);
+		EXPORT SOCdrills_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'soc_drills', Athlete360.Layouts.SOCdrills_stg, THOR, OPT);
 END;

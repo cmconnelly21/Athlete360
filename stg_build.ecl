@@ -23,6 +23,7 @@ export stg_build := sequential(
 		Athlete360.build_stg.build_MSOCtesting,
 		Athlete360.build_stg.build_MSOCrawgps,
 		Athlete360.build_stg.build_WSOCgps,
-		Athlete360.build_stg.build_WSOCrawgps
+		Athlete360.build_stg.build_WSOCrawgps,
+		Athlete360.build_stg.build_SOCdrills
 		
 );
