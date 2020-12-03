@@ -134,4 +134,4 @@ DATA_DISTANCE := SORT(
 // output(completegpsdata);	
 // output(finalResult);	
 // output(DATA_DISTANCE , all);
-OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::despray::MSOCgpsgamereport',CSV,OVERWRITE);
+OUTPUT(DATA_DISTANCE,,'~Athlete360::OUT::charts::MSOCgpsgamereport',OVERWRITE);

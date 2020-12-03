@@ -107,10 +107,20 @@ temp1 := RECORD
 		UNSIGNED1 Sleepquality;
 		UNSIGNED1 Sleephours;
 		string19 wuid := workunit;
-		UNSIGNED3 athleteid := 0;
+		UNSIGNED3 athleteid;
 	END;
 	
-Finalresult := project(replacePreviousOnEmptycompletedatas,Transform({RECORDOF(temp1)},self.athleteid := (Integer)left.athleteid;self := Left));
+// Finalresult1 := project(replacePreviousOnEmptycompletedatas,Transform({RECORDOF(temp1)},self.athleteid := (Integer)left.athleteid;self := Left));
+
+
+Finalresult2 := join(replacePreviousOnEmptycompletedatas, 
+											Athlete360.files_stg.MSOCgps_stgfile, 
+											left.name = right.name AND
+											left.date = right.date,
+											Transform({RECORDOF(temp1), UNSIGNED1 week},
+																	self.week := right.week,
+																	self := left),
+																	left outer);
 
 // OUTPUT(cleanedsprayfile[1..5000]);		
 // OUTPUT(completestgdata(date > 20190812)[1..5000]);
@@ -118,8 +128,9 @@ Finalresult := project(replacePreviousOnEmptycompletedatas,Transform({RECORDOF(t
 // OUTPUT(PlaceEmptysOncompletedatas[1..5000]);
 // OUTPUT(completetestdata_sorted[1..5000]);
 // OUTPUT(replacePreviousOnEmptycompletedatas[1..5000]);
-// OUTPUT(finalresult[1..5000]);
+// OUTPUT(finalresult1[1..5000]);
+// OUTPUT(finalresult2[1..5000]);
 
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, finalresult);
+EXPORT build_MSOCreadiness := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.MSOCreadiness_name, finalresult2);

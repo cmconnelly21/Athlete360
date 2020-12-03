@@ -178,7 +178,7 @@ l_ML := RECORD
   UNSIGNED4 id;
 	UNSIGNED4 athid;
   DECIMAL5_2 z_distance;
-	// DECIMAL5_2 HSRpermin;
+	// DECIMAL5_2 z_HSdist;
 	DECIMAL5_2 z_Timeabove85;
 	// DECIMAL5_2 z_distancepermin;
 	DECIMAL5_2 z_impacts;
@@ -204,14 +204,14 @@ ML_Core.ToField(myTrainData, myTrainDataNF);
 ML_Core.ToField(myTestData, myTestDataNF);
 
 //set independent and dependent variables
-myIndTrainData := myTrainDataNF(number < 11); // Number is the field number
+myIndTrainData := myTrainDataNF(number < 10); // Number is the field number
 
-myDepTrainData := PROJECT(myTrainDataNF(number = 11), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTrainData := PROJECT(myTrainDataNF(number = 10), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
-myIndTestData := myTestDataNF(number < 11);
+myIndTestData := myTestDataNF(number < 10);
 
-myDepTestData := PROJECT(myTestDataNF(number = 11), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
+myDepTestData := PROJECT(myTestDataNF(number = 10), TRANSFORM(RECORDOF(LEFT), SELF.number := 1, SELF := LEFT));
 
 
 //set module for learningtree
@@ -232,6 +232,8 @@ importance := myLearnerR.FeatureImportance(myModelR);
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
 // OUTPUT(fulldata,all);
+// OUTPUT(subdatasums,all);
+// OUTPUT(subdataaves,all);
 // OUTPUT(myDataES,all);
 // OUTPUT(myTrainDataNF,all);
 // OUTPUT(myIndTrainData,all);
