@@ -133,8 +133,9 @@ Athlete360.files_stg.SOCdrills_stgfile,
 
 Athlete360.util.toUpperTrim(left.drillname) = Athlete360.util.toUpperTrim(right.drillname),
 
-transform({RECORDOF(LEFT)},
-				SELF.drillnum := IF(Right.drillname = '', drillnum_for_other, Right.drillnum);
+transform({RECORDOF(LEFT), UNSIGNED1 year},
+				SELF.drillnum := IF(Right.drillname = '', drillnum_for_other, Right.drillnum),
+				self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, IF(left.date > 20190000 AND left.date < 20200000, 2, IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
 				SELF := LEFT;), 
 
 left outer

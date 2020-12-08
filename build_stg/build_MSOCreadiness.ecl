@@ -117,8 +117,9 @@ Finalresult2 := join(replacePreviousOnEmptycompletedatas,
 											Athlete360.files_stg.MSOCgps_stgfile, 
 											left.name = right.name AND
 											left.date = right.date,
-											Transform({RECORDOF(temp1), UNSIGNED1 week},
+											Transform({RECORDOF(temp1), UNSIGNED1 week, UNSIGNED1 year},
 																	self.week := right.week,
+																	self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, IF(left.date > 20190000 AND left.date < 20200000, 2, IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
 																	self := left),
 																	left outer);
 

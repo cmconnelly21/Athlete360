@@ -19,7 +19,7 @@
  // Athlete360.build_stg.build_WSOCdatefile,
  // Athlete360.build_stg.build_MSOCdatefile,
  // Athlete360.build_stg.build_MSOCgpsNUM,
- // Athlete360.build_stg.build_MSOCgps,
+ Athlete360.build_stg.build_MSOCgps,
  // Athlete360.build_stg.build_athleteinfofile,
  // Athlete360.build_stg.build_SOCdrills,
 // Athlete360.build_stg.build_MSOCrawgps,

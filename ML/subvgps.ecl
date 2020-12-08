@@ -22,6 +22,7 @@ UNSIGNED1 OB;
 UNSIGNED1 GK;
 UNSIGNED1 Session1;
 UNSIGNED1 Session2;
+UNSIGNED4 date;
 UNSIGNED1 week;
 UNSIGNED3 DayNum;
 UNSIGNED3 drillnum;
@@ -178,7 +179,7 @@ l_ML := RECORD
   UNSIGNED4 id;
 	UNSIGNED4 athid;
   DECIMAL5_2 z_distance;
-	// DECIMAL5_2 z_HSdist;
+	// DECIMAL5_2 z_HSRpermin;
 	DECIMAL5_2 z_Timeabove85;
 	// DECIMAL5_2 z_distancepermin;
 	DECIMAL5_2 z_impacts;
@@ -228,6 +229,11 @@ assessmentR := ML_Core.Analysis.Regression.Accuracy(predictedDeps, myDepTestData
 
 importance := myLearnerR.FeatureImportance(myModelR);
 
+				
+fulldata_withprediction := Join(fulldata, predictedDeps, Left.id = right.id, transform({recordof(left), Decimal10_5 prediction},
+																																							self.prediction := right.value, 
+																																							self := left));
+
 
 // OUTPUT(gpsdata,all);
 // OUTPUT(subdata,all);
@@ -241,6 +247,7 @@ importance := myLearnerR.FeatureImportance(myModelR);
 // OUTPUT(myIndTestData,all);
 // OUTPUT(myDepTestData,all);
 // OUTPUT(myModelR,all);
-// OUTPUT(predictedDeps,all);
-OUTPUT(assessmentR,all);
-OUTPUT(importance,all);
+// OUTPUT(fulldata_withprediction,all);
+// OUTPUT(assessmentR,all);
+// OUTPUT(importance,all);
+OUTPUT(fulldata_withprediction,,'~Athlete360::OUT::charts::MSOCpredictions',OVERWRITE);
