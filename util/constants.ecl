@@ -45,5 +45,6 @@
     EXPORT WSOCgymaware_name := 'ws_gymaware';
 		EXPORT Athleteinfo_name := 'athleteinfo';
 		EXPORT SOCdrills_name := 'soc_drills';
+		EXPORT WBBgps_name := 'wbb_gps';
 
 END;

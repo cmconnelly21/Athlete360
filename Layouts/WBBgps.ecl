@@ -1,0 +1,33 @@
+﻿EXPORT WBBgps := RECORD
+		STRING Name;
+		STRING Period;
+		STRING Periodnum;
+		STRING Date;
+		STRING Position;
+		STRING Starttime;
+		STRING Endtime;
+		STRING Totaltime;
+		STRING PlayerLoad;
+		STRING PlayerLoadpermin;
+		STRING TRIMP;
+		STRING TRIMPpermin;
+		STRING MaxHR;
+		STRING HRexertion;
+		STRING Exertionindex;
+		STRING HRover85;
+		STRING HRover92;
+		STRING MaxAccel;
+		STRING MaxDecel;
+		STRING MaxVelocity;
+		STRING AccelDensity;
+		STRING AccelDensityIndex;
+		STRING IMATotal;
+		STRING IMACount;
+		STRING IMAAccelMax;
+		STRING IMACodLmax;
+		STRING IMACodRmax;
+		STRING JumpsTotal;
+		STRING Jumpspermin;
+		string19 wuid := workunit;
+
+	END;
