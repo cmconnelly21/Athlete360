@@ -14,12 +14,17 @@ newRec := RECORD
 END;
 
 newRec getFullDtls(fileList L) := TRANSFORM
-
-		athleteName := STD.STR.FINDREPLACE(regexfind('(\\-[A-Za-z]* [A-Za-z]*\\-)' , L.name, 1), '-', '');
 		
-		teamName := IF(athletename = '', '', Athlete360.files_stg.Athleteinfo_stgfile(STD.STR.TOUPPERCASE(name) = STD.STR.TOUPPERCASE(trim(athleteName, LEFT, RIGHT)))[1].team);
+		    cleanName2 := regexfind('([^0-9]+)_([^0-9]+)_([^0-9]+)','2021_01_22_1300-01.22.21_Practice_Game_Day_2.csv', 0);
+		
+				athleteName := STD.STR.FINDREPLACE(regexfind('(\\-[A-Za-z]* [A-Za-z]*\\-)' , L.name, 1), '-', '');
+		
+				teamName := IF(athleteName = '', '', Athlete360.files_stg.Athleteinfo_stgfile(STD.STR.TOUPPERCASE(name) = STD.STR.TOUPPERCASE(trim(athleteName, LEFT, RIGHT)))[1].team);
 
-        SELF.cleanName := cleanname(IF(teamName ='' , L.name, IF(STD.str.Tolowercase(teamname) = 'wsoc', 'ws_rawgps', 'ms_rawgps')));
+        SELF.cleanName := cleanname(Map(teamName ='' and cleanName2 <> '' => 'wbb_gps',
+																				teamName <> '' => IF(STD.str.Tolowercase(teamname) = 'wsoc', 'ws_rawgps', 'ms_rawgps'),
+																				L.name));
+																				
 
         SELF := L;
 END;
