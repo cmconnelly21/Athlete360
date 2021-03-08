@@ -80,11 +80,11 @@ gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
 			SELF.gamedaycount := RIGHT.gamedaycount;
 			SELF := LEFT));
 	// OUTPUT(rawds[1..100000]);
-	OUTPUT(completedata,all);
-	output(sorted_completedata);
-	OUTPUT(replaceMediansOnEmptycompletedatas,all);
-	// OUTPUT(dataWithAvgs[1..100000]);
-	// OUTPUT(gameday[1..100000]);  
+	OUTPUT(completedata,[1..100000]);
+	// output(sorted_completedata);
+	// OUTPUT(replaceMediansOnEmptycompletedatas,all);
+	OUTPUT(dataWithAvgs[1..100000]);
+	OUTPUT(gameday[1..100000]);  
 
 
 // OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
