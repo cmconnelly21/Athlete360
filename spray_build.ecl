@@ -15,7 +15,7 @@ END;
 
 newRec getFullDtls(fileList L) := TRANSFORM
 		
-		    cleanName2 := regexfind('([^0-9]+)_([^0-9]+)_([^0-9]+)','2021_01_22_1300-01.22.21_Practice_Game_Day_2.csv', 0);
+		    cleanName2 := regexfind('([^0-9]+)_([^0-9]+)_([^0-9]+)', L.name, 0);
 		
 				athleteName := STD.STR.FINDREPLACE(regexfind('(\\-[A-Za-z]* [A-Za-z]*\\-)' , L.name, 1), '-', '');
 		
