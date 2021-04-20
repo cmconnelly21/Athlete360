@@ -73,43 +73,86 @@ temp3 := RECORD
     // );
 		
 Dataforiterate := dedup(project
-								(completedata, transform({RECORDOF(temp3), decimal5_2 S_temprec, decimal5_2 S_sum2},
+								(completedata, transform({RECORDOF(temp3), decimal5_2 S_temprec, decimal5_2 S_temprec2, decimal5_2 S_temprec3, 
+																													decimal5_2 S_sum2, decimal5_2 S_sum4, decimal5_2 rollscore2, decimal5_2 rollscore4,
+																													decimal5_2 TL_temprec, decimal5_2 TL_temprec2, decimal5_2 TL_temprec3, 
+																													decimal5_2 TL_sum2, decimal5_2 TL_sum4, decimal5_2 rollload2, decimal5_2 rollload4},
 								self.cnt := COUNTER,
 								self. S_temprec := 0,
+								self. S_temprec2 := 0,
+								self. S_temprec3 := 0,
 								self.S_sum2 := 0,
+								self.S_sum4 := 0,
 								self.rollscore2 := 0,
+								self.rollscore4 := 0,
+								self. TL_temprec := 0,
+								self. TL_temprec2 := 0,
+								self. TL_temprec3 := 0,
+								self.TL_sum2 := 0,
+								self.TL_sum4 := 0,
+								self.rollload2 := 0,
+								self.rollload4 := 0,
 								self := left)),date);
 								
 firstprevrecord := ITERATE(dataforiterate,
 					TRANSFORM({RECORDOF(left)},
 								Self.cnt := IF(Left.Athleteid = Right.Athleteid, Right.cnt, 1),
 								Self.S_temprec := IF(right.cnt = left.cnt-1, right.score, left.score);
+								Self.TL_temprec := IF(right.cnt = left.cnt-1, right.trainingload, left.trainingload);
 								Self := right));
 								
 Secondprevrecord := ITERATE(firstprevrecord,
 					TRANSFORM({RECORDOF(left)},
 								Self.cnt := IF(Left.Athleteid = Right.Athleteid, Right.cnt, 1),
+								Self.S_temprec2 := IF(right.cnt = left.cnt-1, right.S_temprec, left.S_temprec);
+								Self.TL_temprec2 := IF(right.cnt = left.cnt-1, right.TL_temprec, left.TL_temprec);
+								Self := right));
+								
+thirdprevrecord := ITERATE(Secondprevrecord,
+					TRANSFORM({RECORDOF(left)},
+								Self.cnt := IF(Left.Athleteid = Right.Athleteid, Right.cnt, 1),
+								Self.S_temprec3 := IF(right.cnt = left.cnt-1, right.S_temprec2, left.S_temprec2);
+								Self.TL_temprec3 := IF(right.cnt = left.cnt-1, right.TL_temprec2, left.TL_temprec2);
+								Self := right));								
+								
+sumprevrecords := ITERATE(thirdprevrecord,
+					TRANSFORM({RECORDOF(left)},
+								Self.cnt := IF(Left.Athleteid = Right.Athleteid, Right.cnt, 1),
 								self.S_sum2 := left.score + left.S_temprec,
+								self.S_sum4 := left.score + left.S_temprec + left.S_temprec2 + left.S_temprec3,
+								self.TL_sum2 := left.trainingload + left.TL_temprec,
+								self.TL_sum4 := left.trainingload + left.TL_temprec + left.TL_temprec2 + left.TL_temprec3,
 								self := right));
+								
+rollsums := Project(sumprevrecords,
+					TRANSFORM({RECORDOF(left)},
+							self.rollscore2 := left.S_sum2/2,
+							self.rollscore4 := left.S_sum4/4,
+							self.rollload2 := left.TL_sum2/2,
+							self.rollload4 := left.TL_sum4/4,
+							Self := left));
 
 
 								
-OUTPUT(dataforiterate);	
-OUTPUT(secondprevrecord);
+// OUTPUT(dataforiterate);	
+// OUTPUT(secondprevrecord);
+// OUTPUT(thirdprevrecord);
+// OUTPUT(sumprevrecords);
+// OUTPUT(rollsums);
 
 //output data and create output file
 
-// gameday := JOIN(dataWithAvgs,ATHLETE360.files_stg.MSOCdate_stgfile,
-			// left.date = RIGHT.date,
-			// TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
-			// SELF.gamedaycount := RIGHT.gamedaycount;
-			// SELF := LEFT));
+gameday := JOIN(rollsums,ATHLETE360.files_stg.MSOCdate_stgfile,
+			left.date = RIGHT.date,
+			TRANSFORM({RECORDOF(LEFT); ATHLETE360.files_stg.MSOCdate_stgfile.gamedaycount},
+			SELF.gamedaycount := RIGHT.gamedaycount;
+			SELF := LEFT));
 	// OUTPUT(rawds[1..100000]);
-	OUTPUT(completedata[1..100000]);
+	// OUTPUT(completedata[1..100000]);
 	// output(sorted_completedata);
 	// OUTPUT(replaceMediansOnEmptycompletedatas,all);
-	OUTPUT(firstprevrecord[1..100000]);
+	// OUTPUT(firstprevrecord[1..100000]);
 	// OUTPUT(gameday[1..100000]);  
 
 
-// OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);
+OUTPUT(gameday,,'~Athlete360::OUT::despray::MSOCrollingave',CSV,OVERWRITE);

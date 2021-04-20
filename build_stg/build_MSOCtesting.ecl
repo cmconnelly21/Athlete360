@@ -12,8 +12,6 @@ stgLayout extractdata (Athlete360.Layouts.MSOCtesting L):= transform
 																								SELF.time := STD.date.fromstringtotime (L.time, '%H:%M');
 																								SELF.Name := L.Name;
 																								SELF.Test := L.Test;
-																								SELF.Jerseynumber := (UNSIGNED1)L.Jerseynumber;
-																								SELF.Position := L.Position;
 																								SELF.IsitSpeed := L.IsitSpeed;
 																								SELF.Trial1 := (DECIMAL5_2)L.Trial1;
 																								SELF.Trial2 := (DECIMAL5_2)L.Trial2;
@@ -21,8 +19,6 @@ stgLayout extractdata (Athlete360.Layouts.MSOCtesting L):= transform
 																								SELF.Trial4 := (DECIMAL5_2)L.Trial4;
 																								SELF.Trial5 := (DECIMAL5_2)L.Trial5;
 																								SELF.Trial6 := (DECIMAL5_2)L.Trial6;
-																								SELF.Average := (DECIMAL5_2)L.Average;
-																								SELF.Bestscore := (DECIMAL5_2)L.Bestscore;
 																								SELF.wuid := workunit;
 																								
 END;																					 
