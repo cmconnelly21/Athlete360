@@ -8,17 +8,14 @@ stgLayout := Athlete360.Layouts.MSOCtesting_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCtesting L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
+																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
 																								SELF.time := STD.date.fromstringtotime (L.time, '%H:%M');
 																								SELF.Name := L.Name;
 																								SELF.Test := L.Test;
 																								SELF.IsitSpeed := L.IsitSpeed;
 																								SELF.Trial1 := (DECIMAL5_2)L.Trial1;
 																								SELF.Trial2 := (DECIMAL5_2)L.Trial2;
-																								SELF.Trial3 := (DECIMAL5_2)L.Trial3;
-																								SELF.Trial4 := (DECIMAL5_2)L.Trial4;
-																								SELF.Trial5 := (DECIMAL5_2)L.Trial5;
-																								SELF.Trial6 := (DECIMAL5_2)L.Trial6;
+																								SELF.daybest := (DECIMAL5_2)L.daybest;
 																								SELF.wuid := workunit;
 																								
 END;																					 
@@ -30,8 +27,8 @@ END;
 finalStageData := DEDUP(
         SORT(
             cleanedSprayFile + Athlete360.files_stg.MSOCtesting_stgfile,
-            NAME, DATE, TIME, -wuid),
-        NAME, DATE, TIME
+            NAME, DATE, TEST, -wuid),
+        NAME, DATE, TEST
     );
 
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
