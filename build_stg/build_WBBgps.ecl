@@ -3,12 +3,13 @@
 // First_step get the spray file from files_spray
 sprayFile := Athlete360.files_spray.WBBgpsfile;
 
+
 // get the layout (processed layout)
 stgLayout := Athlete360.Layouts.WBBgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
+																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
 																								SELF.Name := L.Name;
 																								SELF.Period := L.Period;
 																								SELF.Periodnum := (UNSIGNED3)L.Periodnum;
@@ -19,8 +20,8 @@ stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.TRIMP := (DECIMAL5_2)L.TRIMP;
 																								SELF.TRIMPpermin := (DECIMAL5_2)L.TRIMPpermin;
 																								SELF.endtime := (UNSIGNED4)L.endtime;
-																								SELF.starttime := (UNSIGNED4)L.starttime;
-																								SELF.totaltime := (UNSIGNED4)L.totaltime;
+																								SELF.starttime := STD.date.fromstringtotime(L.starttime, '%s');
+																								SELF.totaltime := STD.date.fromstringtotime(L.totaltime, '%s');
 																								SELF.HRover92 := (UNSIGNED4)L.HRover92;
 																								SELF.HRover85 := (UNSIGNED4)L.HRover85;
 																								SELF.HRexertion := (UNSIGNED3)L.HRexertion;

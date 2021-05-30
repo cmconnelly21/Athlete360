@@ -1,6 +1,6 @@
 ﻿EXPORT WBBgps_stg := RECORD
 		STRING30 Name;
-		STRING30 Period;
+		STRING40 Period;
 		UNSIGNED3 Periodnum;
 		UNSIGNED4 Date;
 		STRING Position;

@@ -2,7 +2,7 @@
 
 String fileDate := (String) std.Date.Today() : STORED('filedate');
 
-folderDate := Std.Date.DateToString((Unsigned4)fileDate, '%Y-%m-%d');
+folderDate := Std.Date.DateToString((Unsigned4)fileDate, '%Y-%m-%d'); 
 
 fileList := std.file.RemoteDirectory('10.0.0.220', '/var/lib/HPCCSystems/mydropzone/Athlete360/' + folderDate, '**');
 
@@ -55,5 +55,8 @@ sprayFiles := NOTHOR(Apply(fileListNew,
 addFiles := nothor(APPLY(fileListNew, Athlete360.util.fn_promote_file(spray_prefix , name, cleanname)));
 
 // addToSuper := APPLY(GLOBAL(NOTHOR(fileList)), Athlete360.util.fn_promote_file(spray_prefix , name));
+
+// output(fileListNew);
+// output(folderDate);
 
 EXPORT spray_build := SEQUENTIAL(output(fileListNew), output(folderDate),  sprayFiles, addFiles);

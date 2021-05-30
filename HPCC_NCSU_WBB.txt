@@ -1,19 +1,20 @@
 WBB data workflow
 
-Pull data from Catapult cloud
+Pull data from Catapult (gps) cloud
 integrate WBB data into HPCCupload script
 check to see if layout script for WBB_gps are working
 check to see if stg  script for WBB_gps are working
 	join athleteinfo data with WBB_gps to add athleteid
 Integrate changes into build_athlete360 script
 	make sure WBB_gps is integrated into spray_build correctly
-		WBB_gps file is correctly identified from landing zone, and sprayed into the 			WBB_gps superfile
+		WBB_gps file is correctly identified from landing zone, and sprayed into the WBB_gps superfile
 	make sure WBB_gps is correctly processed by stg_build
 		all data is in the correct format and looks the way it should
 
 
 Start building scripts to prepare WBB_gps for analysis
-	- TBD what will need to be done with the data to find the information we need based on future goals for reports in RealBI
+	- TBD what will need to be done with the data to find the information we need based on future goals for reports 
+	   in RealBI
 
 
 Start building dashboard with report tabs in RealBI
