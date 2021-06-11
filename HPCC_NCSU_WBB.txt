@@ -13,15 +13,20 @@ Integrate changes into build_athlete360 script
 
 
 Start building scripts to prepare WBB_gps for analysis
-	- TBD what will need to be done with the data to find the information we need based on future goals for reports 
-	   in RealBI
+	- code for finding averages based on particular types of days
+	- code for finding team averages
+	- code for analyzing game data
+	- possibly more over time based on needs if something doesn't fit into these other codes
 
 
 Start building dashboard with report tabs in RealBI
 	figure out what types of reports we need (daily, weekly, game, etc.)
 	figure out how we want to display each element for the different report tabs
 		more longitudinal line graphs for weekly vs bars and tables for daily/game
-	-TBD more details when we have done more with the data manipulation/analysis
+	- game data report
+	- report looking at trends over the past week
+	- report looking at the difference between different types of practices
+	- report looking at a given practice and how it compares to normal for team/each athlete
 
 
 
