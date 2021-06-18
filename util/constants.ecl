@@ -24,6 +24,7 @@
     
     EXPORT WSOCdate_name := 'ws_dates';
 		EXPORT MSOCdate_name := 'ms_dates';
+		EXPORT WBBdate_name := 'wbb_dates';
     EXPORT MSOCtesting_name := 'ms_testing';
     EXPORT MSOCgps_name := 'ms_gps';
 		EXPORT MSOCgpsNUM_name := 'ms_gpsNUM';

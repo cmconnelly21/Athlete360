@@ -21,7 +21,7 @@ temp1 := RECORD
 	decimal10_5 Jumpspermin;
  END; 
  
- gpsaverages := dedup(sort(Project(gpsdata, 
+ gpsaverages := sort(Project(gpsdata, 
 							transform({RECORDOF(temp1)},
 							self.PlayerLoad := AVE(group(gpsdata(date = left.date),date), PlayerLoad);
 							self.PlayerLoadpermin := AVE(group(gpsdata(date = left.date),date), PlayerLoadpermin);
@@ -33,7 +33,7 @@ temp1 := RECORD
 							self.JumpsTotal := AVE(group(gpsdata(date = left.date),date), JumpsTotal);
 							self.Jumpspermin := AVE(group(gpsdata(date = left.date),date), Jumpspermin);
 							self := LEFT
-								)),date),date);
+								)),date);
 
 
 
