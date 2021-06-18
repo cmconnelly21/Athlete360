@@ -4,9 +4,9 @@
 		UNSIGNED3 Periodnum;
 		UNSIGNED4 Date;
 		STRING Position;
+		UNSIGNED4 Totaltime;
 		UNSIGNED4 Starttime;
 		UNSIGNED4 Endtime;
-		UNSIGNED4 Totaltime;
 		DECIMAL5_2 PlayerLoad;
 		DECIMAL5_2 PlayerLoadpermin;
 		DECIMAL5_2 TRIMP;
@@ -27,6 +27,8 @@
 		UNSIGNED2 IMACodRmax;
 		UNSIGNED2 JumpsTotal;
 		DECIMAL5_2 Jumpspermin;
+		STRING gamedaycount;
+		UNSIGNED3 daynum;
 		UNSIGNED3 Athleteid;
 		string19 wuid := workunit;
 

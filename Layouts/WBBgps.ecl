@@ -4,9 +4,9 @@
 		STRING Periodnum;
 		STRING Date;
 		STRING Position;
+		STRING Totaltime;
 		STRING Starttime;
 		STRING Endtime;
-		STRING Totaltime;
 		STRING PlayerLoad;
 		STRING PlayerLoadpermin;
 		STRING TRIMP;

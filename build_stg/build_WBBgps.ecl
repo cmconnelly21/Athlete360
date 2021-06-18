@@ -10,8 +10,8 @@ stgLayout := Athlete360.Layouts.WBBgps_stg;
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.date := STD.date.fromstringtodate(L.date,'%m/%d/%Y');
-																								SELF.Name := L.Name;
-																								SELF.Period := L.Period;
+																								SELF.Name := STD.str.filterout(L.Name,'"');
+																								SELF.Period := STD.str.filterout(L.Period,'"');
 																								SELF.Periodnum := (UNSIGNED3)L.Periodnum;
 																								SELF.Position := L.Position;
 																								SELF.IMATotal := (UNSIGNED2)L.IMATotal;
@@ -19,9 +19,9 @@ stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.PlayerLoadpermin:= (DECIMAL5_2)L.PlayerLoadpermin;
 																								SELF.TRIMP := (DECIMAL5_2)L.TRIMP;
 																								SELF.TRIMPpermin := (DECIMAL5_2)L.TRIMPpermin;
-																								SELF.endtime := (UNSIGNED4)L.endtime;
-																								SELF.starttime := STD.date.fromstringtotime(L.starttime, '%s');
-																								SELF.totaltime := STD.date.fromstringtotime(L.totaltime, '%s');
+																								SELF.endtime := std.date.fromstringtotime(L.endtime,'%H:%M:%S');
+																								SELF.starttime := std.date.fromstringtotime(L.starttime,'%H:%M:%S');
+																								SELF.totaltime := std.date.fromstringtotime(L.totaltime,'%H:%M:%S');
 																								SELF.HRover92 := (UNSIGNED4)L.HRover92;
 																								SELF.HRover85 := (UNSIGNED4)L.HRover85;
 																								SELF.HRexertion := (UNSIGNED3)L.HRexertion;
@@ -37,6 +37,8 @@ stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.IMAcodRmax := (UNSIGNED2)L.IMAcodRmax;
 																								SELF.Jumpstotal := (UNSIGNED2)L.Jumpstotal;
 																								SELF.Jumpspermin := (DECIMAL5_2)L.Jumpspermin;
+																								SELF.gamedaycount := ' ';
+																								SELF.daynum := 0;
 																								SELF.athleteid := 0;
 																								SELF.wuid := workunit;
 																								
@@ -56,7 +58,7 @@ finalStageData := DEDUP(
 mapfile := Athlete360.files_stg.athleteinfo_stgfile;
 
 //now we link the stagedata with the athleteid related to the names from the athleteinfo file
-completestgdata := join(finalStageData,
+completestgdata1 := join(finalStageData,
 
 Athlete360.files_stg.Athleteinfo_stgfile,
 
@@ -67,6 +69,22 @@ transform({RECORDOF(LEFT)}, SELF.Athleteid := RIGHT.athleteid; SELF := LEFT;),
 left outer
 
 );
+
+completestgdata2 := join(completestgdata1,
+
+Athlete360.files_stg.WBBdate_stgfile,
+
+left.date = right.date,
+
+transform({RECORDOF(LEFT)}, 
+				SELF.gamedaycount := RIGHT.gamedaycount;
+				SELF.daynum := Right.daynum;
+				SELF := LEFT;), 
+
+left outer
+
+);
+
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_WBBgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WBBgps_name, completestgData);
+EXPORT build_WBBgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WBBgps_name, completestgData2);

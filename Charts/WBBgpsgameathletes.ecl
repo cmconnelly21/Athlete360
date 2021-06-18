@@ -4,7 +4,7 @@
 
 
 
-gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period in ['Pre Game','Period 1','Period 2','Period 3','Period 4','OT 1','OT 2']), date, period);
+gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period in ['Pre Game','Period 1','Period 2','Period 3','Period 4','OT 1','OT 2']), athleteid, date, period);
 
 temp1 := RECORD
   unsigned4 date;
@@ -37,4 +37,4 @@ temp1 := RECORD
 
 
 
-OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBgpsgamereport',OVERWRITE);
+OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBgpsgameathletes',OVERWRITE);
