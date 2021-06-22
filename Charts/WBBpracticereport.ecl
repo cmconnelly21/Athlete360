@@ -4,12 +4,14 @@
 
 
 
-gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','OT 1','OT 2']), athleteid, date, period);
+gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period not in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','OT 1','OT 2']), athleteid, date, period);
+
 
 temp1 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
 	unsigned4 daynum;
+	string gamedaycount;
   string period;
 	unsigned4 starttime;
 	decimal10_5 PlayerLoad;
@@ -29,7 +31,7 @@ gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
 
 DATA_AVE_ID := SORT(
 	TABLE(gpsdata1, 
-		{athleteid,date,period,
+		{athleteid,date,gamedaycount,period,
 		decimal10_5 ave_PlayerLoad := AVE(group, PlayerLoad);
 		decimal10_5 ave_PlayerLoadpermin := AVE(group, PlayerLoadpermin);
 		decimal10_5 ave_TRIMP := AVE(group, TRIMP);
@@ -40,15 +42,16 @@ DATA_AVE_ID := SORT(
 		unsigned4 ave_JumpsTotal := AVE(group, JumpsTotal);
 		decimal10_5 ave_Jumpspermin := AVE(group, Jumpspermin);
 		},
-		athleteid,date,period,
+		athleteid,date,gamedaycount,period,
 		MERGE
-		), athleteid,date,period
+		), athleteid,date,gamedaycount,period
 	);
 
 temp2 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
 	unsigned4 daynum;
+	string gamedaycount;
   string period;
 	unsigned4 starttime;
 	decimal10_5 ave_PlayerLoad;
@@ -78,10 +81,10 @@ gpsaverages := sort(join(gpsdata1, DATA_AVE_ID,
 														Self := Left;
 														),
 														INNER, ALL
-														),athleteid,date,starttime,period);
+														),athleteid,date,gamedaycount,starttime,period);
 
 
 
 // OUTPUT(gpsdata1);
 // OUTPUT(gpsaverages);
-OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBgpsgameathletes',OVERWRITE);
+OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBpracticereport',OVERWRITE);
