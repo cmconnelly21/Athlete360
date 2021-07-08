@@ -1,4 +1,5 @@
 ﻿EXPORT MSOCgps := RECORD
+		STRING ID;
 		STRING Name;
 		STRING Position;
 		STRING Sessiontype;

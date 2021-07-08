@@ -9,7 +9,10 @@ export charts_build := sequential(
 		Athlete360.charts.WSOCGPSgamereport,
 		Athlete360.charts.MSOCGPSgamereport,
 		Athlete360.charts.WSOCGPSdistance,
-		Athlete360.charts.MSOCGPSdistance
+		Athlete360.charts.MSOCGPSdistance,
+		Athlete360.charts.WBBgpsgamereport,
+		Athlete360.charts.WBBgpsgameathletes,
+		Athlete360.charts.WBBpracticereport
 
 		
 );

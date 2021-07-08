@@ -15,7 +15,7 @@ END;
 
 newRec getFullDtls(fileList L) := TRANSFORM
 		
-		    cleanName2 := regexfind('([^0-9]+)_([^0-9]+)_([^0-9]+)', L.name, 0);
+		    cleanName2 := regexfind('20*', L.name, 0);
 		
 				athleteName := STD.STR.FINDREPLACE(regexfind('(\\-[A-Za-z]* [A-Za-z]*\\-)' , L.name, 1), '-', '');
 		

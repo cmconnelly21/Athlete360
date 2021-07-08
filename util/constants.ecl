@@ -18,6 +18,9 @@
 		EXPORT chart_out_MSOCGPSgamereport := 'MSOCgpsgamereport';
 		EXPORT chart_out_WSOCGPSdistance := 'WSOCgpsdistance';
 		EXPORT chart_out_MSOCGPSdistance := 'MSOCgpsdistance';
+		EXPORT chart_out_WBBgpsgamereport := 'WBBgpsgamereport';
+		EXPORT chart_out_WBBgpsgameathletes := 'WBBgpsgameathletes';
+		EXPORT chart_out_WBBpracticereport := 'WBBpracticereport';
 
 
     EXPORT landingzone_ip  := '10.0.0.220';

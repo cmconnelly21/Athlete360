@@ -1,6 +1,7 @@
 ﻿	EXPORT MSOCrawgps := RECORD
 		STRING PlayerID;
 		STRING Name;
+		STRING date;
 		STRING Time;
 		STRING ElapsedTime;
 		STRING Latitude;

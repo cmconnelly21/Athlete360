@@ -24,7 +24,7 @@ lay1 iterateme(lay1 L, lay1 R, integer cntr) := transform
 										self := R;// IF(SELF.cnt = 1, R, L);
 end;										
 
-rawDSsums := Iterate(rawDs3, iterateme(LEFT, RIGHT, COUNTER));
+rawDSsums := DISTRIBUTE(Iterate(rawDs3, iterateme(LEFT, RIGHT, COUNTER)),hash64(name,date,cnt));
 //add fields that will be used to create the 1 min periods										
 rawDSsums_limit1 := JOIN(
   rawDSsums,
@@ -37,11 +37,11 @@ rawDSsums_limit1 := JOIN(
       SELF := LEFT
     ),
     LEFT OUTER,
-     LOOKUP
+     LOOKUP,LOCAL
 );
 //add fields that will be used to create the 3 min periods
 rawDSsums_limit3 := JOIN(
-  rawDSsums_limit1,
+  DISTRIBUTE(rawDSsums_limit1,hash64(name,date,cnt)),
   rawDSsums,
   left.name = right.name and left.date = right.date and left.cnt -1800 = right.cnt,
   transform(
@@ -51,11 +51,11 @@ rawDSsums_limit3 := JOIN(
       SELF := LEFT
     ),
     LEFT OUTER,
-     LOOKUP
+     LOOKUP,LOCAL
 );
 //add fields that will be used to create the 5 min periods
 rawDSsums_limit5 := JOIN(
-  rawDSsums_limit3,
+  DISTRIBUTE(rawDSsums_limit3,hash64(name,date,cnt)),
   rawDSsums,
   left.name = right.name and left.date = right.date and left.cnt -3000 = right.cnt,
   transform(
@@ -65,7 +65,7 @@ rawDSsums_limit5 := JOIN(
       SELF := LEFT
     ),
     LEFT OUTER,
-     LOOKUP
+     LOOKUP,LOCAL
 );
 //add fields that will be used to create the averages
 rawDSaves := Project(rawDSsums_limit5, 
@@ -86,6 +86,8 @@ temp2 := RECORD
 		string position;
     string drillname;
      UNSIGNED4 drillstarttime;
+		 string gamedaycount;
+		 unsigned4 week;
 END;
 
 completegpsdata := join
@@ -108,6 +110,8 @@ completegpsdata := join
                 SELF.position := RIGHT.position,
                 SELF.drillname := RIGHT.drillname,
                 SELF.drillstarttime := RIGHT.drillstarttime,
+								Self.gamedaycount := Right.gamedaycount,
+								self.week := right.week,
                 SELF.Date := RIGHT.Date,
                 SELF := LEFT
             ), 
@@ -128,6 +132,8 @@ temp3 := RECORD
 	string12 position;
   string drillname;
   unsigned4 drillstarttime;
+	string gamedaycount;
+	unsigned4 week;
   unsigned4 date;
   decimal10_5 hrave1;
   decimal10_5 hrave3;
@@ -139,35 +145,36 @@ finalchartdata := PROJECT(athletespecificpeaks,transform({RECORDOF(temp3)}; SELF
 //create dataset to show average peaks for each drill 
 
 		
-temp4 := RECORD
-  string name;
-  string12 time;
-  decimal10_5 elapsedtime;
-  decimal10_5 speed;
-  unsigned3 athleteid;
-	string12 position;
-  string drillname;
-  unsigned4 drillstarttime;
-  unsigned4 date;
-	String12 gamedaycount;
-  decimal10_5 hrave1;
-  decimal10_5 hrave3;
-  decimal10_5 hrave5;
+// temp4 := RECORD
+  // string name;
+  // string12 time;
+  // decimal10_5 elapsedtime;
+  // decimal10_5 speed;
+  // unsigned3 athleteid;
+	// string12 position;
+  // string drillname;
+  // unsigned4 drillstarttime;
+  // unsigned4 date;
+	// String12 gamedaycount;
+  // decimal10_5 hrave1;
+  // decimal10_5 hrave3;
+  // decimal10_5 hrave5;
 	
- END;		
+ // END;		
 		
-finalouput := JOIN(
-  finalchartdata,
-  Athlete360.Files_stg.MSOCdate_stgfile,
-  left.date = right.date,
-  transform(
-      {recordof(temp4), unsigned2 weeknum},
-      SELF.gamedaycount := right.gamedaycount;
-			self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
-      SELF := LEFT
-    ),
-    LEFT OUTER
-);
+// finalouput := JOIN(
+  // DISTRIBUTE(finalchartdata,hash64(date)),
+  // Dedup(sort(DISTRIBUTE(Athlete360.Files_stg.MSOCdate_stgfile,hash64(date)),date,LOCAL),date,LOCAL),
+  // left.date = right.date,
+  // transform(
+      // {recordof(temp4)}, 
+			// unsigned2 weeknum},
+      // SELF.gamedaycount := right.gamedaycount;
+			// self.weeknum := Athlete360.util.DateAddendum.YearWeekNumFromDate(left.date,2);
+      // SELF := LEFT
+    // ),
+    // LEFT OUTER,LOCAL
+// );
 
 
 
@@ -186,4 +193,4 @@ finalouput := JOIN(
 // OUTPUT(finalouput[1..10000]);
 // OUTPUT(finalouput);
 
-OUTPUT(finalouput,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
+OUTPUT(finalchartdata,,'~Athlete360::OUT::despray::MSOCGPSfindpeaks',CSV,OVERWRITE);
