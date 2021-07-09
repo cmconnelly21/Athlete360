@@ -24,5 +24,5 @@ IMPORT Athlete360;
 		EXPORT WSOCgymawarefile := DATASET( Athlete360.util.constants.spray_prefix + 'ws_gymaware', Athlete360.Layouts.WSOCgymaware, CSV(HEADING(1)), OPT);
 		EXPORT Athleteinfofile := DATASET( Athlete360.util.constants.spray_prefix + 'athleteinfo', Athlete360.Layouts.Athleteinfo, CSV(HEADING(1)), OPT);
 		EXPORT SOCdrillsfile := DATASET( Athlete360.util.constants.spray_prefix + 'soc_drills', Athlete360.Layouts.SOCdrills, CSV(HEADING(1)));
-		EXPORT WBBgpsfile := DATASET( Athlete360.util.constants.spray_prefix + 'wbb_gps', Athlete360.Layouts.WBBgps, CSV(HEADING(10)), OPT);
+		EXPORT WBBgpsfile := DATASET( Athlete360.util.constants.spray_prefix + 'wbb_gps', Athlete360.Layouts.WBBgps, CSV(SEPARATOR(','),HEADING(10), QUOTE('"')), OPT);
 END;

@@ -15,7 +15,7 @@ stgLayout extractdata (Athlete360.Layouts.MSOCtrainingload L):= transform
 									STD.date.FromStringToTime(L.Time,'%H:%M'));
 									// self.time := (unsigned4)L.time;
                   self.Name := L.Firstname + ' ' + L.Lastname;
-									// self.name := L.name;
+									self.name := L.name;
 									self.Rating := (DECIMAL5_2)L.Rating;
 									self.Duration := (Unsigned1)L.Duration;
                   self.TrainingLoad := (Unsigned1)L.TrainingLoad;
