@@ -3,6 +3,7 @@
 		STRING50 Position;
 		STRING50 Sessiontype;
 		UNSIGNED1 Week;
+		UNSIGNED1 year;
 		UNSIGNED4 Date;
 		STRING Drillname;
 		UNSIGNED4 Drillstarttime;
@@ -70,6 +71,7 @@
 		STRING highintensityburstdur;
 		STRING gamedaycount;
 		UNSIGNED3 daynum;
+		UNSIGNED1 year;
 		UNSIGNED3 drillnum;
 		string19 wuid := workunit;
     UNSIGNED3 athleteid := 0;

@@ -9,6 +9,7 @@ stglayout := Athlete360.layouts.WBBdatefile_stg;
 stgLayout extractdata (Athlete360.Layouts.WBBdatefile L):= transform
                   SELF.date := STD.date.FromStringToDate(L.date,'%m/%d/%Y');
 									SELF.gamedaycount := (STRING20)L.gamedaycount;
+									SELF.week := L.week;
 									self.daynum :=0;
 									SELF.wuid := (STRING19)workunit;
 END;

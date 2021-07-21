@@ -4,12 +4,14 @@
 
 
 
-gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period not in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','OT 1','OT 2']), athleteid, date, period);
+gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period not in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','Quarter 1','Quarter 2','Quarter 3','Quarter 4','OT 1','OT 2']), athleteid, date, period);
 
 
 temp1 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
+	unsigned4 week;
+	unsigned1 year;
 	unsigned4 daynum;
 	string gamedaycount;
   string period;
@@ -50,6 +52,8 @@ DATA_AVE_ID := SORT(
 temp2 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
+	unsigned4 week;
+	unsigned1 year;
 	unsigned4 daynum;
 	string gamedaycount;
   string period;

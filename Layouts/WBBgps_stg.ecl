@@ -28,6 +28,8 @@
 		UNSIGNED2 JumpsTotal;
 		DECIMAL5_2 Jumpspermin;
 		STRING gamedaycount;
+		UNSIGNED4 week;
+		UNSIGNED1 year;
 		UNSIGNED3 daynum;
 		UNSIGNED3 Athleteid;
 		string19 wuid := workunit;

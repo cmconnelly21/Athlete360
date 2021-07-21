@@ -38,6 +38,8 @@ stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.Jumpstotal := (UNSIGNED2)L.Jumpstotal;
 																								SELF.Jumpspermin := (DECIMAL5_2)L.Jumpspermin;
 																								SELF.gamedaycount := ' ';
+																								SELF.week := 0;
+																								SELF.year := 0;
 																								SELF.daynum := 0;
 																								SELF.athleteid := 0;
 																								SELF.wuid := workunit;
@@ -78,7 +80,9 @@ left.date = right.date,
 
 transform({RECORDOF(LEFT)}, 
 				SELF.gamedaycount := RIGHT.gamedaycount;
+				SELF.week := Right.week;
 				SELF.daynum := Right.daynum;
+				self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, IF(left.date > 20190000 AND left.date < 20200000, 2, IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
 				SELF := LEFT;), 
 
 left outer

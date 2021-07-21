@@ -21,6 +21,7 @@
 		EXPORT chart_out_WBBgpsgamereport := 'WBBgpsgamereport';
 		EXPORT chart_out_WBBgpsgameathletes := 'WBBgpsgameathletes';
 		EXPORT chart_out_WBBpracticereport := 'WBBpracticereport';
+		EXPORT chart_out_WBBpracticeathletes := 'WBBpracticeathletes';
 
 
     EXPORT landingzone_ip  := '10.0.0.220';

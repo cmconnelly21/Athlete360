@@ -1,6 +1,6 @@
 ﻿IMPORT Athlete360, STD;
 
-#stored('filedate', '20210708');
+#stored('filedate', '20210718');
 //Athlete360.build_athlete360;
 	
 // get the layout (processed layout)
@@ -18,7 +18,7 @@
  // Athlete360.files_spray.WSOCgpsfile,
  // Athlete360.files_spray.WBBgpsfile,
   // Athlete360.build_stg.build_WBBdatefile,
- Athlete360.build_stg.build_WBBgps,
+ // Athlete360.build_stg.build_WBBgps,
  // Athlete360.build_stg.build_WSOCdatefile,
  // Athlete360.build_stg.build_MSOCdatefile,
  // Athlete360.build_stg.build_MSOCgpsNUM,

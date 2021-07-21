@@ -38,6 +38,7 @@ stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
 																								SELF.highintensityburstnum := (DECIMAL5_2)L.highintensityburstnum;
 																								SELF.highintensityburstdur := L.highintensityburstdur;
 																								SELF.Sessiontype := L.Sessiontype;
+																								// SELF.Drillstarttime := (UNSIGNED4)L.Drillstarttime;
 																								SELF.Drillstarttime := STD.date.fromstringtotime (L.Drillstarttime[1..8], '%H:%M:%S');
 																								SELF.Drilltotaltime := (DECIMAL5_2)L.Drilltotaltime;
 																								SELF.Drilldistance := (DECIMAL10_5)L.Drilldistance;
@@ -80,6 +81,7 @@ stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
 																								SELF.Decelerationsdisz6 := (DECIMAL5_2)L.Decelerationsdisz6;
 																								SELF.Gamedaycount := ' ';
 																								SELF.daynum := 0;
+																								Self.year := 0;
 																								SELF.drillnum := 0;
 																								SELF.wuid := workunit;
 																								
@@ -134,7 +136,7 @@ Athlete360.files_stg.SOCdrills_stgfile,
 
 Athlete360.util.toUpperTrim(left.drillname) = Athlete360.util.toUpperTrim(right.drillname),
 
-transform({RECORDOF(LEFT), UNSIGNED1 year},
+transform({RECORDOF(LEFT)},
 				SELF.drillnum := IF(Right.drillname = '', drillnum_for_other, Right.drillnum),
 				self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, IF(left.date > 20190000 AND left.date < 20200000, 2, IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
 				SELF := LEFT;), 

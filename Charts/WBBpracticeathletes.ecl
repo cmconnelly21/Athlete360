@@ -4,14 +4,16 @@
 
 
 
-gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','Quarter 1','Quarter 2','Quarter 3','Quarter 4','OT 1','OT 2']), date, starttime, period);
+gpsdata := sort(Athlete360.files_stg.WBBgps_stgfile(Period not in ['Pre Game Warm Up','Period 1','Period 2','Period 3','Period 4','Quarter 1','Quarter 2','Quarter 3','Quarter 4','OT 1','OT 2']), athleteid, date, period);
+
 
 temp1 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
-	unsigned4 week;
-	unsigned1 year;
+	UNSIGNED4 week;
+	UNSIGNED1 year;
 	unsigned4 daynum;
+	string gamedaycount;
   string period;
 	unsigned4 starttime;
 	decimal10_5 PlayerLoad;
@@ -31,7 +33,7 @@ gpsdata1 := PROJECT(gpsdata,TRANSFORM({RECORDOF(temp1)}, self := left));
 
 DATA_AVE_ID := SORT(
 	TABLE(gpsdata1, 
-		{date, period,
+		{athleteid,date,gamedaycount,period,
 		decimal10_5 ave_PlayerLoad := AVE(group, PlayerLoad);
 		decimal10_5 ave_PlayerLoadpermin := AVE(group, PlayerLoadpermin);
 		decimal10_5 ave_TRIMP := AVE(group, TRIMP);
@@ -42,17 +44,18 @@ DATA_AVE_ID := SORT(
 		unsigned4 ave_JumpsTotal := AVE(group, JumpsTotal);
 		decimal10_5 ave_Jumpspermin := AVE(group, Jumpspermin);
 		},
-		date,period,
+		athleteid,date,gamedaycount,period,
 		MERGE
-		), date,period
+		), athleteid,date,gamedaycount,period
 	);
 
 temp2 := RECORD
   unsigned2 athleteid;
 	unsigned4 date;
-	unsigned4 week;
-	unsigned1 year;
+	UNSIGNED4 week;
+	UNSIGNED1 year;
 	unsigned4 daynum;
+	string gamedaycount;
   string period;
 	unsigned4 starttime;
 	decimal10_5 ave_PlayerLoad;
@@ -68,7 +71,7 @@ temp2 := RECORD
  
  
 gpsaverages := sort(join(gpsdata1, DATA_AVE_ID,
-									left.date = right.date AND left.period = right.period,
+									left.athleteid = right.athleteid AND left.date = right.date AND left.period = right.period,
 									Transform(temp2,
 														self.ave_playerload := right.ave_playerload;
 														self.ave_playerloadpermin := right.ave_playerloadpermin;
@@ -82,8 +85,10 @@ gpsaverages := sort(join(gpsdata1, DATA_AVE_ID,
 														Self := Left;
 														),
 														INNER, ALL
-														),date,starttime,period);
+														),athleteid,date,gamedaycount,starttime,period);
 
 
 
-OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBgpsgamereport',OVERWRITE);
+// OUTPUT(gpsdata1);
+// OUTPUT(gpsaverages);
+OUTPUT(gpsaverages,,'~Athlete360::OUT::charts::WBBpracticeathletes',OVERWRITE);
