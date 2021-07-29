@@ -8,13 +8,13 @@ stgLayout := Athlete360.Layouts.MSOCreadiness_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCreadiness L):= transform
-									SELF.Date := STD.date.FromStringToDate(L.Date,'%m/%d/%Y');
-									// SELF.date := (unsigned4)L.date;
-									SELF.Time := IF(std.str.splitwords(L.Time, ' ')[2]='PM',
-									1200 + STD.date.FromStringToTime(L.Time,'%H:%M'),
-									STD.date.FromStringToTime(L.Time,'%H:%M'));
-									// SELF.time := (unsigned4)L.time;
-                  self.Name := L.Firstname + ' ' + L.Lastname;
+									// SELF.Date := STD.date.FromStringToDate(L.Date,'%m/%d/%Y');
+									SELF.date := (unsigned4)L.date;
+									// SELF.Time := IF(std.str.splitwords(L.Time, ' ')[2]='PM',
+									// 1200 + STD.date.FromStringToTime(L.Time,'%H:%M'),
+									// STD.date.FromStringToTime(L.Time,'%H:%M'));
+									SELF.time := (unsigned4)L.time;
+                  // self.Name := L.Firstname + ' ' + L.Lastname;
 									Self.name := L.name;
 									self.Score := (DECIMAL5_2)L.Score;
 									self.Fatigue := (Unsigned1)L.Fatigue;

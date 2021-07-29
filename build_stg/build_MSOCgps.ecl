@@ -8,8 +8,8 @@ stgLayout := Athlete360.Layouts.MSOCgps_stg;
 
 // do all preprocessing actions and get the cleaned data from spray
 stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
-																								SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
-																								// self.date := (unsigned4)L.date;
+																								// SELF.date := STD.date.fromstringtodate(L.date,'%d/%m/%Y');
+																								self.date := (unsigned4)L.date;
 																								SELF.Name := L.Name;
 																								SELF.Drillname := Athlete360.util.toUpperTrim(L.Drillname);
 																								SELF.Week := (UNSIGNED1)L.Week;
@@ -38,8 +38,8 @@ stgLayout extractdata (Athlete360.Layouts.MSOCgps L):= transform
 																								SELF.highintensityburstnum := (DECIMAL5_2)L.highintensityburstnum;
 																								SELF.highintensityburstdur := L.highintensityburstdur;
 																								SELF.Sessiontype := L.Sessiontype;
-																								// SELF.Drillstarttime := (UNSIGNED4)L.Drillstarttime;
-																								SELF.Drillstarttime := STD.date.fromstringtotime (L.Drillstarttime[1..8], '%H:%M:%S');
+																								SELF.Drillstarttime := (UNSIGNED4)L.Drillstarttime;
+																								// SELF.Drillstarttime := STD.date.fromstringtotime (L.Drillstarttime[1..8], '%H:%M:%S');
 																								SELF.Drilltotaltime := (DECIMAL5_2)L.Drilltotaltime;
 																								SELF.Drilldistance := (DECIMAL10_5)L.Drilldistance;
 																								SELF.Distancepermin := (DECIMAL5_2)L.Distancepermin;

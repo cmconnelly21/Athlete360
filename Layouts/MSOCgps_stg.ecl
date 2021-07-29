@@ -71,7 +71,6 @@
 		STRING highintensityburstdur;
 		STRING gamedaycount;
 		UNSIGNED3 daynum;
-		UNSIGNED1 year;
 		UNSIGNED3 drillnum;
 		string19 wuid := workunit;
     UNSIGNED3 athleteid := 0;

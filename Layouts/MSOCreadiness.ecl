@@ -3,9 +3,9 @@
 		STRING Date;
 		STRING Time;
 		STRING daynum;
-		STRING Lastname;
-		STRING Firstname;
-		// STRING Name;
+		// STRING Lastname;
+		// STRING Firstname;
+		STRING Name;
 		STRING Score;
 		STRING Fatigue;
 		STRING Mood;
