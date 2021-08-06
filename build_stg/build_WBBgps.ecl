@@ -13,6 +13,7 @@ stgLayout extractdata (Athlete360.Layouts.WBBgps L):= transform
 																								SELF.Name := STD.str.filterout(L.Name,'"');
 																								SELF.Period := STD.str.filterout(L.Period,'"');
 																								SELF.Periodnum := (UNSIGNED3)L.Periodnum;
+																								SELF.Periodid := 0;
 																								SELF.Position := L.Position;
 																								SELF.IMATotal := (UNSIGNED2)L.IMATotal;
 																								SELF.PlayerLoad := (DECIMAL5_2)L.PlayerLoad;
@@ -82,13 +83,30 @@ transform({RECORDOF(LEFT)},
 				SELF.gamedaycount := RIGHT.gamedaycount;
 				SELF.week := Right.week;
 				SELF.daynum := Right.daynum;
-				self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, IF(left.date > 20190000 AND left.date < 20200000, 2, IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
+				self.year := IF(left.date > 20180000 AND left.date < 20190000, 1, 
+											IF(left.date > 20190000 AND left.date < 20200000, 2, 
+											IF(left.date > 20200000 AND left.date < 20210000, 3, 4))),
 				SELF := LEFT;), 
 
 left outer
 
 );
 
+
+completestgdata3 := sort(join(completestgdata2,
+
+Athlete360.files_stg.WBBdrills_stgfile,
+
+Athlete360.util.toUpperTrim(left.period) = Athlete360.util.toUpperTrim(right.period),
+
+transform({RECORDOF(LEFT)},
+				SELF.periodid := Right.Periodid;
+				SELF := LEFT;),
+
+left outer
+
+),name,date);
+
 // by above, you will have concatenated set consists of prevoius data and new spray data, making sure no duplicates created.
 // promote  the final dataset into stage gile
-EXPORT build_WBBgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WBBgps_name, completestgData2);
+EXPORT build_WBBgps := Athlete360.util.fn_promote_ds(Athlete360.util.constants.stg_prefix,  Athlete360.util.constants.WBBgps_name, completestgData3);

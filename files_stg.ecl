@@ -26,5 +26,7 @@ IMPORT Athlete360;
 		EXPORT WSOCgymaware_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'ws_gymaware', Athlete360.Layouts.WSOCgymaware_stg, THOR, OPT);
 		EXPORT Athleteinfo_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'athleteinfo', Athlete360.Layouts.Athleteinfo_stg, THOR, OPT);
 		EXPORT SOCdrills_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'soc_drills', Athlete360.Layouts.SOCdrills_stg, THOR, OPT);
+		EXPORT WBBdrills_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'wbb_drills', Athlete360.Layouts.WBBdrills_stg, THOR, OPT);
 		EXPORT WBBgps_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'wbb_gps', Athlete360.Layouts.WBBgps_stg, THOR, OPT);
+		EXPORT WBBgpsNUM_stgfile := DATASET( Athlete360.util.constants.stg_prefix + 'wbb_gpsNUM', Athlete360.Layouts.WBBgpsNUM_stg, THOR, OPT);
 END;

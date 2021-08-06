@@ -1,10 +1,11 @@
-﻿EXPORT WBBgps_stg := RECORD
-		STRING30 Name;
-		STRING40 Period;
-		UNSIGNED3 Periodnum;
+﻿EXPORT WBBgpsNUM_stg := RECORD
+		UNSIGNED4 id;
 		UNSIGNED4 Periodid;
+		UNSIGNED3 Periodnum;
 		UNSIGNED4 Date;
-		STRING Position;
+		UNSIGNED1 Forward;
+		UNSIGNED1 Guard;
+		UNSIGNED1 Center;
 		UNSIGNED4 Totaltime;
 		UNSIGNED4 Starttime;
 		UNSIGNED4 Endtime;
